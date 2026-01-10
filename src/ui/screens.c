@@ -2508,8 +2508,8 @@ void create_screen_setup() {
             // TabViewSetup
             lv_obj_t *obj = lv_tabview_create(parent_obj, LV_DIR_TOP, 38);
             objects.tab_view_setup = obj;
-            lv_obj_set_pos(obj, 0, 0);
-            lv_obj_set_size(obj, LV_PCT(100), 280);
+            lv_obj_set_pos(obj, 0, 10);
+            lv_obj_set_size(obj, LV_PCT(100), 396);
             lv_obj_add_event_cb(obj, event_handler_cb_setup_tab_view_setup, LV_EVENT_ALL, flowState);
             lv_obj_set_style_text_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -2588,7 +2588,7 @@ void create_screen_setup() {
                             // WeaponsRG
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_rg = obj;
-                            lv_obj_set_pos(obj, -495, 348);
+                            lv_obj_set_pos(obj, -465, 350);
                             lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_rg, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
@@ -2600,7 +2600,7 @@ void create_screen_setup() {
                             // WeaponsLC
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_lc = obj;
-                            lv_obj_set_pos(obj, 901, -104);
+                            lv_obj_set_pos(obj, 961, 277);
                             lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_lc, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
@@ -2660,7 +2660,7 @@ void create_screen_setup() {
                             // WeaponsMXG
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_mxg = obj;
-                            lv_obj_set_pos(obj, -682, -49);
+                            lv_obj_set_pos(obj, -652, 13);
                             lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_mxg, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
@@ -2684,7 +2684,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_arl = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_arl, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2696,7 +2696,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_c = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_c, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2708,7 +2708,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_eat = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_eat, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2720,7 +2720,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_en = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_en, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2732,7 +2732,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_rr = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_rr, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2744,7 +2744,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_spr = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_spr, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2756,7 +2756,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_wsp = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_wsp, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2768,7 +2768,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_gl = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_gl, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2780,7 +2780,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_de = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_de, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2792,7 +2792,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_ste = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_ste, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2804,7 +2804,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_ft = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_ft, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2816,7 +2816,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.weapons_dt = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_weapons_dt, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2854,7 +2854,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_bsb = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_bsb, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2866,7 +2866,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_sgp = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_sgp, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2878,7 +2878,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_ds = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_ds, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2890,7 +2890,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_gd = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_gd, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2932,7 +2932,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_gdb = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_gdb, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2944,7 +2944,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_gdr = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_gdr, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2956,7 +2956,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_gdk = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_gdk, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2968,7 +2968,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_gdhd = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_gdhd, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -2980,7 +2980,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_sup = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_sup, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3007,7 +3007,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_ph = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_ph, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3019,7 +3019,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_jp = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_jp, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3031,7 +3031,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_hp = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_hp, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3043,7 +3043,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.backpack_wp = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_backpack_wp, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3081,7 +3081,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.supply_frv = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_supply_frv, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3093,7 +3093,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.supply_pe = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_supply_pe, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3105,7 +3105,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.supply_ee = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_supply_ee, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3117,7 +3117,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.supply_otf = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_supply_otf, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3129,7 +3129,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.supply_ss = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_supply_ss, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3167,7 +3167,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_mgs = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_mgs, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3179,7 +3179,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_gs = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_gs, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3191,7 +3191,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_acs = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_acs, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3203,7 +3203,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_hmge = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_hmge, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3215,7 +3215,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_ate = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_ate, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3226,7 +3226,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_obj_create(parent_obj);
                             objects.obj6 = obj;
                             lv_obj_set_pos(obj, 0, 0);
-                            lv_obj_set_size(obj, 19, 76);
+                            lv_obj_set_size(obj, 120, 76);
                             lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3242,7 +3242,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_fs = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_fs, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3254,7 +3254,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_ms = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_ms, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3266,7 +3266,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_rs = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_rs, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3278,7 +3278,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_ems = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_ems, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3290,7 +3290,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.sentry_ls = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_sentry_ls, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3328,7 +3328,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.ground_gm = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_ground_gm, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3340,7 +3340,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.ground_tt = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_ground_tt, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3352,7 +3352,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.ground_sgr = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_ground_sgr, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3364,7 +3364,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.ground_apm = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_ground_apm, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3391,7 +3391,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.ground_atm = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_ground_atm, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3403,7 +3403,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.ground_im = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_ground_im, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3415,7 +3415,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.ground_gb = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_ground_gb, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3438,7 +3438,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike120 = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike120, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3450,7 +3450,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike380 = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike380, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3462,7 +3462,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_ors = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_ors, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3474,7 +3474,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_ogb = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_ogb, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3486,7 +3486,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_oas = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_oas, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3498,7 +3498,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_ol = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_ol, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3510,7 +3510,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_ops = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_ops, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3522,7 +3522,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_owb = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_owb, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3534,7 +3534,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_oes = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_oes, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3546,7 +3546,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_onb = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_onb, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3558,7 +3558,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_ogs = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_ogs, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3570,7 +3570,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.strike_oss = obj;
                             lv_obj_set_pos(obj, -78, -19);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_strike_oss, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3590,8 +3590,8 @@ void create_screen_setup() {
                         {
                             lv_obj_t *obj = lv_obj_create(parent_obj);
                             objects.obj9 = obj;
-                            lv_obj_set_pos(obj, 0, 0);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, 137, 0);
+                            lv_obj_set_size(obj, 102, 76);
                             lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3607,7 +3607,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.eagle110 = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_eagle110, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3619,7 +3619,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.eagle500 = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_eagle500, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3631,7 +3631,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.eagle_a = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_eagle_a, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3643,7 +3643,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.eagle_cb = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_eagle_cb, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3653,8 +3653,8 @@ void create_screen_setup() {
                         {
                             lv_obj_t *obj = lv_obj_create(parent_obj);
                             objects.obj10 = obj;
-                            lv_obj_set_pos(obj, 0, 0);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, -385, 0);
+                            lv_obj_set_size(obj, 127, 76);
                             lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3670,7 +3670,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.eagle_sr = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_eagle_sr, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3682,7 +3682,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.eagle_na = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_eagle_na, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3694,7 +3694,7 @@ void create_screen_setup() {
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.eagle_ss = obj;
                             lv_obj_set_pos(obj, 203, 122);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_setup_eagle_ss, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
                             add_style_button_std(obj);
@@ -3707,8 +3707,8 @@ void create_screen_setup() {
         }
         {
             lv_obj_t *obj = lv_img_create(parent_obj);
-            lv_obj_set_pos(obj, 0, 0);
-            lv_obj_set_size(obj, 484, 43);
+            lv_obj_set_pos(obj, 40, 0);
+            lv_obj_set_size(obj, 739, 62);
             lv_img_set_src(obj, &img_tab_icons);
             lv_obj_clear_flag(obj, LV_OBJ_FLAG_CLICK_FOCUSABLE|LV_OBJ_FLAG_SCROLLABLE);
         }
@@ -3827,7 +3827,7 @@ void create_screen_setup() {
             // MsgBox
             lv_obj_t *obj = lv_obj_create(parent_obj);
             objects.msg_box = obj;
-            lv_obj_set_pos(obj, -2, 110);
+            lv_obj_set_pos(obj, -3, 139);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_border_width(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_clear_flag(obj, LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_CLICK_FOCUSABLE);
@@ -3845,7 +3845,7 @@ void create_screen_setup() {
                     // MsgLabel
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.msg_label = obj;
-                    lv_obj_set_pos(obj, 2, 115);
+                    lv_obj_set_pos(obj, 0, 0);
                     lv_obj_set_size(obj, 65, 44);
                     lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
