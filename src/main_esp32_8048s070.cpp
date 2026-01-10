@@ -406,6 +406,12 @@ void setup()
 
 void loop()
 {
+    // Update LVGL tick - critical for timers and animations
+    static uint32_t last_tick = 0;
+    uint32_t now = millis();
+    lv_tick_inc(now - last_tick);
+    last_tick = now;
+
     lv_timer_handler(); // Handle LVGL tasks
     delay(5);
 
