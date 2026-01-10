@@ -45,7 +45,7 @@ extern "C" {
 static const char *TAG = "HD2-8048S070";
 
 // Display and LVGL objects
-static LGFX lcd;
+static LGFX *lcd = nullptr;  // Create as pointer to avoid early initialization
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t *disp_draw_buf;
 static lv_color_t *disp_draw_buf2;
@@ -134,7 +134,7 @@ void setRotation(int rotation, bool restore) {
 
 void setBrightness(int brightness, bool restore) {
     currentBrightness = brightness;
-    lcd.setBrightness(brightness);
+    if (lcd) lcd->setBrightness(brightness);
     if (restore) {
         preferences.putInt("brightness", brightness);
     }
@@ -194,7 +194,7 @@ void updateBatteryInfo() {
 }
 
 void dimScreen(int brightness) {
-    lcd.setBrightness(brightness);
+    if (lcd) lcd->setBrightness(brightness);
 }
 
 } // extern "C"
@@ -202,13 +202,18 @@ void dimScreen(int brightness) {
 /* Display flushing */
 void my_disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p)
 {
+    if (!lcd) {
+        lv_disp_flush_ready(disp_drv);
+        return;
+    }
+
     uint32_t w = (area->x2 - area->x1 + 1);
     uint32_t h = (area->y2 - area->y1 + 1);
 
-    lcd.startWrite();
-    lcd.setAddrWindow(area->x1, area->y1, w, h);
-    lcd.pushPixels((uint16_t *)&color_p->full, w * h, true);
-    lcd.endWrite();
+    lcd->startWrite();
+    lcd->setAddrWindow(area->x1, area->y1, w, h);
+    lcd->pushPixels((uint16_t *)&color_p->full, w * h, true);
+    lcd->endWrite();
 
     lv_disp_flush_ready(disp_drv);
 }
@@ -256,22 +261,41 @@ void setup()
 {
     // Initialize Serial for debugging
     Serial.begin(115200);
+    delay(1000); // Give serial time to initialize
     Serial.println("\n\n========================================");
     Serial.println("HD2 Macropad - ESP32-8048S070");
     Serial.printf("Version: %s\n", SW_VER);
     Serial.println("========================================\n");
+    Serial.flush();
 
     // Initialize configuration
+    Serial.println("Step 1: Initializing config...");
+    Serial.flush();
     initConfig();
+    Serial.println("Step 2: Loading config...");
+    Serial.flush();
     loadConfig();
+    Serial.flush();
 
     // Initialize LCD
-    Serial.println("Initializing display...");
-    lcd.init();
-    lcd.setRotation(screenRotation);
-    lcd.fillScreen(TFT_BLACK);
+    Serial.println("Step 3: Creating display object...");
+    Serial.flush();
+    lcd = new LGFX();
+    Serial.println("Step 4: Configuring display...");
+    Serial.flush();
+    lcd->begin();  // Configure the display hardware
+    Serial.println("Step 5: Initializing display...");
+    Serial.flush();
+    lcd->init();
+    Serial.println("Step 6: Setting rotation...");
+    Serial.flush();
+    lcd->setRotation(screenRotation);
+    Serial.println("Step 7: Filling screen black...");
+    Serial.flush();
+    lcd->fillScreen(TFT_BLACK);
 
     Serial.println("Display initialized");
+    Serial.flush();
 
     // Initialize touch
     Serial.println("Initializing touch...");
@@ -345,7 +369,7 @@ void setup()
     delay(200);
 
     // Turn on display backlight
-    lcd.setBrightness(currentBrightness);
+    lcd->setBrightness(currentBrightness);
     Serial.println("Backlight on");
 
     // Mark LVGL as ready
