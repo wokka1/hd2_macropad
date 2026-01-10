@@ -11,8 +11,8 @@
       "extensions": [],
       "imports": [],
       "flowSupport": true,
-      "displayWidth": 480,
-      "displayHeight": 320,
+      "displayWidth": 800,
+      "displayHeight": 480,
       "displayBorderRadius": 0,
       "darkTheme": true,
       "colorFormat": "BGR",
@@ -382,8 +382,8 @@
             {
               "objID": "cad9f67d-3f44-450b-f1e1-4e790989274e",
               "type": "LVGLImageWidget",
-              "left": 0,
-              "top": 0,
+              "left": 160,
+              "top": 80,
               "width": 480,
               "height": 320,
               "customInputs": [],
@@ -399,8 +399,8 @@
               "identifier": "ImgSplash",
               "leftUnit": "px",
               "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
+              "widthUnit": "px",
+              "heightUnit": "px",
               "children": [],
               "widgetFlags": "PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
               "hiddenFlagType": "literal",
@@ -531,8 +531,8 @@
       "name": "Intro",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "createAtStart": true,
       "deleteOnScreenUnload": false
     },
@@ -597,7 +597,7 @@
                   "type": "LVGLTabWidget",
                   "left": 0,
                   "top": 0,
-                  "width": 480,
+                  "width": 800,
                   "height": 242,
                   "customInputs": [],
                   "customOutputs": [],
@@ -7426,8 +7426,8 @@
         {
           "objID": "b5d55bd6-2075-4b93-e2e0-d427984baede",
           "type": "LVGLActionComponent",
-          "left": 578,
-          "top": 286,
+          "left": 528,
+          "top": -189,
           "width": 305,
           "height": 54,
           "customInputs": [],
@@ -7452,8 +7452,8 @@
         {
           "objID": "6e9f0a1b-685c-42d0-95f9-4b45bb5c06c1",
           "type": "LVGLActionComponent",
-          "left": 31,
-          "top": 521,
+          "left": -219,
+          "top": 565,
           "width": 323,
           "height": 54,
           "customInputs": [],
@@ -7478,8 +7478,8 @@
         {
           "objID": "65d98cb3-927d-4540-c856-c7cc79aac59a",
           "type": "CallActionActionComponent",
-          "left": 593,
-          "top": 209,
+          "left": 505,
+          "top": -271,
           "width": 95,
           "height": 24,
           "customInputs": [],
@@ -7523,8 +7523,8 @@
         {
           "objID": "bfb084d9-d17c-4922-ca2a-dd1fb75e8cc5",
           "type": "LVGLActionComponent",
-          "left": 154,
-          "top": 445,
+          "left": 444,
+          "top": 592,
           "width": 299,
           "height": 54,
           "customInputs": [],
@@ -7549,8 +7549,8 @@
         {
           "objID": "cab59a63-e40b-4c41-d0f3-0750de61abc6",
           "type": "LVGLActionComponent",
-          "left": 478,
-          "top": 372,
+          "left": -339,
+          "top": 262,
           "width": 311,
           "height": 54,
           "customInputs": [],
@@ -7622,8 +7622,8 @@
       "name": "Setup",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -8346,8 +8346,8 @@
         {
           "objID": "6bfef908-b9bf-4d77-e074-5e4ec6385921",
           "type": "LVGLActionComponent",
-          "left": 583,
-          "top": 381,
+          "left": 587,
+          "top": 565,
           "width": 293,
           "height": 54,
           "customInputs": [],
@@ -8372,8 +8372,8 @@
         {
           "objID": "adfe53a5-6b8b-42aa-85b0-f51a494c1e7e",
           "type": "LVGLActionComponent",
-          "left": 174,
-          "top": 381,
+          "left": 188,
+          "top": 592,
           "width": 330,
           "height": 54,
           "customInputs": [],
@@ -8398,8 +8398,8 @@
         {
           "objID": "e84658d6-5424-4a79-a5ec-f054e039ac31",
           "type": "CallActionActionComponent",
-          "left": 99,
-          "top": 458,
+          "left": 2,
+          "top": 541,
           "width": 140,
           "height": 24,
           "customInputs": [],
@@ -8413,8 +8413,8 @@
         {
           "objID": "1ed6c14c-3c09-4b02-91de-bc86002cd886",
           "type": "CallActionActionComponent",
-          "left": 544,
-          "top": 228,
+          "left": 320,
+          "top": 501,
           "width": 144,
           "height": 24,
           "customInputs": [],
@@ -8475,8 +8475,8 @@
       "name": "Preset",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -8838,8 +8838,8 @@
       "name": "ResetPreset",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -10002,8 +10002,8 @@
       "name": "Image",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -10972,8 +10972,8 @@
         {
           "objID": "e3f0aa3e-20a3-4a4b-bdad-0c42130c59e9",
           "type": "LVGLActionComponent",
-          "left": 57,
-          "top": 436,
+          "left": 51,
+          "top": 536,
           "width": 317,
           "height": 54,
           "customInputs": [],
@@ -10998,8 +10998,8 @@
         {
           "objID": "e2406fdd-b8a7-4d1d-b12f-cc73622bba49",
           "type": "LVGLActionComponent",
-          "left": 470,
-          "top": 400,
+          "left": 520,
+          "top": 563,
           "width": 274,
           "height": 54,
           "customInputs": [],
@@ -11043,8 +11043,8 @@
       "name": "Game",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -11180,8 +11180,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 49,
-                      "height": 30,
+                      "width": 84,
+                      "height": 44,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -11212,7 +11212,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -11336,8 +11336,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 44,
-                      "height": 30,
+                      "width": 75,
+                      "height": 44,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -11368,7 +11368,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -11492,8 +11492,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 35,
-                      "height": 45,
+                      "width": 60,
+                      "height": 66,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -11524,7 +11524,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -11648,8 +11648,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 47,
-                      "height": 45,
+                      "width": 79,
+                      "height": 66,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -11680,7 +11680,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -11804,8 +11804,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 51,
-                      "height": 30,
+                      "width": 87,
+                      "height": 44,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -11836,7 +11836,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -11960,8 +11960,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 38,
-                      "height": 30,
+                      "width": 63,
+                      "height": 44,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -11992,7 +11992,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -12116,8 +12116,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 46,
-                      "height": 30,
+                      "width": 78,
+                      "height": 44,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -12148,7 +12148,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -12272,8 +12272,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 45,
-                      "height": 45,
+                      "width": 78,
+                      "height": 66,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -12304,7 +12304,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -12428,8 +12428,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 0,
                       "top": 0,
-                      "width": 62,
-                      "height": 30,
+                      "width": 107,
+                      "height": 44,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -12460,7 +12460,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_12"
+                              "text_font": "MONTSERRAT_20"
                             }
                           }
                         }
@@ -12614,8 +12614,8 @@
         {
           "objID": "6be62012-3fda-44e1-8144-1990f031732a",
           "type": "LVGLActionComponent",
-          "left": 593,
-          "top": 356,
+          "left": 457,
+          "top": 576,
           "width": 256,
           "height": 54,
           "customInputs": [],
@@ -12652,8 +12652,8 @@
       "name": "Mission",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -12719,7 +12719,7 @@
                   "type": "LVGLTabWidget",
                   "left": 0,
                   "top": 0,
-                  "width": 480,
+                  "width": 800,
                   "height": 242,
                   "customInputs": [],
                   "customOutputs": [],
@@ -12742,7 +12742,7 @@
                       "left": 0,
                       "top": 0,
                       "width": 100,
-                      "height": 64,
+                      "height": 70,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -12764,7 +12764,7 @@
                           "left": 0,
                           "top": 0,
                           "width": 50,
-                          "height": 16,
+                          "height": 22,
                           "customInputs": [],
                           "customOutputs": [],
                           "style": {
@@ -12792,7 +12792,14 @@
                           "disabledStateType": "literal",
                           "states": "",
                           "localStyles": {
-                            "objID": "d8e1fb43-993e-4bb9-9da7-d70aed982f03"
+                            "objID": "d8e1fb43-993e-4bb9-9da7-d70aed982f03",
+                            "definition": {
+                              "MAIN": {
+                                "DEFAULT": {
+                                  "text_font": "MONTSERRAT_20"
+                                }
+                              }
+                            }
                           },
                           "group": "",
                           "groupIndex": 0,
@@ -12807,7 +12814,7 @@
                           "left": 0,
                           "top": 0,
                           "width": 50,
-                          "height": 16,
+                          "height": 22,
                           "customInputs": [],
                           "customOutputs": [],
                           "style": {
@@ -12840,7 +12847,8 @@
                               "MAIN": {
                                 "DEFAULT": {
                                   "text_align": "RIGHT",
-                                  "text_color": "colorActive"
+                                  "text_color": "colorActive",
+                                  "text_font": "MONTSERRAT_20"
                                 }
                               }
                             }
@@ -12951,7 +12959,7 @@
                       "left": 0,
                       "top": 0,
                       "width": 49,
-                      "height": 80,
+                      "height": 86,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -12973,7 +12981,7 @@
                           "left": 0,
                           "top": 0,
                           "width": 100,
-                          "height": 16,
+                          "height": 22,
                           "customInputs": [],
                           "customOutputs": [],
                           "style": {
@@ -13000,7 +13008,14 @@
                           "disabledStateType": "literal",
                           "states": "",
                           "localStyles": {
-                            "objID": "2e44f3ab-daab-43c0-f6cd-3e1d1384591a"
+                            "objID": "2e44f3ab-daab-43c0-f6cd-3e1d1384591a",
+                            "definition": {
+                              "MAIN": {
+                                "DEFAULT": {
+                                  "text_font": "MONTSERRAT_20"
+                                }
+                              }
+                            }
                           },
                           "group": "",
                           "groupIndex": 0,
@@ -13097,7 +13112,7 @@
                       "left": 0,
                       "top": 0,
                       "width": 49,
-                      "height": 80,
+                      "height": 86,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -13119,7 +13134,7 @@
                           "left": 0,
                           "top": 0,
                           "width": 100,
-                          "height": 16,
+                          "height": 22,
                           "customInputs": [],
                           "customOutputs": [],
                           "style": {
@@ -13146,7 +13161,14 @@
                           "disabledStateType": "literal",
                           "states": "",
                           "localStyles": {
-                            "objID": "8deac51b-8174-41d2-a5c6-69e27d7545b7"
+                            "objID": "8deac51b-8174-41d2-a5c6-69e27d7545b7",
+                            "definition": {
+                              "MAIN": {
+                                "DEFAULT": {
+                                  "text_font": "MONTSERRAT_20"
+                                }
+                              }
+                            }
                           },
                           "group": "",
                           "groupIndex": 0,
@@ -14334,8 +14356,8 @@
         {
           "objID": "1e1d954b-7995-4343-c1ab-02a237f16c15",
           "type": "LVGLActionComponent",
-          "left": 20,
-          "top": 535,
+          "left": -352,
+          "top": 294,
           "width": 311,
           "height": 54,
           "customInputs": [],
@@ -14360,8 +14382,8 @@
         {
           "objID": "d8a096d3-a824-4a55-bec6-68ecf6b7acb9",
           "type": "LVGLActionComponent",
-          "left": 143,
-          "top": 468,
+          "left": 30,
+          "top": 589,
           "width": 305,
           "height": 54,
           "customInputs": [],
@@ -14386,8 +14408,8 @@
         {
           "objID": "b256208f-1016-4af8-d1ea-6611bce9402e",
           "type": "LVGLActionComponent",
-          "left": 432,
-          "top": 333,
+          "left": 490,
+          "top": 562,
           "width": 330,
           "height": 54,
           "customInputs": [],
@@ -14438,8 +14460,8 @@
       "name": "Config",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -14708,8 +14730,8 @@
         {
           "objID": "292dddd0-14db-43d5-a4a2-a4a5e87d1bf0",
           "type": "LVGLActionComponent",
-          "left": 419,
-          "top": 244,
+          "left": 521,
+          "top": 571,
           "width": 305,
           "height": 54,
           "customInputs": [],
@@ -14734,8 +14756,8 @@
         {
           "objID": "b09008dd-11f4-4e69-c53f-c050b8da2504",
           "type": "LVGLActionComponent",
-          "left": 184,
-          "top": 396,
+          "left": -78,
+          "top": 554,
           "width": 305,
           "height": 54,
           "customInputs": [],
@@ -14760,8 +14782,8 @@
         {
           "objID": "d2077491-b7ec-4404-fa66-74a4044cd588",
           "type": "CallActionActionComponent",
-          "left": 315,
-          "top": 349,
+          "left": 300,
+          "top": 574,
           "width": 112,
           "height": 24,
           "customInputs": [],
@@ -14801,8 +14823,8 @@
       "name": "ResetConfig",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -14963,7 +14985,7 @@
                   "left": 54,
                   "top": 113,
                   "width": 100,
-                  "height": 64,
+                  "height": 88,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -14990,7 +15012,14 @@
                   "disabledStateType": "literal",
                   "states": "",
                   "localStyles": {
-                    "objID": "21d896cb-e617-45f0-dd9d-b8d457de2bb9"
+                    "objID": "21d896cb-e617-45f0-dd9d-b8d457de2bb9",
+                    "definition": {
+                      "MAIN": {
+                        "DEFAULT": {
+                          "text_font": "MONTSERRAT_20"
+                        }
+                      }
+                    }
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -15005,7 +15034,7 @@
                   "left": 54,
                   "top": 113,
                   "width": 100,
-                  "height": 32,
+                  "height": 44,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -15032,7 +15061,14 @@
                   "disabledStateType": "literal",
                   "states": "",
                   "localStyles": {
-                    "objID": "92ca1942-630d-4c17-b09d-762098581262"
+                    "objID": "92ca1942-630d-4c17-b09d-762098581262",
+                    "definition": {
+                      "MAIN": {
+                        "DEFAULT": {
+                          "text_font": "MONTSERRAT_20"
+                        }
+                      }
+                    }
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -15047,7 +15083,7 @@
                   "left": 54,
                   "top": 113,
                   "width": 100,
-                  "height": 48,
+                  "height": 66,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -15078,7 +15114,7 @@
                     "definition": {
                       "MAIN": {
                         "DEFAULT": {
-                          "text_font": "MONTSERRAT_14"
+                          "text_font": "MONTSERRAT_20"
                         }
                       }
                     }
@@ -15251,8 +15287,8 @@
         {
           "objID": "19a95e3f-3bdf-471d-f061-3e4091dbb50c",
           "type": "LVGLActionComponent",
-          "left": 80,
-          "top": 427,
+          "left": 106,
+          "top": 543,
           "width": 330,
           "height": 54,
           "customInputs": [],
@@ -15289,8 +15325,8 @@
       "name": "About",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false
@@ -15370,8 +15406,8 @@
             {
               "objID": "8e4997d1-5b59-4aee-f263-a37c5acdf53b",
               "type": "LVGLContainerWidget",
-              "left": 0,
-              "top": -20,
+              "left": 1,
+              "top": -105,
               "width": 356,
               "height": 237,
               "customInputs": [],
@@ -15431,8 +15467,8 @@
                 {
                   "objID": "4fd0de68-fa81-4125-eb49-681070c6c283",
                   "type": "LVGLButtonWidget",
-                  "left": 0,
-                  "top": 0,
+                  "left": 120,
+                  "top": -70,
                   "width": 116,
                   "height": 116,
                   "customInputs": [],
@@ -15487,8 +15523,8 @@
                 {
                   "objID": "f69025f3-a937-46c9-b56a-ede239d36ca6",
                   "type": "LVGLButtonWidget",
-                  "left": 0,
-                  "top": 0,
+                  "left": -1,
+                  "top": -103,
                   "width": 116,
                   "height": 116,
                   "customInputs": [],
@@ -15544,7 +15580,7 @@
                   "objID": "41a407f9-5e1e-4f5d-b3ed-3d1730c92d71",
                   "type": "LVGLButtonWidget",
                   "left": 0,
-                  "top": 0,
+                  "top": -250,
                   "width": 116,
                   "height": 116,
                   "customInputs": [],
@@ -15639,8 +15675,8 @@
                 {
                   "objID": "f2efa404-9516-4856-ac39-7639230ba475",
                   "type": "LVGLButtonWidget",
-                  "left": 0,
-                  "top": 0,
+                  "left": -120,
+                  "top": -70,
                   "width": 116,
                   "height": 116,
                   "customInputs": [],
@@ -16226,8 +16262,8 @@
         {
           "objID": "d5686555-5f30-44d1-d797-e7ff0f5a6fad",
           "type": "LVGLActionComponent",
-          "left": 99,
-          "top": 374,
+          "left": 164,
+          "top": 497,
           "width": 323,
           "height": 54,
           "customInputs": [],
@@ -16264,8 +16300,8 @@
       "name": "Manual",
       "left": 0,
       "top": 0,
-      "width": 480,
-      "height": 320,
+      "width": 800,
+      "height": 480,
       "isUsedAsUserWidget": false,
       "createAtStart": true,
       "deleteOnScreenUnload": false

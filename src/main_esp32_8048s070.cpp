@@ -226,8 +226,9 @@ void my_touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
         if (touch_touched())
         {
             data->state = LV_INDEV_STATE_PR;
-            data->point.x = touch_last_x();
-            data->point.y = touch_last_y();
+            // Invert coordinates: bottom-right was triggering top-left
+            data->point.x = SCREEN_WIDTH - touch_last_x();
+            data->point.y = SCREEN_HEIGHT - touch_last_y();
         }
         else
         {

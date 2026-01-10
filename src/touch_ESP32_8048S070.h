@@ -18,10 +18,10 @@
 #define TOUCH_GT911_ROTATION ROTATION_NORMAL
 
 // Touch map configuration
-#define TOUCH_MAP_X1        800
-#define TOUCH_MAP_X2        0
-#define TOUCH_MAP_Y1        480
-#define TOUCH_MAP_Y2        0
+#define TOUCH_MAP_X1        0
+#define TOUCH_MAP_X2        800
+#define TOUCH_MAP_Y1        0
+#define TOUCH_MAP_Y2        480
 
 // Global touch instance
 TAMC_GT911 *ts = nullptr;
