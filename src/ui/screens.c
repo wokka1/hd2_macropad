@@ -3900,7 +3900,7 @@ void create_screen_preset() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_preset1 = obj;
                     lv_obj_set_pos(obj, 110, -136);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_preset_btn_preset1, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_icon1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3911,7 +3911,7 @@ void create_screen_preset() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_preset2 = obj;
                     lv_obj_set_pos(obj, 70, -117);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_preset_btn_preset2, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_icon2, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3922,7 +3922,7 @@ void create_screen_preset() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_preset3 = obj;
                     lv_obj_set_pos(obj, 30, -117);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_preset_btn_preset3, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_icon3, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3933,7 +3933,7 @@ void create_screen_preset() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_preset4 = obj;
                     lv_obj_set_pos(obj, -10, -117);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_preset_btn_preset4, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_icon4, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3944,7 +3944,7 @@ void create_screen_preset() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_preset5 = obj;
                     lv_obj_set_pos(obj, -50, -117);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_preset_btn_preset5, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_icon5, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3955,7 +3955,7 @@ void create_screen_preset() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_preset6 = obj;
                     lv_obj_set_pos(obj, -90, -117);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_preset_btn_preset6, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_icon6, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4119,7 +4119,7 @@ void create_screen_image() {
         {
             lv_obj_t *obj = lv_obj_create(parent_obj);
             lv_obj_set_pos(obj, 0, 0);
-            lv_obj_set_size(obj, LV_PCT(90), 282);
+            lv_obj_set_size(obj, LV_PCT(90), 423);
             lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4141,7 +4141,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj21 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj21, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_conduct_geological_survey, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4150,7 +4150,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj22 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj22, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_emergency_evacuation, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4159,7 +4159,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj23 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj23, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_enable_e_710_extraction, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4168,7 +4168,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj24 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj24, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_eradicate_automaton_forces, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4177,7 +4177,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj25 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj25, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_eradicate_terminid_swarm, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4186,7 +4186,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj26 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj26, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_evacuate_high_value_assets, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4195,7 +4195,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj27 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj27, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_launch_icbm, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4204,7 +4204,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj28 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj28, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_retrieve_essential_personnel, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4213,7 +4213,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj29 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj29, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_retrieve_valuable_data, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4222,7 +4222,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj30 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj30, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_spread_democracy, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4231,7 +4231,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj31 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj31, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_terminate_illegal_broadcast, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4240,7 +4240,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj32 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj32, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_mission_upload_escape_pod_data, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4249,7 +4249,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj33 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj33, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_faction_terminid, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4258,7 +4258,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj34 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj34, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_faction_automaton, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4267,7 +4267,7 @@ void create_screen_image() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj35 = obj;
                     lv_obj_set_pos(obj, -169, -97);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_image_obj35, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_bg_img_src(obj, &img_faction_illuminate, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4328,7 +4328,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_reinforce = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_btn_reinforce, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4339,7 +4339,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_resupply = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_btn_resupply, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4350,7 +4350,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_sos = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_btn_sos, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4361,7 +4361,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_rearm = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_btn_rearm, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4372,7 +4372,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.custom_stratagem1 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_custom_stratagem1, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                 }
@@ -4381,7 +4381,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.custom_stratagem2 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_custom_stratagem2, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                 }
@@ -4390,7 +4390,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.custom_stratagem3 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_custom_stratagem3, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                 }
@@ -4399,7 +4399,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.custom_stratagem4 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 116, 116);
+                    lv_obj_set_size(obj, 174, 174);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_custom_stratagem4, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                 }
@@ -4431,7 +4431,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.custom_stratagem5 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_custom_stratagem5, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                 }
@@ -4440,7 +4440,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.custom_stratagem6 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_custom_stratagem6, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                 }
@@ -4449,7 +4449,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_seaf = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_btn_seaf, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4460,7 +4460,7 @@ void create_screen_game() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.btn_hellbomb = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 76, 76);
+                    lv_obj_set_size(obj, 114, 114);
                     lv_obj_add_event_cb(obj, event_handler_cb_game_btn_hellbomb, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4472,7 +4472,7 @@ void create_screen_game() {
             lv_obj_t *obj = lv_btn_create(parent_obj);
             objects.obj37 = obj;
             lv_obj_set_pos(obj, -2, -2);
-            lv_obj_set_size(obj, 76, 38);
+            lv_obj_set_size(obj, 114, 64);
             lv_obj_add_event_cb(obj, event_handler_cb_game_obj37, LV_EVENT_ALL, flowState);
             add_style_button_std(obj);
             lv_obj_set_style_align(obj, LV_ALIGN_BOTTOM_RIGHT, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4482,7 +4482,7 @@ void create_screen_game() {
             lv_obj_t *obj = lv_btn_create(parent_obj);
             objects.obj38 = obj;
             lv_obj_set_pos(obj, 2, -2);
-            lv_obj_set_size(obj, 76, 38);
+            lv_obj_set_size(obj, 114, 64);
             lv_obj_add_event_cb(obj, event_handler_cb_game_obj38, LV_EVENT_ALL, flowState);
             add_style_button_std(obj);
             lv_obj_set_style_align(obj, LV_ALIGN_BOTTOM_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4492,8 +4492,8 @@ void create_screen_game() {
             // ImgConnection2
             lv_obj_t *obj = lv_img_create(parent_obj);
             objects.img_connection2 = obj;
-            lv_obj_set_pos(obj, -2, -43);
-            lv_obj_set_size(obj, 36, 36);
+            lv_obj_set_pos(obj, 0, -68);
+            lv_obj_set_size(obj, 48, 48);
             lv_obj_set_style_bg_img_src(obj, &img_btdis, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_align(obj, LV_ALIGN_BOTTOM_RIGHT, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
@@ -4520,7 +4520,7 @@ void create_screen_mission() {
         {
             lv_obj_t *obj = lv_obj_create(parent_obj);
             lv_obj_set_pos(obj, 0, 0);
-            lv_obj_set_size(obj, LV_PCT(100), 282);
+            lv_obj_set_size(obj, LV_PCT(100), LV_PCT(100));
             lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_border_width(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4559,8 +4559,8 @@ void create_screen_mission() {
                             // BtnSSSD
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_sssd = obj;
-                            lv_obj_set_pos(obj, 0, 0);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, 774, 620);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_sssd, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_ud1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4597,8 +4597,8 @@ void create_screen_mission() {
                             // BtnUD
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_ud = obj;
-                            lv_obj_set_pos(obj, 223, -29);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, 223, 620);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_ud, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_ud1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4635,8 +4635,8 @@ void create_screen_mission() {
                             // BtnSEF
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_sef = obj;
-                            lv_obj_set_pos(obj, 223, -29);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, -551, 620);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_sef, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_sef1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4673,8 +4673,8 @@ void create_screen_mission() {
                             // BtnHBD
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_hbd = obj;
-                            lv_obj_set_pos(obj, 110, -136);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, 884, 100);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_hbd, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_hbd1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4711,8 +4711,8 @@ void create_screen_mission() {
                             // BtnTD
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_td = obj;
-                            lv_obj_set_pos(obj, 223, -29);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, 223, 100);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_td, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_td1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4749,8 +4749,8 @@ void create_screen_mission() {
                             // BtnPD
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_pd = obj;
-                            lv_obj_set_pos(obj, 186, -14);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, -588, 100);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_pd, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_hbd1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4787,8 +4787,8 @@ void create_screen_mission() {
                             // BtnSP
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_sp = obj;
-                            lv_obj_set_pos(obj, 223, -29);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, 997, -420);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_sp, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_sp1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4825,8 +4825,8 @@ void create_screen_mission() {
                             // BtnOIF
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_oif = obj;
-                            lv_obj_set_pos(obj, 110, -136);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, 110, -420);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_oif, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_oif1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -4863,8 +4863,8 @@ void create_screen_mission() {
                             // BtnDFV
                             lv_obj_t *obj = lv_btn_create(parent_obj);
                             objects.btn_dfv = obj;
-                            lv_obj_set_pos(obj, 110, -136);
-                            lv_obj_set_size(obj, 76, 76);
+                            lv_obj_set_pos(obj, -664, -420);
+                            lv_obj_set_size(obj, 114, 114);
                             lv_obj_add_event_cb(obj, event_handler_cb_mission_btn_dfv, LV_EVENT_ALL, flowState);
                             add_style_button_std(obj);
                             lv_obj_set_style_bg_img_src(obj, &img_dfv1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -5332,7 +5332,7 @@ void create_screen_reset_config() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj45 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 76, 38);
+                    lv_obj_set_size(obj, 114, 65);
                     lv_obj_add_event_cb(obj, event_handler_cb_reset_config_obj45, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -5342,7 +5342,7 @@ void create_screen_reset_config() {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj46 = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, 76, 38);
+                    lv_obj_set_size(obj, 114, 65);
                     lv_obj_add_event_cb(obj, event_handler_cb_reset_config_obj46, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
                     lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][4]), LV_PART_MAIN | LV_STATE_DEFAULT);
