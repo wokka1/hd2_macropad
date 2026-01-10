@@ -13,6 +13,7 @@
 #include <Preferences.h>
 #include "display_ESP32_8048S070.h"
 #include "touch_ESP32_8048S070.h"
+#include "usb_hid_keyboard.h"
 
 // UI includes - eez-flow.h has C++ templates, so include it outside extern "C"
 #include "ui/eez-flow.h"
@@ -247,14 +248,56 @@ void flow_tick_task(lv_timer_t *timer)
     ui_tick();
 }
 
-// HID input task stub (to be implemented when HID is added)
+// HID input task - processes keyboard commands from stratagemCode buffer
 void hid_input_task(void *pvParameter)
 {
-    while (1) {
-        // TODO: Process HID input commands from stratagemCode buffer
-        // This would send the key sequences via BLE/USB
+    const int INPUT_CHECK_DELAY = 50; // ms
 
-        vTaskDelay(pdMS_TO_TICKS(50));
+    while (1) {
+        vTaskDelay(pdMS_TO_TICKS(INPUT_CHECK_DELAY));
+
+        // Check if there's a command in the buffer
+        if (stratagemCode[0] > 0)
+        {
+            Serial.println("Sending keyboard command");
+
+            uint8_t cmdIndex = 0;
+
+            // Check connection type
+            if (connectionType != CT_USB)
+            {
+                // Clear buffer and skip if not USB
+                memset(stratagemCode, 0, sizeof(stratagemCode));
+                continue;
+            }
+
+            // Send modifier keys (mask) first
+            usb_keyboard_send(stratagemMask, 0, 0);
+            vTaskDelay(pdMS_TO_TICKS(inputDelay));
+
+            // Loop through command sequence from buffer
+            while (stratagemCode[cmdIndex] > 0 && cmdIndex < 8)
+            {
+                // Press key defined by the keycode
+                usb_keyboard_send(stratagemMask, stratagemCode[cmdIndex], 1);
+                vTaskDelay(pdMS_TO_TICKS(inputDelay));
+
+                // Release key
+                usb_keyboard_send(0, 0, 0);
+                vTaskDelay(pdMS_TO_TICKS(inputDelay));
+
+                cmdIndex++;
+            }
+
+            // Release all modifier keys
+            usb_keyboard_send(0, 0, 0);
+
+            // Clear the command buffer
+            memset(stratagemCode, 0, sizeof(stratagemCode));
+            stratagemMask = 0;
+
+            Serial.println("Command sent");
+        }
     }
 }
 
@@ -357,6 +400,12 @@ void setup()
 
     Serial.println("Input driver registered");
 
+    // Initialize USB HID Keyboard
+    Serial.println("Initializing USB HID...");
+    usb_hid_init();
+    connectionType = CT_USB;  // Set connection type to USB
+    Serial.println("USB HID initialized - connection type set to USB");
+
     // Initialize the HD2 Macropad UI
     Serial.println("Initializing UI...");
     ui_init();
@@ -396,8 +445,9 @@ void setup()
     flowTickTimer->repeat_count = -1;
 
     // Setup HID input task (async)
-    // Note: Commented out until HID implementation is complete
-    // xTaskCreatePinnedToCore(&hid_input_task, "hid_input_task", 2048, NULL, 5, NULL, 0);
+    Serial.println("Creating HID input task...");
+    xTaskCreatePinnedToCore(&hid_input_task, "hid_input_task", 4096, NULL, 5, NULL, 0);
+    Serial.println("HID input task created");
 
     Serial.println("\n========================================");
     Serial.println("Setup complete!");
