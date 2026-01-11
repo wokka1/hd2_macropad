@@ -12,8 +12,9 @@ USBHIDKeyboard Keyboard;
 bool usb_hid_init()
 {
     // Initialize USB with HID Keyboard
+    // Note: USB.begin() is already called automatically when Serial starts
+    // (ARDUINO_USB_CDC_ON_BOOT=1), so we only initialize the keyboard interface
     Keyboard.begin();
-    USB.begin();
 
     Serial.println("USB HID Keyboard initialized");
     return true;

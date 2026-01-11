@@ -172,15 +172,38 @@ void playbackSound(char *path) {
 
 // HID functions stubs (to be implemented with BLE/USB HID libraries)
 void setStratagemCode(uint8_t sequence[8], uint8_t mask, bool plain) {
-    // For now, just log the stratagem
-    Serial.print("Stratagem sequence: ");
-    for (int i = 0; i < 8 && sequence[i] != 0; i++) {
-        Serial.printf("%d ", sequence[i]);
+    // Validate connection type (matching original implementation)
+    switch (connectionType)
+    {
+        case CT_USB:
+            if (!usb_connected()) {
+                return;
+            }
+            break;
+        default:
+            return;
     }
-    Serial.printf("(mask: %d, plain: %d)\n", mask, plain);
 
-    // TODO: Implement HID key sending via BLE or USB
-    // Will need ESP32-BLE-Keyboard or similar library
+    // Clear the buffer first
+    for (uint8_t c = 0; c < 8; c++)
+    {
+        stratagemCode[c] = 0;
+    }
+
+    for (uint8_t c = 0; c < 8; c++)
+    {
+        if (sequence[c] > 0)
+        {
+            uint8_t rawCode = sequence[c];
+            stratagemCode[c] = plain ? rawCode : LookupKeycode(rawCode);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    stratagemMask = mask;
 }
 
 // Update functions stubs
@@ -259,8 +282,6 @@ void hid_input_task(void *pvParameter)
         // Check if there's a command in the buffer
         if (stratagemCode[0] > 0)
         {
-            Serial.println("Sending keyboard command");
-
             uint8_t cmdIndex = 0;
 
             // Check connection type
@@ -295,8 +316,6 @@ void hid_input_task(void *pvParameter)
             // Clear the command buffer
             memset(stratagemCode, 0, sizeof(stratagemCode));
             stratagemMask = 0;
-
-            Serial.println("Command sent");
         }
     }
 }
@@ -400,11 +419,9 @@ void setup()
 
     Serial.println("Input driver registered");
 
-    // Initialize USB HID Keyboard
-    Serial.println("Initializing USB HID...");
-    usb_hid_init();
+    // Initialize USB HID Keyboard (moved after UI to speed up boot)
+    // Will initialize later in setup
     connectionType = CT_USB;  // Set connection type to USB
-    Serial.println("USB HID initialized - connection type set to USB");
 
     // Initialize the HD2 Macropad UI
     Serial.println("Initializing UI...");
@@ -414,6 +431,11 @@ void setup()
     ui_post();
 
     Serial.println("UI initialized");
+
+    // Debug: Print some object addresses to verify UI was created
+    Serial.printf("DEBUG: objects.game = 0x%08X\n", (uint32_t)objects.game);
+    Serial.printf("DEBUG: objects.btn_reinforce = 0x%08X\n", (uint32_t)objects.btn_reinforce);
+    Serial.printf("DEBUG: objects.custom_stratagem1 = 0x%08X\n", (uint32_t)objects.custom_stratagem1);
 
     // Small delay before turning on backlight
     delay(200);
@@ -443,6 +465,11 @@ void setup()
     // Setup timer for EEZ Flow ui tick
     lv_timer_t *flowTickTimer = lv_timer_create(flow_tick_task, 10, NULL);
     flowTickTimer->repeat_count = -1;
+
+    // Initialize USB HID Keyboard (done last to avoid slowing boot)
+    Serial.println("Initializing USB HID...");
+    usb_hid_init();
+    Serial.println("USB HID initialized");
 
     // Setup HID input task (async)
     Serial.println("Creating HID input task...");

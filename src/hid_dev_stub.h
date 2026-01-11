@@ -38,12 +38,14 @@ extern "C" {
 #define HID_KEY_Y 0x1C
 #define HID_KEY_Z 0x1D
 
-// Stub function - actual implementation in main_esp32_8048s070.cpp
-inline uint8_t LookupKeycode(uint8_t input) {
-    // Simple passthrough for now
-    // TODO: Implement proper keymap lookup when HID is added
-    return input;
-}
+// Arrow keys
+#define HID_KEY_RIGHT_ARROW 0x4F
+#define HID_KEY_LEFT_ARROW  0x50
+#define HID_KEY_DOWN_ARROW  0x51
+#define HID_KEY_UP_ARROW    0x52
+
+// LookupKeycode function is defined in keymaps.c
+extern uint8_t LookupKeycode(uint8_t input);
 
 #ifdef __cplusplus
 } /*extern "C"*/
