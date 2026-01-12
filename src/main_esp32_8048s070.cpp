@@ -45,6 +45,19 @@ extern "C" {
 // Tag for logging
 static const char *TAG = "HD2-8048S070";
 
+// Debug logging macros (only work when CDC is enabled)
+#if ARDUINO_USB_CDC_ON_BOOT
+    #define DEBUG_PRINT(x) Serial.print(x)
+    #define DEBUG_PRINTLN(x) Serial.println(x)
+    #define DEBUG_PRINTF(...) Serial.printf(__VA_ARGS__)
+    #define DEBUG_FLUSH() Serial.flush()
+#else
+    #define DEBUG_PRINT(x)
+    #define DEBUG_PRINTLN(x)
+    #define DEBUG_PRINTF(...)
+    #define DEBUG_FLUSH()
+#endif
+
 // Display and LVGL objects
 static LGFX *lcd = nullptr;  // Create as pointer to avoid early initialization
 static lv_disp_draw_buf_t draw_buf;
@@ -78,7 +91,7 @@ extern "C" {
 
 esp_err_t initConfig() {
     preferences.begin("hd2_config", false);
-    Serial.println("Config initialized (Arduino Preferences)");
+    DEBUG_PRINTLN("Config initialized (Arduino Preferences)");
     return ESP_OK;
 }
 
@@ -104,7 +117,7 @@ void closeConfig() {
 
 void resetConfig() {
     preferences.clear();
-    Serial.println("Config reset");
+    DEBUG_PRINTLN("Config reset");
 }
 
 void loadConfig() {
@@ -114,7 +127,7 @@ void loadConfig() {
     currentBrightness = preferences.getInt("brightness", 255);
     screenRotation = preferences.getInt("rotation", 0);
 
-    Serial.printf("Config loaded: delay=%d, muted=%d, brightness=%d\n",
+    DEBUG_PRINTF("Config loaded: delay=%d, muted=%d, brightness=%d\n",
                   inputDelay, playerMuted, currentBrightness);
 }
 
@@ -166,7 +179,7 @@ void setKeymap(uint8_t index, bool restore) {
 void playbackSound(char *path) {
     soundPlayback = true;
     soundFile = path;
-    Serial.printf("Sound requested: %s (not yet implemented)\n", path);
+    DEBUG_PRINTF("Sound requested: %s (not yet implemented)\n", path);
     // TODO: Implement with ESP32-audioI2S or similar Arduino library
 }
 
@@ -209,7 +222,7 @@ void setStratagemCode(uint8_t sequence[8], uint8_t mask, bool plain) {
 // Update functions stubs
 void updateConnection() {
     // TODO: Update UI with connection status
-    Serial.println("Connection update (stub)");
+    DEBUG_PRINTLN("Connection update (stub)");
 }
 
 void updateBatteryInfo() {
@@ -322,57 +335,61 @@ void hid_input_task(void *pvParameter)
 
 void setup()
 {
-    // Initialize Serial for debugging
+#if ARDUINO_USB_CDC_ON_BOOT
+    // Initialize USB and Serial for debugging (only when CDC is enabled)
+    USB.begin();
     Serial.begin(115200);
     delay(1000); // Give serial time to initialize
-    Serial.println("\n\n========================================");
-    Serial.println("HD2 Macropad - ESP32-8048S070");
-    Serial.printf("Version: %s\n", SW_VER);
-    Serial.println("========================================\n");
-    Serial.flush();
+    DEBUG_PRINTLN("\n\n========================================");
+    DEBUG_PRINTLN("HD2 Macropad - ESP32-8048S070");
+    DEBUG_PRINTF("Version: %s\n", SW_VER);
+    DEBUG_PRINTLN("========================================\n");
+    DEBUG_FLUSH();
+#endif
+    // When CDC_ON_BOOT=0, USB will be initialized by Keyboard.begin() later
 
     // Initialize configuration
-    Serial.println("Step 1: Initializing config...");
-    Serial.flush();
+    DEBUG_PRINTLN("Step 1: Initializing config...");
+    DEBUG_FLUSH();
     initConfig();
-    Serial.println("Step 2: Loading config...");
-    Serial.flush();
+    DEBUG_PRINTLN("Step 2: Loading config...");
+    DEBUG_FLUSH();
     loadConfig();
-    Serial.flush();
+    DEBUG_FLUSH();
 
     // Initialize LCD
-    Serial.println("Step 3: Creating display object...");
-    Serial.flush();
+    DEBUG_PRINTLN("Step 3: Creating display object...");
+    DEBUG_FLUSH();
     lcd = new LGFX();
-    Serial.println("Step 4: Configuring display...");
-    Serial.flush();
+    DEBUG_PRINTLN("Step 4: Configuring display...");
+    DEBUG_FLUSH();
     lcd->begin();  // Configure the display hardware
-    Serial.println("Step 5: Initializing display...");
-    Serial.flush();
+    DEBUG_PRINTLN("Step 5: Initializing display...");
+    DEBUG_FLUSH();
     lcd->init();
-    Serial.println("Step 6: Setting rotation...");
-    Serial.flush();
+    DEBUG_PRINTLN("Step 6: Setting rotation...");
+    DEBUG_FLUSH();
     lcd->setRotation(screenRotation);
-    Serial.println("Step 7: Filling screen black...");
-    Serial.flush();
+    DEBUG_PRINTLN("Step 7: Filling screen black...");
+    DEBUG_FLUSH();
     lcd->fillScreen(TFT_BLACK);
 
-    Serial.println("Display initialized");
-    Serial.flush();
+    DEBUG_PRINTLN("Display initialized");
+    DEBUG_FLUSH();
 
     // Initialize touch
-    Serial.println("Initializing touch...");
+    DEBUG_PRINTLN("Initializing touch...");
     if (!touch_init())
     {
-        Serial.println("ERROR: Touch initialization failed!");
+        DEBUG_PRINTLN("ERROR: Touch initialization failed!");
     }
     else
     {
-        Serial.println("Touch initialized");
+        DEBUG_PRINTLN("Touch initialized");
     }
 
     // Initialize LVGL
-    Serial.println("Initializing LVGL...");
+    DEBUG_PRINTLN("Initializing LVGL...");
     lv_init();
 
     // Allocate LVGL draw buffers
@@ -380,24 +397,24 @@ void setup()
                                                      MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
     if (!disp_draw_buf)
     {
-        Serial.println("ERROR: LVGL buffer 1 allocation failed!");
+        DEBUG_PRINTLN("ERROR: LVGL buffer 1 allocation failed!");
         while(1) delay(1000);
     }
     else
     {
-        Serial.printf("LVGL buffer 1 allocated: %d bytes\n", sizeof(lv_color_t) * LVGL_BUFFER_SIZE);
+        DEBUG_PRINTF("LVGL buffer 1 allocated: %d bytes\n", sizeof(lv_color_t) * LVGL_BUFFER_SIZE);
     }
 
     disp_draw_buf2 = (lv_color_t *)heap_caps_malloc(sizeof(lv_color_t) * LVGL_BUFFER_SIZE,
                                                       MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
     if (!disp_draw_buf2)
     {
-        Serial.println("LVGL buffer 2 allocation failed! Using single buffer.");
+        DEBUG_PRINTLN("LVGL buffer 2 allocation failed! Using single buffer.");
         lv_disp_draw_buf_init(&draw_buf, disp_draw_buf, NULL, LVGL_BUFFER_SIZE);
     }
     else
     {
-        Serial.printf("LVGL buffer 2 allocated: %d bytes\n", sizeof(lv_color_t) * LVGL_BUFFER_SIZE);
+        DEBUG_PRINTF("LVGL buffer 2 allocated: %d bytes\n", sizeof(lv_color_t) * LVGL_BUFFER_SIZE);
         lv_disp_draw_buf_init(&draw_buf, disp_draw_buf, disp_draw_buf2, LVGL_BUFFER_SIZE);
     }
 
@@ -409,7 +426,7 @@ void setup()
     disp_drv.draw_buf = &draw_buf;
     disp = lv_disp_drv_register(&disp_drv);
 
-    Serial.println("Display driver registered");
+    DEBUG_PRINTLN("Display driver registered");
 
     // Initialize input device driver
     lv_indev_drv_init(&indev_drv);
@@ -417,32 +434,32 @@ void setup()
     indev_drv.read_cb = my_touchpad_read;
     indev = lv_indev_drv_register(&indev_drv);
 
-    Serial.println("Input driver registered");
+    DEBUG_PRINTLN("Input driver registered");
 
     // Initialize USB HID Keyboard (moved after UI to speed up boot)
     // Will initialize later in setup
     connectionType = CT_USB;  // Set connection type to USB
 
     // Initialize the HD2 Macropad UI
-    Serial.println("Initializing UI...");
+    DEBUG_PRINTLN("Initializing UI...");
     ui_init();
 
     // UI post processing
     ui_post();
 
-    Serial.println("UI initialized");
+    DEBUG_PRINTLN("UI initialized");
 
     // Debug: Print some object addresses to verify UI was created
-    Serial.printf("DEBUG: objects.game = 0x%08X\n", (uint32_t)objects.game);
-    Serial.printf("DEBUG: objects.btn_reinforce = 0x%08X\n", (uint32_t)objects.btn_reinforce);
-    Serial.printf("DEBUG: objects.custom_stratagem1 = 0x%08X\n", (uint32_t)objects.custom_stratagem1);
+    DEBUG_PRINTF("DEBUG: objects.game = 0x%08X\n", (uint32_t)objects.game);
+    DEBUG_PRINTF("DEBUG: objects.btn_reinforce = 0x%08X\n", (uint32_t)objects.btn_reinforce);
+    DEBUG_PRINTF("DEBUG: objects.custom_stratagem1 = 0x%08X\n", (uint32_t)objects.custom_stratagem1);
 
     // Small delay before turning on backlight
     delay(200);
 
     // Turn on display backlight
     lcd->setBrightness(currentBrightness);
-    Serial.println("Backlight on");
+    DEBUG_PRINTLN("Backlight on");
 
     // Mark LVGL as ready
     lvglReady = true;
@@ -467,19 +484,19 @@ void setup()
     flowTickTimer->repeat_count = -1;
 
     // Initialize USB HID Keyboard (done last to avoid slowing boot)
-    Serial.println("Initializing USB HID...");
+    DEBUG_PRINTLN("Initializing USB HID...");
     usb_hid_init();
-    Serial.println("USB HID initialized");
+    DEBUG_PRINTLN("USB HID initialized");
 
     // Setup HID input task (async)
-    Serial.println("Creating HID input task...");
+    DEBUG_PRINTLN("Creating HID input task...");
     xTaskCreatePinnedToCore(&hid_input_task, "hid_input_task", 4096, NULL, 5, NULL, 0);
-    Serial.println("HID input task created");
+    DEBUG_PRINTLN("HID input task created");
 
-    Serial.println("\n========================================");
-    Serial.println("Setup complete!");
-    Serial.println("HD2 Macropad ready for use");
-    Serial.println("========================================\n");
+    DEBUG_PRINTLN("\n========================================");
+    DEBUG_PRINTLN("Setup complete!");
+    DEBUG_PRINTLN("HD2 Macropad ready for use");
+    DEBUG_PRINTLN("========================================\n");
 }
 
 void loop()
