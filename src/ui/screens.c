@@ -3714,8 +3714,8 @@ void create_screen_setup() {
         }
         {
             lv_obj_t *obj = lv_obj_create(parent_obj);
-            lv_obj_set_pos(obj, 2, -2);
-            lv_obj_set_size(obj, LV_PCT(100), 38);
+            lv_obj_set_pos(obj, 68, 0);
+            lv_obj_set_size(obj, LV_PCT(100), 41);
             lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3773,7 +3773,7 @@ void create_screen_setup() {
                 }
                 {
                     lv_obj_t *obj = lv_obj_create(parent_obj);
-                    lv_obj_set_pos(obj, 0, 0);
+                    lv_obj_set_pos(obj, 336, -248);
                     lv_obj_set_size(obj, 76, LV_PCT(100));
                     lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3803,7 +3803,7 @@ void create_screen_setup() {
                             // LabelAmount
                             lv_obj_t *obj = lv_label_create(parent_obj);
                             objects.label_amount = obj;
-                            lv_obj_set_pos(obj, 0, 0);
+                            lv_obj_set_pos(obj, 12, -177);
                             lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT);
                             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -3814,7 +3814,7 @@ void create_screen_setup() {
                 {
                     lv_obj_t *obj = lv_btn_create(parent_obj);
                     objects.obj15 = obj;
-                    lv_obj_set_pos(obj, 310, -2);
+                    lv_obj_set_pos(obj, 643, -41);
                     lv_obj_set_size(obj, 114, LV_PCT(150));
                     lv_obj_add_event_cb(obj, event_handler_cb_setup_obj15, LV_EVENT_ALL, flowState);
                     add_style_button_std(obj);
