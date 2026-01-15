@@ -1,4 +1,13 @@
-# HD2 Macropad
+# HD2 Macropad fork to run on 7" elecrow display
+
+This code is forked from https://github.com/unic8s/hd2_macropad and modified to run on this specific board: [Elecrow 7" basic](https://www.elecrow.com/esp32-display-7-inch-hmi-display-rgb-tft-lcd-touch-screen-support-lvgl.html)
+
+> [!NOTE]
+> I didn't realize when I started this, the Elecrow board doesn't seem to follow all of the ESP32 specs, it has no usb_hid capabilities, and I was trying to use that first, but once BT was enabled, things started falling into place.  The basic board only has 4MB of flash, so it's very limiting on what can be compiled in, sound and wifi are not enabled and there is no room, unless the icons are scaled down (which likely can be done with no negative effects).  Elecrow has an advanced version of the board with 16MB of flash and some other features, I'll test with it later, I'd like to enable the sound.
+
+Flashing this code will be the same process as the original, so follow the instructions down below.  I've tried to keep all of the original functionality.
+
+-------------------------------------------------------------------------
 
 ![The device including the 3D printed frame](screens/device.jpg)
 
