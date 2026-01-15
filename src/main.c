@@ -1,12 +1,12 @@
 #include <lvgl.h>
-#include "display.h"
 #include "esp_bsp.h"
-#include "lv_port.h"
-#include <esp_log.h>   // Add this line to include the header file that declares ESP_LOGI
-#include <esp_flash.h> // Add this line to include the header file that declares esp_flash_t
+#include <esp_log.h>
+#include <esp_flash.h>
 #include <esp_chip_info.h>
 #include <esp_system.h>
 #include <esp_heap_caps.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include <ui/ui.h>
 #include <ui/vars.h>
 #include <ui/screens.h>
@@ -248,8 +248,7 @@ void app_main()
   logSection("Initialize panel device");
   // Display configuration
   bsp_display_cfg_t cfg = {
-      .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
-      .buffer_size = EXAMPLE_LCD_QSPI_H_RES * EXAMPLE_LCD_QSPI_V_RES,
+      .buffer_size = LCD_WIDTH * LCD_HEIGHT,
       .rotate = screenRotation,
   };
 
