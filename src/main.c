@@ -52,8 +52,8 @@ bool playerMuted;
 // Delay for HID input execution in milliseconds (default: 100)
 int inputDelay = 100;
 
-// Rotation of screen (default: 90)
-int screenRotation = LV_DISP_ROT_90;
+// Rotation of screen (default: none for ESP32-8048S070 landscape display)
+int screenRotation = LV_DISP_ROT_NONE;
 
 // Set stratagem code sequence which should be executed
 // sequence - keycode buffer
@@ -243,7 +243,8 @@ void app_main()
   xTaskCreatePinnedToCore(&hid_input_task, "hid_input_task", 2048, NULL, 5, NULL, 0);
 
   // Resolve screen rotation from config
-  screenRotation = peekConfig("rotation", LV_DISP_ROT_90);
+  // ESP32-8048S070 is landscape 800x480, default to no rotation
+  screenRotation = peekConfig("rotation", LV_DISP_ROT_NONE);
 
   logSection("Initialize panel device");
   // Display configuration
