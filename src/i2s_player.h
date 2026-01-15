@@ -1,21 +1,15 @@
-/* I2S player stub for Arduino compatibility */
+/* I2S player stub - audio removed for BLE-only build */
 #pragma once
 
-#ifdef ESP32_8048S070
-// Arduino build - stub (audio not implemented yet)
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+// Stub for BLE-only build - audio playback not needed
 inline void play_wav(const char *path) {
-    // Stub - audio playback not implemented in Arduino version yet
+    // Stub - audio playback removed for size optimization
 }
 
 #ifdef __cplusplus
 }
-#endif
-
-#else
-// ESP-IDF build - use real implementation
-#include "../libraries/audio_player/i2s_player.h"
 #endif

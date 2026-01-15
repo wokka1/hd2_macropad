@@ -1,7 +1,9 @@
 #include <esp_system.h>
 #include "esp_log.h"
 #include "nvs_flash.h"
-#include "i2s_sdcard.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+// #include "i2s_sdcard.h"  // Removed - audio not needed for BLE-only build
 #include <lvgl.h>
 #include "ui/ui.h"
 #include "ui/screens.h"
@@ -20,8 +22,8 @@ extern uint8_t connectionType;
 
 extern esp_err_t ble_controller_init();
 extern esp_err_t ble_controller_deinit();
-extern esp_err_t usb_controller_init();
-extern esp_err_t usb_controller_deinit();
+// extern esp_err_t usb_controller_init();  // Removed - USB HID not needed for BLE-only build
+// extern esp_err_t usb_controller_deinit();
 
 // Init configuration from NVS
 esp_err_t initConfig()
@@ -35,8 +37,9 @@ esp_err_t initConfig()
     }
     ESP_ERROR_CHECK(ret);
 
-    ESP_ERROR_CHECK(init_sdcard());
-    lv_fs_fatfs_init();
+    // SD card and FAT filesystem removed for BLE-only build
+    // ESP_ERROR_CHECK(init_sdcard());
+    // lv_fs_fatfs_init();
 
     return ret;
 }
@@ -136,7 +139,7 @@ void setRotation(int rotation, bool restore)
         setConfig("rotation", screenRotation);
     }
 
-    playbackSound(SND_SWITCH);
+    // playbackSound(SND_SWITCH);  // Audio removed for BLE-only build
 
     if (restart)
     {
@@ -185,7 +188,7 @@ void setMuted(bool muted, bool restore)
         setConfig("muted", playerMuted ? 1 : 0);
     }
 
-    playbackSound(SND_SWITCH);
+    // playbackSound(SND_SWITCH);  // Audio removed for BLE-only build
 }
 
 // Write the keymap assignment to configuration
@@ -200,7 +203,7 @@ void setConnectivity(uint8_t index, bool restore)
         setConfig("connectivity", index);
     }
 
-    playbackSound(SND_SWITCH);
+    // playbackSound(SND_SWITCH);  // Audio removed for BLE-only build
 
     switch (connectionType)
     {
@@ -208,10 +211,10 @@ void setConnectivity(uint8_t index, bool restore)
         // Deinit Bluetooth controller
         ble_controller_deinit();
         break;
-    case CT_USB:
-        // Deinit USB controller
-        usb_controller_deinit();
-        break;
+    // case CT_USB:  // Removed - USB HID not needed for BLE-only build
+    //     // Deinit USB controller
+    //     usb_controller_deinit();
+    //     break;
     default:
         break;
     }
@@ -224,10 +227,10 @@ void setConnectivity(uint8_t index, bool restore)
         // Init Bluetooth controller
         ble_controller_init();
         break;
-    case CT_USB:
-        // Init USB controller
-        usb_controller_init();
-        break;
+    // case CT_USB:  // Removed - USB HID not needed for BLE-only build
+    //     // Init USB controller
+    //     usb_controller_init();
+    //     break;
     default:
         break;
     }
@@ -251,7 +254,7 @@ void setKeymap(uint8_t index, bool restore)
         setConfig("keymap", index);
     }
 
-    playbackSound(SND_SWITCH);
+    // playbackSound(SND_SWITCH);  // Audio removed for BLE-only build
 }
 
 esp_err_t openConfig()
