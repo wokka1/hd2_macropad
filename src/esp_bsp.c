@@ -307,10 +307,11 @@ static esp_err_t init_lcd_panel(void)
 {
     ESP_LOGI(TAG, "Initializing RGB LCD panel");
 
+    // Timing from bluetooth-testing branch (known working with ESP-IDF)
     esp_lcd_rgb_panel_config_t panel_config = {
         .clk_src = LCD_CLK_SRC_PLL160M,
         .timings = {
-            .pclk_hz = LCD_PIXEL_CLOCK_HZ,
+            .pclk_hz = LCD_PIXEL_CLOCK_HZ,  // 14MHz
             .h_res = LCD_WIDTH,
             .v_res = LCD_HEIGHT,
             .hsync_pulse_width = 1,

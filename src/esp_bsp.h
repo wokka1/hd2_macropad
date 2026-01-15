@@ -17,7 +17,7 @@
 #define LCD_BIT_PER_PIXEL   16
 
 // LCD RGB Interface Pins for ESP32-8048S070
-#define LCD_PIXEL_CLOCK_HZ  (14 * 1000 * 1000)  // 14MHz
+#define LCD_PIXEL_CLOCK_HZ  (14 * 1000 * 1000)  // 14MHz (from bluetooth-testing)
 #define LCD_BK_LIGHT_ON_LEVEL  1
 #define LCD_BK_LIGHT_OFF_LEVEL !LCD_BK_LIGHT_ON_LEVEL
 #define PIN_NUM_BK_LIGHT    2
