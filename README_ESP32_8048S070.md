@@ -8,7 +8,7 @@ This document describes the adaptation of the HD2 Macropad project to work with 
 - **Display**: 7" 800x480 RGB parallel interface
 - **Touch Controller**: GT911 (I2C)
 - **MCU**: ESP32-S3 with OPI PSRAM
-- **Framework**: Arduino (vs ESP-IDF in original)
+- **Framework**: ESP-IDF
 
 ### Pin Configuration
 
@@ -28,13 +28,13 @@ This document describes the adaptation of the HD2 Macropad project to work with 
 - **SDA**: GPIO 19
 - **SCL**: GPIO 20
 - **RST**: GPIO 38
-- **INT**: Not connected (-1)
+- **INT**: GPIO 18
 
 #### Display Timing
 - **Resolution**: 800x480
-- **Pixel Clock**: 15MHz
+- **Pixel Clock**: 14MHz
 - **HSYNC**: Front Porch=40, Pulse=48, Back Porch=40
-- **VSYNC**: Front Porch=13, Pulse=3, Back Porch=32
+- **VSYNC**: Front Porch=1, Pulse=31, Back Porch=13
 
 ## Files Created
 
@@ -54,33 +54,33 @@ GT911 touch controller driver using the TAMC_GT911 library.
 - Touch coordinate mapping for 800x480 resolution
 - Simple API for touch state and coordinates
 
-### 3. `src/main_esp32_8048s070.cpp`
-Arduino-based main application file for the ESP32-8048S070 environment.
+### 3. `src/main.c`
+ESP-IDF main application file for the ESP32-8048S070 environment.
 
 **Key Features:**
-- LVGL initialization with LovyanGFX
-- Touch input handling
+- LVGL initialization with ESP LCD RGB panel
+- Touch input handling via GT911
 - Double buffering for smooth graphics
-- Basic test UI (to be extended with full HD2 Macropad UI)
+- Full HD2 Macropad UI integrated
 
 ### 4. PlatformIO Environment
-Updated `platformio.ini` with new `esp32_8048s070` environment.
+Updated `platformio.ini` with new `esp32_8048s070_espidf` environment.
 
 ## Building and Uploading
 
 ### Build for ESP32-8048S070
 ```bash
-pio run -e esp32_8048s070
+pio run -e esp32_8048s070_espidf
 ```
 
 ### Upload to ESP32-8048S070
 ```bash
-pio run -e esp32_8048s070 -t upload
+pio run -e esp32_8048s070_espidf -t upload
 ```
 
 ### Monitor Serial Output
 ```bash
-pio device monitor -e esp32_8048s070
+pio device monitor -e esp32_8048s070_espidf
 ```
 
 ### Build Original Project (480x320)
@@ -92,46 +92,48 @@ pio run -e LVGL-320-480
 
 | Feature | Original (LVGL-320-480) | ESP32-8048S070 |
 |---------|------------------------|----------------|
-| Framework | ESP-IDF | Arduino |
+| Framework | ESP-IDF | ESP-IDF |
 | Display | 480x320 SPI (ST7796) | 800x480 RGB Parallel |
 | Touch | FT6336 (I2C) | GT911 (I2C) |
-| Display Library | ESP LCD (native) | LovyanGFX |
+| Display Library | ESP LCD (native) | ESP LCD RGB Panel |
 | Resolution | 480x320 | 800x480 |
 | Interface | QSPI | RGB Parallel |
 
 ## Current Status
 
 ### ✅ Completed
-- [x] Display driver configuration (LovyanGFX)
+- [x] Display driver configuration (ESP LCD RGB Panel)
 - [x] Touch driver configuration (GT911)
 - [x] PlatformIO environment setup
-- [x] Basic Arduino main file
+- [x] ESP-IDF main application
 - [x] LVGL initialization
 - [x] Source file filtering for environment isolation
+- [x] Full HD2 Macropad UI integrated
+- [x] BLE HID functionality
+- [x] NVS configuration storage
+- [x] UI layouts adapted for 800x480 resolution
 
 ### 🚧 TODO
-- [ ] Integrate full HD2 Macropad UI (currently shows test screen)
-- [ ] Port BLE HID functionality to Arduino framework
-- [ ] Port USB HID functionality to Arduino framework
-- [ ] Port audio playback functionality
-- [ ] Port NVS configuration storage
-- [ ] Adapt UI layouts for 800x480 resolution
-- [ ] Test all HD2 Macropad features
+- [ ] USB HID functionality (not supported on this board - BT only)
+- [ ] Audio playback functionality (limited by 4MB flash)
+- [ ] Comprehensive testing of all features
 
 ## Integration Notes
 
-The current implementation provides a basic framework with:
-1. Working display output via LovyanGFX
+The current implementation provides a fully functional HD2 Macropad with:
+1. Working display output via ESP LCD RGB Panel
 2. Working touch input via GT911
 3. LVGL integration with proper buffering
-4. Simple test UI to verify functionality
+4. Full HD2 Macropad UI with stratagem selection
+5. BLE HID keyboard functionality
+6. NVS configuration storage
 
-To complete the integration, the following components from the original project need to be ported:
-- `ui/ui.c` - Main UI components (may need layout adjustments)
-- BLE and USB HID controllers (Arduino-compatible versions)
-- Audio player functionality
-- Configuration management (NVS or SPIFFS)
-- Stratagem system and keymapping
+### Hardware Limitations (Basic 4MB Board)
+- No USB HID capability on this board variant
+- Audio disabled due to flash constraints
+- WiFi disabled due to flash constraints
+
+The advanced 16MB version of this board may support additional features.
 
 ## References
 
@@ -165,12 +167,12 @@ Setup complete!
 
 ### Display Issues
 - Check RGB pin connections match the hardware
-- Verify pixel clock frequency (15MHz for this display)
+- Verify pixel clock frequency (14MHz for this display)
 - Adjust timing parameters if display shows tearing
 
 ### Touch Issues
 - Verify I2C pins (SDA=19, SCL=20)
-- Check touch reset pin (GPIO 38)
+- Check touch reset pin (GPIO 38) and interrupt pin (GPIO 18)
 - Monitor serial for touch initialization errors
 
 ### Memory Issues
@@ -179,6 +181,6 @@ Setup complete!
 - Consider using PSRAM for buffers
 
 ### Build Errors
-- Ensure LovyanGFX and GT911 libraries are installed
 - Check that build_src_filter excludes conflicting files
-- Verify ESP32 Arduino core version compatibility
+- Verify ESP-IDF version compatibility
+- Ensure all required components are available
