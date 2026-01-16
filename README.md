@@ -7,6 +7,8 @@ This code is forked from https://github.com/unic8s/hd2_macropad and modified to 
 
 Flashing this code will be the same process as the original, so follow the instructions down below.  I've tried to keep all of the original functionality.
 
+Technical details of this build can be found at [README_ESP32_8048S070](README_ESP32_8048S070.md)
+
 -------------------------------------------------------------------------
 
 ![The device including the 3D printed frame](screens/device.jpg)

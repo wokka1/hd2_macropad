@@ -66,6 +66,16 @@ ESP-IDF main application file for the ESP32-8048S070 environment.
 ### 4. PlatformIO Environment
 Updated `platformio.ini` with new `esp32_8048s070_espidf` environment.
 
+### 5. EEZ Studio UI Files
+The EEZ Studio project files have been updated to support the larger 800x480 display:
+
+- **Screen layouts** adjusted for 800x480 resolution
+- **Stratagem icons** resized for the larger display
+- **Tab icons** updated from 480×38 to 720×57 embedded base64 image data
+- **UI element positions** recalculated for proper spacing on 7" screen
+
+The EEZ project file is located at `eez/hd2_macropad.eez-project`.
+
 ## Building and Uploading
 
 ### Build for ESP32-8048S070
