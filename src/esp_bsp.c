@@ -48,16 +48,97 @@ static int16_t touch_last_y = 0;
 #define GT911_I2C_ADDR_2    0x14
 static uint8_t gt911_addr = GT911_I2C_ADDR_1;
 
-// LEDC channel for backlight
+#if !BACKLIGHT_USE_I2C
+// LEDC channel for backlight (PWM mode for original ESP32-8048S070)
 #define LCD_LEDC_CH         1
+#endif
 
 /**********************
  * BACKLIGHT CONTROL
  **********************/
 
+#if BACKLIGHT_USE_I2C
+/**
+ * STC8H1K28 I2C Backlight Controller for CrowPanel Advance
+ * Protocol: Write single byte to address 0x30
+ *   0 = Maximum brightness
+ *   1-244 = Dimming levels (1=brightest dim, 244=dimmest)
+ *   245 = Off
+ *   246 = Buzzer on
+ *   247 = Buzzer off
+ */
+
+static bool backlight_i2c_ready = false;
+
+static esp_err_t stc8h_write_brightness(uint8_t value)
+{
+    if (!backlight_i2c_ready) {
+        ESP_LOGW(TAG, "Backlight I2C not ready");
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    esp_err_t ret = i2c_master_write_to_device(BSP_I2C_NUM, BACKLIGHT_I2C_ADDR,
+                                                &value, 1, pdMS_TO_TICKS(100));
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to write to STC8H1K28: %s", esp_err_to_name(ret));
+    }
+    return ret;
+}
+
 static esp_err_t bsp_display_brightness_init(void)
 {
-    ESP_LOGI(TAG, "Initializing backlight PWM");
+    ESP_LOGI(TAG, "CrowPanel Advance: Using STC8H1K28 I2C backlight controller at 0x%02X", BACKLIGHT_I2C_ADDR);
+    // I2C will be initialized by bsp_i2c_init() before touch init
+    // Mark as ready - actual I2C init happens later
+    backlight_i2c_ready = true;
+    return ESP_OK;
+}
+
+esp_err_t bsp_display_brightness_set(int brightness_percent)
+{
+    if (brightness_percent > 100) {
+        brightness_percent = 100;
+    }
+    if (brightness_percent < 0) {
+        brightness_percent = 0;
+    }
+
+    ESP_LOGI(TAG, "Setting LCD backlight: %d%%", brightness_percent);
+
+    // STC8H1K28: 0 = max brightness, 245 = off
+    // Convert percentage: 100% -> 0, 0% -> 245
+    uint8_t value;
+    if (brightness_percent == 0) {
+        value = BACKLIGHT_OFF;  // 245 = off
+    } else if (brightness_percent >= 100) {
+        value = BACKLIGHT_MAX;  // 0 = max brightness
+    } else {
+        // Linear scale: 100% = 0, 1% = 244
+        // brightness_percent: 1-99 maps to value: 1-244
+        value = (uint8_t)(245 - (brightness_percent * 245 / 100));
+    }
+
+    return stc8h_write_brightness(value);
+}
+
+esp_err_t bsp_display_backlight_off(void)
+{
+    ESP_LOGI(TAG, "Backlight OFF");
+    return stc8h_write_brightness(BACKLIGHT_OFF);
+}
+
+esp_err_t bsp_display_backlight_on(void)
+{
+    ESP_LOGI(TAG, "Backlight ON (max brightness)");
+    return stc8h_write_brightness(BACKLIGHT_MAX);
+}
+
+#else
+/* PWM Backlight Control for original ESP32-8048S070 */
+
+static esp_err_t bsp_display_brightness_init(void)
+{
+    ESP_LOGI(TAG, "Initializing backlight PWM on GPIO %d", PIN_NUM_BK_LIGHT);
 
     const ledc_timer_config_t LCD_backlight_timer = {
         .speed_mode = LEDC_LOW_SPEED_MODE,
@@ -110,6 +191,8 @@ esp_err_t bsp_display_backlight_on(void)
     return bsp_display_brightness_set(100);
 }
 
+#endif // BACKLIGHT_USE_I2C
+
 /**********************
  * LVGL CALLBACKS
  **********************/
@@ -157,6 +240,22 @@ static esp_err_t bsp_i2c_init(void)
     ESP_ERROR_CHECK(i2c_driver_install(BSP_I2C_NUM, i2c_conf.mode, 0, 0, 0));
 
     i2c_initialized = true;
+
+    // Scan I2C bus for devices
+    ESP_LOGI(TAG, "Scanning I2C bus...");
+    for (uint8_t addr = 0x08; addr < 0x78; addr++) {
+        i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+        i2c_master_start(cmd);
+        i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, true);
+        i2c_master_stop(cmd);
+        esp_err_t ret = i2c_master_cmd_begin(BSP_I2C_NUM, cmd, pdMS_TO_TICKS(50));
+        i2c_cmd_link_delete(cmd);
+        if (ret == ESP_OK) {
+            ESP_LOGI(TAG, "I2C device found at address 0x%02X", addr);
+        }
+    }
+    ESP_LOGI(TAG, "I2C scan complete");
+
     return ESP_OK;
 }
 
@@ -307,21 +406,41 @@ static esp_err_t init_lcd_panel(void)
 {
     ESP_LOGI(TAG, "Initializing RGB LCD panel");
 
-    // Timing from bluetooth-testing branch (known working with ESP-IDF)
+#ifdef PCLK_ACTIVE_NEG
+    // CrowPanel Advance timing per ESPHome community
+    ESP_LOGI(TAG, "Using CrowPanel Advance timing (pclk: %d Hz, pclk_active_neg: %d)",
+             LCD_PIXEL_CLOCK_HZ, PCLK_ACTIVE_NEG);
+#endif
+
     esp_lcd_rgb_panel_config_t panel_config = {
         .clk_src = LCD_CLK_SRC_PLL160M,
         .timings = {
-            .pclk_hz = LCD_PIXEL_CLOCK_HZ,  // 14MHz
+            .pclk_hz = LCD_PIXEL_CLOCK_HZ,
             .h_res = LCD_WIDTH,
             .v_res = LCD_HEIGHT,
+#ifdef CROWPANEL_ADVANCE
+            // CrowPanel Advance timing from ESPHome community
+            .hsync_pulse_width = 48,
+            .hsync_back_porch = 13,
+            .hsync_front_porch = 40,
+            .vsync_pulse_width = 3,
+            .vsync_back_porch = 13,
+            .vsync_front_porch = 40,
+#else
+            // Original ESP32-8048S070 timing
             .hsync_pulse_width = 1,
             .hsync_back_porch = 40,
             .hsync_front_porch = 48,
             .vsync_pulse_width = 1,
             .vsync_back_porch = 40,
             .vsync_front_porch = 13,
+#endif
             .flags = {
+#ifdef PCLK_ACTIVE_NEG
+                .pclk_active_neg = true,
+#else
                 .pclk_active_neg = false,
+#endif
             },
         },
         .data_width = 16,
@@ -460,7 +579,16 @@ lv_disp_t *bsp_display_start_with_config(const bsp_display_cfg_t *cfg)
 {
     ESP_LOGI(TAG, "Starting display initialization");
 
-    // Initialize backlight PWM
+#if BACKLIGHT_USE_I2C
+    // For CrowPanel Advance: Initialize I2C first (needed for backlight control)
+    ESP_LOGI(TAG, "CrowPanel Advance: Initializing I2C bus first for backlight control");
+    if (bsp_i2c_init() != ESP_OK) {
+        ESP_LOGE(TAG, "I2C init failed");
+        return NULL;
+    }
+#endif
+
+    // Initialize backlight
     if (bsp_display_brightness_init() != ESP_OK) {
         ESP_LOGE(TAG, "Backlight init failed");
         return NULL;
@@ -471,6 +599,9 @@ lv_disp_t *bsp_display_start_with_config(const bsp_display_cfg_t *cfg)
         ESP_LOGE(TAG, "LCD panel init failed");
         return NULL;
     }
+
+    // Turn on backlight after panel is ready
+    bsp_display_backlight_on();
 
     // Initialize LVGL
     if (init_lvgl(cfg) != ESP_OK) {
