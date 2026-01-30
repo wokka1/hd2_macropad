@@ -152,8 +152,8 @@ typedef struct _objects_t {
     lv_obj_t *obj36;
     lv_obj_t *btn_reinforce;
     lv_obj_t *btn_resupply;
-    lv_obj_t *btn_sos;
     lv_obj_t *btn_rearm;
+    lv_obj_t *btn_hellbomb_1;
     lv_obj_t *custom_stratagem1;
     lv_obj_t *custom_stratagem2;
     lv_obj_t *custom_stratagem3;
@@ -161,7 +161,6 @@ typedef struct _objects_t {
     lv_obj_t *custom_stratagem5;
     lv_obj_t *custom_stratagem6;
     lv_obj_t *btn_seaf;
-    lv_obj_t *btn_hellbomb;
     lv_obj_t *obj37;
     lv_obj_t *obj38;
     lv_obj_t *btn_sssd;
