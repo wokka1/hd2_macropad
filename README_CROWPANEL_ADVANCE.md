@@ -237,8 +237,51 @@ Key files:
 - [Official Factory Source Code (GitHub)](https://github.com/Elecrow-RD/CrowPanel-Advance-7-HMI-ESP32-S3-AI-Powered-IPS-Touch-Screen-800x480)
 - [ESP-IDF RGB LCD Documentation](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/api-reference/peripherals/lcd.html)
 
+## USB HID Support
+
+### Hardware Limitation
+
+**USB HID does NOT work on the CrowPanel Advance 7" board** due to hardware design.
+
+The ESP32-S3 has native USB on GPIO19 (D-) and GPIO20 (D+). However:
+
+| Board | GPIO19/20 Usage | USB HID Status |
+|-------|-----------------|----------------|
+| CrowPanel Basic | Touch I2C (SDA/SCL) | ❌ Not possible |
+| CrowPanel Advance | Free (Touch uses GPIO15/16) | ❌ Not connected |
+
+On the CrowPanel Advance, while GPIO19/20 are not used by the touch controller, **they are not routed to any external USB connector**. The board's USB-C port is connected to a USB-to-serial chip (likely CH340) for programming only.
+
+### Software Implementation
+
+USB HID support is implemented in the codebase using TinyUSB:
+
+- `src/usb/usb_controller.c` - TinyUSB HID keyboard implementation
+- `src/usb/usb_controller.h` - USB controller API
+- TinyUSB initializes successfully but reports "USB mounted: NO" because there's no physical connection
+
+### Testing USB HID
+
+The boot log will show:
+```
+I (1897) TinyUSB: TinyUSB Driver installed
+I (1901) USB Controller: TinyUSB driver installed OK
+I (1907) USB Controller: USB mounted: NO      <- No physical USB connection
+I (1912) USB Controller: USB connected: NO
+```
+
+### Workarounds
+
+1. **Use Bluetooth HID** - Works out of the box, no hardware changes needed
+2. **Hardware modification** - Solder a USB connector to GPIO19 (D-) and GPIO20 (D+)
+3. **Different board** - Use a board that exposes native USB (e.g., boards with dedicated USB OTG port)
+
 ## Version History
 
+- **2026-01-31**: Added USB HID support (TinyUSB)
+  - USB HID implementation complete but non-functional on CrowPanel Advance
+  - Hardware limitation: native USB pins not exposed
+  - Bluetooth HID remains the recommended connection method
 - **2026-01-30**: Initial working configuration with official Elecrow factory settings
   - I2C backlight control via STC8H1K28
   - Correct RGB pin mapping from LovyanGFX_Driver.h

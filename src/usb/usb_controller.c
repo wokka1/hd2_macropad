@@ -90,7 +90,10 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_
 
 esp_err_t usb_controller_init(void)
 {
+    ESP_LOGI(TAG, "===========================================");
     ESP_LOGI(TAG, "Initializing USB HID controller");
+    ESP_LOGI(TAG, "ESP32-S3 native USB: D- = GPIO19, D+ = GPIO20");
+    ESP_LOGI(TAG, "===========================================");
 
     const tinyusb_config_t tusb_cfg = {
         .device_descriptor = NULL,  // Use default device descriptor
@@ -98,15 +101,21 @@ esp_err_t usb_controller_init(void)
         .string_descriptor_count = sizeof(string_descriptor) / sizeof(string_descriptor[0]),
         .external_phy = false,
         .configuration_descriptor = configuration_descriptor,
+        .self_powered = false,
+        .vbus_monitor_io = -1,  // No VBUS monitoring
     };
 
+    ESP_LOGI(TAG, "Installing TinyUSB driver...");
     esp_err_t ret = tinyusb_driver_install(&tusb_cfg);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to install TinyUSB driver: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "FAILED to install TinyUSB driver: %s", esp_err_to_name(ret));
         return ret;
     }
 
-    ESP_LOGI(TAG, "USB HID controller initialized successfully");
+    ESP_LOGI(TAG, "TinyUSB driver installed OK");
+    ESP_LOGI(TAG, "USB mounted: %s", tud_mounted() ? "YES" : "NO");
+    ESP_LOGI(TAG, "USB connected: %s", tud_connected() ? "YES" : "NO");
+    ESP_LOGI(TAG, "===========================================");
     return ESP_OK;
 }
 
