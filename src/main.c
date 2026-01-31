@@ -239,6 +239,10 @@ void app_main()
   // Init and load config from NVS storage
   initConfig();
 
+  // Initialize USB HID early so device is detected by host
+  // HID reports are only sent when USB mode is selected
+  usb_controller_init();
+
   // Setup HID input task (async)
   xTaskCreatePinnedToCore(&hid_input_task, "hid_input_task", 2048, NULL, 5, NULL, 0);
 

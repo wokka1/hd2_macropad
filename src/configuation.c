@@ -205,6 +205,7 @@ void setConnectivity(uint8_t index, bool restore)
 
     // playbackSound(SND_SWITCH);  // Audio removed for BLE-only build
 
+    // Deinit previous connection type (USB stays running always)
     switch (connectionType)
     {
     case CT_BLUETOOTH:
@@ -212,8 +213,7 @@ void setConnectivity(uint8_t index, bool restore)
         ble_controller_deinit();
         break;
     case CT_USB:
-        // Deinit USB controller
-        usb_controller_deinit();
+        // USB stays initialized - nothing to deinit
         break;
     default:
         break;
@@ -221,6 +221,7 @@ void setConnectivity(uint8_t index, bool restore)
 
     connectionType = index;
 
+    // Init new connection type (USB is already running from startup)
     switch (connectionType)
     {
     case CT_BLUETOOTH:
@@ -228,8 +229,7 @@ void setConnectivity(uint8_t index, bool restore)
         ble_controller_init();
         break;
     case CT_USB:
-        // Init USB controller
-        usb_controller_init();
+        // USB is already initialized at startup - nothing to do
         break;
     default:
         break;
