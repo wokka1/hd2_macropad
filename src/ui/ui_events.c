@@ -121,7 +121,7 @@ void action_goto_game(lv_event_t *e)
 		}
 	}
 
-	lv_scr_load_anim(objects.game, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0, false);
+	lv_scr_load_anim(objects.game, LV_SCR_LOAD_ANIM_NONE, 0, 0, false);
 }
 
 // Update selection in UI (text and bar)
