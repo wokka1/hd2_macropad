@@ -95,7 +95,14 @@ void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param)
     case ESP_HIDD_EVENT_BLE_DISCONNECT:
     {
         sec_conn = false;
-        ESP_LOGI(TAG_BLE, "ESP_HIDD_EVENT_BLE_DISCONNECT");
+        ESP_LOGW(TAG_BLE, "========================================");
+        ESP_LOGW(TAG_BLE, "=== BLE DISCONNECTED ===");
+        ESP_LOGW(TAG_BLE, "Remote device: %02x:%02x:%02x:%02x:%02x:%02x",
+                 param->disconnect.remote_bda[0], param->disconnect.remote_bda[1],
+                 param->disconnect.remote_bda[2], param->disconnect.remote_bda[3],
+                 param->disconnect.remote_bda[4], param->disconnect.remote_bda[5]);
+        ESP_LOGW(TAG_BLE, "Restarting advertising...");
+        ESP_LOGW(TAG_BLE, "========================================");
         esp_ble_gap_start_advertising(&hidd_adv_params);
 
         updateConnection();
@@ -149,7 +156,14 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
 
         updateConnection();
         break;
+    case ESP_GAP_BLE_UPDATE_CONN_PARAMS_EVT:
+        ESP_LOGI(TAG_BLE, "Connection params updated: interval=%d, latency=%d, timeout=%d",
+                 param->update_conn_params.conn_int,
+                 param->update_conn_params.latency,
+                 param->update_conn_params.timeout);
+        break;
     default:
+        ESP_LOGD(TAG_BLE, "GAP event: %d", event);
         break;
     }
 }
