@@ -95,14 +95,7 @@ void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param)
     case ESP_HIDD_EVENT_BLE_DISCONNECT:
     {
         sec_conn = false;
-        ESP_LOGW(TAG_BLE, "========================================");
-        ESP_LOGW(TAG_BLE, "=== BLE DISCONNECTED ===");
-        ESP_LOGW(TAG_BLE, "Remote device: %02x:%02x:%02x:%02x:%02x:%02x",
-                 param->disconnect.remote_bda[0], param->disconnect.remote_bda[1],
-                 param->disconnect.remote_bda[2], param->disconnect.remote_bda[3],
-                 param->disconnect.remote_bda[4], param->disconnect.remote_bda[5]);
-        ESP_LOGW(TAG_BLE, "Restarting advertising...");
-        ESP_LOGW(TAG_BLE, "========================================");
+        ESP_LOGW(TAG_BLE, "=== BLE DISCONNECTED - Restarting advertising ===");
         esp_ble_gap_start_advertising(&hidd_adv_params);
 
         updateConnection();
