@@ -456,6 +456,11 @@ static esp_err_t init_lcd_panel(void)
             PIN_NUM_DATA12, PIN_NUM_DATA13, PIN_NUM_DATA14, PIN_NUM_DATA15,
         },
         .disp_gpio_num = GPIO_NUM_NC,
+#ifdef CROWPANEL_ADVANCE
+        // Use bounce buffer to prevent PSRAM access from causing display offset
+        // 10 lines * 800 pixels * 2 bytes = 16000 bytes from internal SRAM
+        .bounce_buffer_size_px = 800 * 10,
+#endif
         .flags = {
             .fb_in_psram = 1,
         },
