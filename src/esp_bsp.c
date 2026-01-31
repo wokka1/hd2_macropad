@@ -419,13 +419,13 @@ static esp_err_t init_lcd_panel(void)
             .h_res = LCD_WIDTH,
             .v_res = LCD_HEIGHT,
 #ifdef CROWPANEL_ADVANCE
-            // CrowPanel Advance timing from ESPHome community
-            .hsync_pulse_width = 48,
-            .hsync_back_porch = 13,
-            .hsync_front_porch = 40,
-            .vsync_pulse_width = 3,
-            .vsync_back_porch = 13,
-            .vsync_front_porch = 40,
+            // CrowPanel Advance V1.2 timing from official Elecrow factory code
+            .hsync_front_porch = 8,
+            .hsync_pulse_width = 4,
+            .hsync_back_porch = 8,
+            .vsync_front_porch = 8,
+            .vsync_pulse_width = 4,
+            .vsync_back_porch = 8,
 #else
             // Original ESP32-8048S070 timing
             .hsync_pulse_width = 1,
