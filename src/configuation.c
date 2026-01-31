@@ -22,8 +22,8 @@ extern uint8_t connectionType;
 
 extern esp_err_t ble_controller_init();
 extern esp_err_t ble_controller_deinit();
-// extern esp_err_t usb_controller_init();  // Removed - USB HID not needed for BLE-only build
-// extern esp_err_t usb_controller_deinit();
+extern esp_err_t usb_controller_init();
+extern esp_err_t usb_controller_deinit();
 
 // Init configuration from NVS
 esp_err_t initConfig()
@@ -211,10 +211,10 @@ void setConnectivity(uint8_t index, bool restore)
         // Deinit Bluetooth controller
         ble_controller_deinit();
         break;
-    // case CT_USB:  // Removed - USB HID not needed for BLE-only build
-    //     // Deinit USB controller
-    //     usb_controller_deinit();
-    //     break;
+    case CT_USB:
+        // Deinit USB controller
+        usb_controller_deinit();
+        break;
     default:
         break;
     }
@@ -227,10 +227,10 @@ void setConnectivity(uint8_t index, bool restore)
         // Init Bluetooth controller
         ble_controller_init();
         break;
-    // case CT_USB:  // Removed - USB HID not needed for BLE-only build
-    //     // Init USB controller
-    //     usb_controller_init();
-    //     break;
+    case CT_USB:
+        // Init USB controller
+        usb_controller_init();
+        break;
     default:
         break;
     }

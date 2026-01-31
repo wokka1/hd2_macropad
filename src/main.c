@@ -16,9 +16,9 @@
 #include <ui/ui_post.h>
 #include "driver/gpio.h"
 #include "hid_dev.h"
-// #include "i2s_player.h"  // Removed - audio not needed for BLE-only build
+// #include "i2s_player.h"  // Removed - audio not needed
 #include "ble/ble_controller.h"
-// #include "usb/usb_controller.h"  // Removed - USB HID not needed for BLE-only build
+#include "usb/usb_controller.h"
 #include "configration.h"
 #include "keymaps.h"
 #include "version.h"
@@ -69,12 +69,12 @@ void setStratagemCode(uint8_t sequence[8], uint8_t mask, bool plain)
       return;
     }
     break;
-  // case CT_USB:  // Removed - USB HID not needed for BLE-only build
-  //   if (!usb_connected())
-  //   {
-  //     return;
-  //   }
-  //   break;
+  case CT_USB:
+    if (!usb_connected())
+    {
+      return;
+    }
+    break;
   default:
     return;
   }
@@ -136,17 +136,17 @@ void updateConnection()
       imgConnection = (lv_img_dsc_t *)&img_btdis;
     }
     break;
-  // case CT_USB:  // Removed - USB HID not needed for BLE-only build
-  //   // Check USB connection state
-  //   if (usb_connected())
-  //   {
-  //     imgConnection = (lv_img_dsc_t *)&img_us_bcon;
-  //   }
-  //   else
-  //   {
-  //     imgConnection = (lv_img_dsc_t *)&img_us_bdis;
-  //   }
-  //   break;
+  case CT_USB:
+    // Check USB connection state
+    if (usb_connected())
+    {
+      imgConnection = (lv_img_dsc_t *)&img_us_bcon;
+    }
+    else
+    {
+      imgConnection = (lv_img_dsc_t *)&img_us_bdis;
+    }
+    break;
   default:
     return;
   }
@@ -178,9 +178,9 @@ void hid_input_task(void *pvParameters)
       case CT_BLUETOOTH:
         fptr = &ble_keyboard_send;
         break;
-      // case CT_USB:  // Removed - USB HID not needed for BLE-only build
-      //   fptr = &usb_keyboard_send;
-      //   break;
+      case CT_USB:
+        fptr = &usb_keyboard_send;
+        break;
       default:
         return;
       }
