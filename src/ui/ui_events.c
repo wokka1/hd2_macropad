@@ -121,7 +121,7 @@ void action_goto_game(lv_event_t *e)
 		}
 	}
 
-	lv_scr_load_anim(objects.game, LV_SCR_LOAD_ANIM_MOVE_LEFT, 1000, 0, false);
+	lv_scr_load_anim(objects.game, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0, false);
 }
 
 // Update selection in UI (text and bar)
@@ -423,7 +423,7 @@ void action_get_preset(lv_event_t *e)
 
 		disableImageMode();
 
-		lv_scr_load_anim(objects.image, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, false);
+		lv_scr_load_anim(objects.image, LV_SCR_LOAD_ANIM_FADE_IN, 150, 0, false);
 
 		return;
 	}
@@ -515,7 +515,7 @@ void action_get_preset(lv_event_t *e)
 		showMsgBox("Preset\nloaded");
 	}
 
-	lv_scr_load_anim(objects.setup, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, false);
+	lv_scr_load_anim(objects.setup, LV_SCR_LOAD_ANIM_FADE_IN, 150, 0, false);
 }
 
 void action_set_preset(lv_event_t *e)
@@ -552,7 +552,7 @@ void action_set_preset(lv_event_t *e)
 		showMsgBox("Preset\nsaved");
 	}
 
-	lv_scr_load_anim(objects.setup, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, false);
+	lv_scr_load_anim(objects.setup, LV_SCR_LOAD_ANIM_FADE_IN, 150, 0, false);
 }
 
 void showMsgBox(char *msg)
@@ -598,7 +598,7 @@ void action_assign_preset_image(lv_event_t *e)
 	setConfig(presetKey, userData);
 	resolvePresetImages();
 
-	lv_scr_load_anim(objects.preset, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, false);
+	lv_scr_load_anim(objects.preset, LV_SCR_LOAD_ANIM_FADE_IN, 150, 0, false);
 }
 
 void action_clear_preset_image(lv_event_t *e)
@@ -606,7 +606,7 @@ void action_clear_preset_image(lv_event_t *e)
 	setConfig(presetKey, 0);
 	resolvePresetImages();
 
-	lv_scr_load_anim(objects.preset, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, false);
+	lv_scr_load_anim(objects.preset, LV_SCR_LOAD_ANIM_FADE_IN, 150, 0, false);
 }
 
 void resolvePresetImages()
