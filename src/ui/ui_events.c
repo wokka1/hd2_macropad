@@ -299,6 +299,7 @@ void _executeUserStratagem(uint8_t index)
 	uint8_t itemIndex = indices[index];
 	stratagemItem item = strategemItemList[itemIndex];
 
+	ESP_LOGI(TAG_EVT, "Stratagem: slot=%d, idx=%d", index, itemIndex);
 	setStratagemCode(item.sequence, INPUT_CTRL_MASK, false);
 
 	char *path = item.soundPath;
@@ -313,6 +314,7 @@ void action_trigger_stratagem_base(lv_event_t *e)
 	uint8_t *sequence = (uint8_t *)strategemBaseList[index].sequence;
 	char *path = strategemBaseList[index].soundPath;
 
+	ESP_LOGI(TAG_EVT, "Base stratagem: idx=%d", index);
 	_executeStdStratagem(sequence, path);
 
 	if (index > 5) // Mission stratagems

@@ -48,6 +48,8 @@ bool soundPlayback = false;
 char *soundFile;
 // Flag for muting sound playback
 bool playerMuted;
+// Flag for verbose debug logging (key presses, etc.)
+bool debugLogging = false;
 
 // Delay for HID input execution in milliseconds (default: 100)
 int inputDelay = 100;
@@ -167,7 +169,7 @@ void hid_input_task(void *pvParameters)
 
     if (stratagemCode[0] > 0)
     {
-      ESP_LOGI(TAG, "Send command");
+      if (debugLogging) ESP_LOGI(TAG, "Send command");
 
       uint8_t cmdIndex = 0;
 
@@ -203,8 +205,10 @@ void hid_input_task(void *pvParameters)
 
         vTaskDelay(inputDelay / portTICK_PERIOD_MS);
 
-        ESP_LOGI(TAG, "CMD Index: %c", (char)(cmdIndex + '0'));
-        ESP_LOGI(TAG, "CMD Value: %d", stratagemCode[cmdIndex]);
+        if (debugLogging) {
+          ESP_LOGI(TAG, "CMD Index: %c", (char)(cmdIndex + '0'));
+          ESP_LOGI(TAG, "CMD Value: %d", stratagemCode[cmdIndex]);
+        }
 
         stratagemCode[cmdIndex] = 0;
         cmdIndex++;
@@ -212,7 +216,7 @@ void hid_input_task(void *pvParameters)
 
       fptr(0, 0, 0);
 
-      ESP_LOGI(TAG, "Finish command");
+      if (debugLogging) ESP_LOGI(TAG, "Finish command");
     }
 
     // Audio playback removed for BLE-only build

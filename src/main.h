@@ -60,4 +60,7 @@ void dimScreen(int brightness);
 void updateConnection();
 void updateBatteryInfo();
 
+// Debug logging toggle (key press logging)
+extern bool debugLogging;
+
 #endif
