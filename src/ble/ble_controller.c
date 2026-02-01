@@ -176,6 +176,15 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
                 xTimerStart(ble_keepalive_timer, 0);
                 ESP_LOGI(TAG_BLE, "BLE keep-alive timer started (30s interval)");
             }
+
+            // Request longer supervision timeout to prevent disconnects during NVS writes
+            esp_ble_conn_update_params_t conn_params = {0};
+            memcpy(conn_params.bda, bd_addr, sizeof(esp_bd_addr_t));
+            conn_params.min_int = 0x10;    // 20ms (units of 1.25ms)
+            conn_params.max_int = 0x20;    // 40ms
+            conn_params.latency = 0;       // No slave latency
+            conn_params.timeout = 600;     // 6 seconds (units of 10ms) - increased from default ~2s
+            esp_ble_gap_update_conn_params(&conn_params);
         }
 
         updateConnection();

@@ -3,16 +3,53 @@
 #include "nvs_flash.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
 // #include "i2s_sdcard.h"  // Removed - audio not needed for BLE-only build
 #include <lvgl.h>
 #include "ui/ui.h"
 #include "ui/screens.h"
 #include "main.h"
+#include <string.h>
 
 const char *TAG_CFG = "Configuration";
 
 // Handle for NVS config
 nvs_handle_t nvsConfig;
+
+// Async NVS write queue to prevent blocking BLE during flash writes
+typedef struct {
+    char key[16];
+    uint8_t value;
+} nvs_write_msg_t;
+
+static QueueHandle_t nvs_write_queue = NULL;
+
+// Task to process NVS writes asynchronously (low priority)
+static void nvs_write_task(void *pvParameters)
+{
+    nvs_write_msg_t msg;
+    nvs_handle_t handle;
+
+    while (1)
+    {
+        if (xQueueReceive(nvs_write_queue, &msg, portMAX_DELAY) == pdTRUE)
+        {
+            esp_err_t ret = nvs_open("config", NVS_READWRITE, &handle);
+            if (ret == ESP_OK)
+            {
+                ret = nvs_set_u8(handle, msg.key, msg.value);
+                if (ret == ESP_OK)
+                {
+                    nvs_commit(handle);
+                    ESP_LOGD(TAG_CFG, "Async NVS: %s = %d", msg.key, msg.value);
+                }
+                nvs_close(handle);
+            }
+            // Small delay between writes
+            vTaskDelay(pdMS_TO_TICKS(50));
+        }
+    }
+}
 
 extern bool playerMuted;
 extern int inputDelay;
@@ -36,6 +73,15 @@ esp_err_t initConfig()
         ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
+
+    // Create async NVS write queue and task
+    nvs_write_queue = xQueueCreate(10, sizeof(nvs_write_msg_t));
+    if (nvs_write_queue != NULL)
+    {
+        // Low priority task (1) to handle NVS writes without blocking BLE
+        xTaskCreate(nvs_write_task, "nvs_write", 2048, NULL, 1, NULL);
+        ESP_LOGI(TAG_CFG, "Async NVS write task started");
+    }
 
     // SD card and FAT filesystem removed for BLE-only build
     // ESP_ERROR_CHECK(init_sdcard());
@@ -68,32 +114,27 @@ uint8_t getConfig(char *key, int8_t defaultValue)
     return defaultValue;
 }
 
-// Write configuration value by key
+// Write configuration value by key (async - does not block)
 // key - Identifier for configuration value
 // value - Value which should be stored
 void setConfig(char *key, uint8_t value)
 {
-    esp_err_t ret;
-
-    ret = nvs_open("config", NVS_READWRITE, &nvsConfig);
-    if (ret != ESP_OK)
+    if (nvs_write_queue == NULL)
     {
-        ESP_LOGE(TAG_CFG, "Error (%s) opening NVS handle!\n", esp_err_to_name(ret));
+        ESP_LOGE(TAG_CFG, "NVS write queue not initialized");
         return;
     }
 
-    ret = nvs_set_u8(nvsConfig, key, value);
+    nvs_write_msg_t msg;
+    strncpy(msg.key, key, sizeof(msg.key) - 1);
+    msg.key[sizeof(msg.key) - 1] = '\0';
+    msg.value = value;
 
-    if (ret != ESP_OK)
+    // Post to queue (non-blocking) - BLE won't be disrupted
+    if (xQueueSend(nvs_write_queue, &msg, 0) != pdTRUE)
     {
-        ESP_LOGE(TAG_CFG, "Failed!\n");
+        ESP_LOGW(TAG_CFG, "NVS write queue full, dropping: %s", key);
     }
-    else
-    {
-        ESP_LOGI(TAG_CFG, "Done\n");
-    }
-
-    nvs_close(nvsConfig);
 }
 
 // Write the HID input delay to configuration
