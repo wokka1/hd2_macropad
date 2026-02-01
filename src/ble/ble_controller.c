@@ -8,18 +8,33 @@
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
 #include "ble_controller.h"
-#include <esp_log.h> // Add this line to include the header file that declares ESP_LOGI
+#include <esp_log.h>
 #include "main.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/timers.h"
 
 const char *TAG_BLE = "BLE Controller";
 #define HIDD_DEVICE_NAME "HD2 Macropad BT"
+#define BLE_KEEPALIVE_INTERVAL_MS 30000  // 30 seconds
 
 uint16_t hid_conn_id = 0;
 bool sec_conn = false;
+static TimerHandle_t ble_keepalive_timer = NULL;
 
 #define CHAR_DECLARATION_SIZE (sizeof(uint8_t))
 
 void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param);
+
+static void ble_keepalive_callback(TimerHandle_t xTimer)
+{
+    if (sec_conn)
+    {
+        // Send empty keyboard report as keep-alive
+        uint8_t empty_key = 0;
+        esp_hidd_send_keyboard_value(hid_conn_id, 0, &empty_key, 0);
+        ESP_LOGD(TAG_BLE, "BLE keep-alive sent");
+    }
+}
 
 uint8_t hidd_service_uuid128[] = {
     /* LSB <--------------------------------------------------------------------------------> MSB */
@@ -96,6 +111,13 @@ void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param)
     {
         sec_conn = false;
         ESP_LOGW(TAG_BLE, "=== BLE DISCONNECTED - Restarting advertising ===");
+
+        // Stop keep-alive timer
+        if (ble_keepalive_timer != NULL)
+        {
+            xTimerStop(ble_keepalive_timer, 0);
+        }
+
         esp_ble_gap_start_advertising(&hidd_adv_params);
 
         updateConnection();
@@ -145,6 +167,15 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
         if (!param->ble_security.auth_cmpl.success)
         {
             ESP_LOGE(TAG_BLE, "fail reason = 0x%x", param->ble_security.auth_cmpl.fail_reason);
+        }
+        else
+        {
+            // Start keep-alive timer on successful pairing
+            if (ble_keepalive_timer != NULL)
+            {
+                xTimerStart(ble_keepalive_timer, 0);
+                ESP_LOGI(TAG_BLE, "BLE keep-alive timer started (30s interval)");
+            }
         }
 
         updateConnection();
@@ -220,6 +251,19 @@ esp_err_t ble_controller_init()
     esp_ble_gap_register_callback(gap_event_handler);
     esp_hidd_register_callbacks(hidd_event_callback);
 
+    // Create keep-alive timer (does not auto-start)
+    ble_keepalive_timer = xTimerCreate(
+        "ble_keepalive",
+        pdMS_TO_TICKS(BLE_KEEPALIVE_INTERVAL_MS),
+        pdTRUE,  // Auto-reload
+        NULL,
+        ble_keepalive_callback
+    );
+    if (ble_keepalive_timer == NULL)
+    {
+        ESP_LOGE(TAG_BLE, "Failed to create BLE keep-alive timer");
+    }
+
     /* set the security iocap & auth_req & key size & init key response key parameters to the stack*/
     esp_ble_auth_req_t auth_req = ESP_LE_AUTH_BOND; // bonding with peer device after authentication
     esp_ble_io_cap_t iocap = ESP_IO_CAP_NONE;       // set the IO capability to No output No input
@@ -238,6 +282,14 @@ esp_err_t ble_controller_init()
 esp_err_t ble_controller_deinit()
 {
     esp_err_t ret;
+
+    // Stop and delete keep-alive timer
+    if (ble_keepalive_timer != NULL)
+    {
+        xTimerStop(ble_keepalive_timer, 0);
+        xTimerDelete(ble_keepalive_timer, 0);
+        ble_keepalive_timer = NULL;
+    }
 
     esp_hidd_register_callbacks(NULL);
     esp_ble_gap_register_callback(NULL);
