@@ -32,9 +32,16 @@ static void ble_keepalive_callback(TimerHandle_t xTimer)
     {
         // Send empty keyboard report as keep-alive
         uint8_t empty_key = 0;
-        esp_hidd_send_keyboard_value(hid_conn_id, 0, &empty_key, 0);
+        esp_err_t ret = esp_hidd_send_keyboard_value(hid_conn_id, 0, &empty_key, 0);
         keepalive_count++;
-        ESP_LOGI(TAG_BLE, "BLE keep-alive #%lu sent", keepalive_count);
+        if (ret != ESP_OK)
+        {
+            ESP_LOGE(TAG_BLE, "BLE keep-alive #%lu FAILED: %s (0x%x)", keepalive_count, esp_err_to_name(ret), ret);
+        }
+        else
+        {
+            ESP_LOGI(TAG_BLE, "BLE keep-alive #%lu sent", keepalive_count);
+        }
     }
     else
     {
@@ -224,7 +231,11 @@ void ble_keyboard_send(uint8_t special_key_mask, uint8_t keyboard_cmd, uint8_t n
         return;
     }
 
-    esp_hidd_send_keyboard_value(hid_conn_id, (key_mask_t)special_key_mask, &keyboard_cmd, num_key);
+    esp_err_t ret = esp_hidd_send_keyboard_value(hid_conn_id, (key_mask_t)special_key_mask, &keyboard_cmd, num_key);
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG_BLE, "HID send FAILED: %s (0x%x) - possible zombie connection", esp_err_to_name(ret), ret);
+    }
 }
 
 bool ble_connected()
