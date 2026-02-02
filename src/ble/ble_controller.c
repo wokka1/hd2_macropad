@@ -20,6 +20,7 @@ const char *TAG_BLE = "BLE Controller";
 uint16_t hid_conn_id = 0;
 bool sec_conn = false;
 static TimerHandle_t ble_keepalive_timer = NULL;
+static uint32_t keepalive_count = 0;  // Track keep-alive sends for diagnostics
 
 #define CHAR_DECLARATION_SIZE (sizeof(uint8_t))
 
@@ -32,7 +33,12 @@ static void ble_keepalive_callback(TimerHandle_t xTimer)
         // Send empty keyboard report as keep-alive
         uint8_t empty_key = 0;
         esp_hidd_send_keyboard_value(hid_conn_id, 0, &empty_key, 0);
-        ESP_LOGD(TAG_BLE, "BLE keep-alive sent");
+        keepalive_count++;
+        ESP_LOGI(TAG_BLE, "BLE keep-alive #%lu sent", keepalive_count);
+    }
+    else
+    {
+        ESP_LOGW(TAG_BLE, "Keep-alive timer fired but not connected!");
     }
 }
 
@@ -110,13 +116,15 @@ void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param)
     case ESP_HIDD_EVENT_BLE_DISCONNECT:
     {
         sec_conn = false;
-        ESP_LOGW(TAG_BLE, "=== BLE DISCONNECTED - Restarting advertising ===");
+        ESP_LOGW(TAG_BLE, "=== BLE DISCONNECTED after %lu keep-alives ===", keepalive_count);
 
         // Stop keep-alive timer
         if (ble_keepalive_timer != NULL)
         {
             xTimerStop(ble_keepalive_timer, 0);
+            ESP_LOGI(TAG_BLE, "Keep-alive timer stopped");
         }
+        keepalive_count = 0;  // Reset for next connection
 
         esp_ble_gap_start_advertising(&hidd_adv_params);
 
@@ -173,8 +181,9 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
             // Start keep-alive timer on successful pairing
             if (ble_keepalive_timer != NULL)
             {
+                keepalive_count = 0;  // Reset counter for new connection
                 xTimerStart(ble_keepalive_timer, 0);
-                ESP_LOGI(TAG_BLE, "BLE keep-alive timer started (30s interval)");
+                ESP_LOGI(TAG_BLE, "Keep-alive timer started (30s interval)");
             }
 
             // Request longer supervision timeout to prevent disconnects during NVS writes
@@ -190,13 +199,20 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
         updateConnection();
         break;
     case ESP_GAP_BLE_UPDATE_CONN_PARAMS_EVT:
-        ESP_LOGI(TAG_BLE, "Connection params updated: interval=%d, latency=%d, timeout=%d",
+        ESP_LOGI(TAG_BLE, "Conn params updated: int=%d, lat=%d, timeout=%d",
                  param->update_conn_params.conn_int,
                  param->update_conn_params.latency,
                  param->update_conn_params.timeout);
         break;
+    case ESP_GAP_BLE_SET_PKT_LENGTH_COMPLETE_EVT:
+        ESP_LOGI(TAG_BLE, "Packet length set complete");
+        break;
+    case ESP_GAP_BLE_READ_RSSI_COMPLETE_EVT:
+        ESP_LOGI(TAG_BLE, "RSSI: %d dBm", param->read_rssi_cmpl.rssi);
+        break;
     default:
-        ESP_LOGD(TAG_BLE, "GAP event: %d", event);
+        // Log all GAP events for diagnostics
+        ESP_LOGI(TAG_BLE, "GAP event: %d", event);
         break;
     }
 }
