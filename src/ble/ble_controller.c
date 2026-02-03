@@ -38,7 +38,7 @@ static void ble_keepalive_callback(TimerHandle_t xTimer)
         {
             ESP_LOGE(TAG_BLE, "BLE keep-alive #%lu FAILED: %s (0x%x)", keepalive_count, esp_err_to_name(ret), ret);
         }
-        else
+        else if (debugLogging)
         {
             ESP_LOGI(TAG_BLE, "BLE keep-alive #%lu sent", keepalive_count);
         }
