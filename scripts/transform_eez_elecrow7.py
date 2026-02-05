@@ -65,6 +65,20 @@ EXCLUDE_IDENTIFIERS = {
 # Widget types excluded from page-size (480x320) transformation
 EXCLUDE_TYPES_FROM_PAGE_SIZE = {"LVGLImageWidget"}
 
+# Pages to preserve from reference file instead of transforming
+# These pages have custom layouts that shouldn't be overwritten
+PRESERVE_PAGES = {
+    "Mission",  # Keep fuller descriptions that fit on 800x480
+}
+PRESERVE_REFERENCE = "eez/hd2-wokka.eez-project"
+
+# Mission buttons to inject from upstream if missing in preserved page
+# These are new buttons added upstream that need to be merged in
+INJECT_MISSION_BUTTONS = {
+    "BtnCC",   # Cargo Container
+    "BtnCSD",  # Civilian Safe District
+}
+
 # =============================================================================
 # WIDGET REMOVALS
 # =============================================================================
@@ -327,6 +341,96 @@ def replace_bitmaps(project, project_dir):
 
 
 # =============================================================================
+# MISSION PAGE BUTTON INJECTION
+# =============================================================================
+
+def inject_missing_mission_buttons(preserved_page, upstream_page):
+    """Inject missing buttons from upstream into preserved Mission page."""
+    if not INJECT_MISSION_BUTTONS:
+        return 0
+
+    def find_identifiers(obj, found=None):
+        """Recursively find all widget identifiers."""
+        if found is None:
+            found = set()
+        if isinstance(obj, dict):
+            if "identifier" in obj:
+                found.add(obj["identifier"])
+            for key in ("children", "widgets", "components"):
+                if key in obj:
+                    for item in obj[key]:
+                        find_identifiers(item, found)
+        return found
+
+    def find_main_container(page):
+        """Find the main button container on Mission page."""
+        for comp in page.get("components", []):
+            for child in comp.get("children", []):
+                if child.get("type") == "LVGLContainerWidget":
+                    # Check if it contains mission buttons
+                    idents = find_identifiers(child)
+                    if any(i.startswith("Btn") for i in idents):
+                        return child
+        return None
+
+    def extract_button_container(page, btn_ident):
+        """Extract the container for a button from the page."""
+        for comp in page.get("components", []):
+            for child in comp.get("children", []):
+                if child.get("type") == "LVGLContainerWidget":
+                    for container in child.get("children", []):
+                        for btn_child in container.get("children", []):
+                            if btn_child.get("identifier") == btn_ident:
+                                return container
+        return None
+
+    def scale_widget_for_elecrow7(widget):
+        """Scale a widget and its children from 480x320 to 800x480 sizes."""
+        import copy
+        widget = copy.deepcopy(widget)
+
+        def scale(obj):
+            if isinstance(obj, dict):
+                # Scale container/button sizes (76x76 -> 114x114)
+                if obj.get("width") == 76 and obj.get("height") == 76:
+                    obj["width"] = 114
+                    obj["height"] = 114
+                for key in ("children", "widgets"):
+                    if key in obj:
+                        for item in obj[key]:
+                            scale(item)
+        scale(widget)
+        return widget
+
+    # Find what buttons exist in preserved page
+    preserved_buttons = find_identifiers(preserved_page)
+
+    # Find main container in preserved page
+    main_container = find_main_container(preserved_page)
+    if not main_container:
+        print("  Warning: Could not find main container in preserved Mission page")
+        return 0
+
+    injected = 0
+    for btn_ident in INJECT_MISSION_BUTTONS:
+        if btn_ident not in preserved_buttons:
+            # Extract from upstream
+            container = extract_button_container(upstream_page, btn_ident)
+            if container:
+                # Scale for 800x480
+                scaled_container = scale_widget_for_elecrow7(container)
+                # Add to preserved page
+                if "children" in main_container:
+                    main_container["children"].append(scaled_container)
+                    injected += 1
+                    print(f"  Injected missing button: {btn_ident}")
+            else:
+                print(f"  Warning: Could not find {btn_ident} in upstream")
+
+    return injected
+
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
@@ -367,6 +471,35 @@ def transform_eez_project(input_path, output_path, project_dir=None):
     replaced = replace_bitmaps(project, project_dir)
     if replaced:
         print(f"  Bitmaps replaced: {replaced}")
+
+    # Preserve pages from reference file and inject missing buttons
+    if PRESERVE_PAGES:
+        ref_path = os.path.join(project_dir, PRESERVE_REFERENCE)
+        if os.path.exists(ref_path):
+            with open(ref_path, "r", encoding="utf-8") as f:
+                ref_project = json.load(f)
+            ref_pages = {p.get("name"): p for p in ref_project.get("userPages", [])}
+
+            # Keep original upstream pages for injection
+            upstream_pages = {p.get("name"): p for p in project.get("userPages", [])}
+
+            for i, page in enumerate(project.get("userPages", [])):
+                page_name = page.get("name")
+                if page_name in PRESERVE_PAGES and page_name in ref_pages:
+                    # Replace with preserved page
+                    project["userPages"][i] = ref_pages[page_name]
+                    print(f"  Preserved page: {page_name}")
+
+                    # Inject missing buttons from upstream
+                    if page_name == "Mission" and page_name in upstream_pages:
+                        injected = inject_missing_mission_buttons(
+                            project["userPages"][i],
+                            upstream_pages[page_name]
+                        )
+                        if injected:
+                            print(f"  Injected {injected} mission button(s)")
+        else:
+            print(f"  Warning: Reference file not found: {ref_path}")
 
     # Save
     print(f"Saving: {output_path}")
