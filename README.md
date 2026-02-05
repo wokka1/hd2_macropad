@@ -9,6 +9,14 @@ Flashing this code will be the same process as the original, so follow the instr
 
 Technical details of this build can be found at [README_ESP32_8048S070](README_ESP32_8048S070.md)
 
+### Merging Upstream Updates
+
+A Python script is provided to transform the upstream EEZ project (480x320) to the Elecrow 7" resolution (800x480). This allows merging new features from upstream without manually re-applying all layout changes. See [scripts/README.md](scripts/README.md) for details.
+
+```bash
+python3 scripts/transform_eez_elecrow7.py
+```
+
 -------------------------------------------------------------------------
 
 ![The device including the 3D printed frame](screens/device.jpg)
