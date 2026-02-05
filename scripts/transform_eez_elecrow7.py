@@ -79,12 +79,43 @@ INJECT_MISSION_BUTTONS = {
     "BtnCSD",  # Civilian Safe District
 }
 
+# Mission page customizations applied after preservation
+MISSION_CUSTOMIZATIONS = {
+    "font_replacement": ("MONTSERRAT_20", "MONTSERRAT_14"),
+    "icon_size": 100,  # Change from 114x114 to 100x100
+    "injected_buttons": {
+        # Create new containers from scratch matching reference pattern
+        "BtnCC": {
+            "container_left": 0,
+            "button_left": 997, "button_top": 1140,
+            "label": "Cargo\nContainer",
+            "label_width": 72, "label_height": 32,
+        },
+        "BtnCSD": {
+            "container_left": 9,
+            "button_left": 699, "button_top": 1140,
+            "label": "Super\nDestroyer",
+            "label_width": 72, "label_height": 32,
+        },
+    },
+}
+
 # =============================================================================
 # WIDGET REMOVALS
 # =============================================================================
 
 REMOVE_IDENTIFIERS = {
     "BtnSOS",  # Game page - removed
+}
+
+# Container removals by objID (for empty spacer containers)
+REMOVE_CONTAINERS = {
+    # Setup page - TabSpecial: remove 4th container
+    "b4fd079e-8f4d-43e2-9651-fdb842521d6a",
+    # Setup page - TabBackpack: remove 4th container
+    "99603c57-9006-475b-ca56-ef9f70943cf9",
+    # Setup page - TabSentry: remove 2nd container
+    "dc11de2d-804a-46e5-bdef-da02158d5fe9",
 }
 
 # =============================================================================
@@ -166,6 +197,13 @@ OBJID_OVERRIDES = {
     "71fb1be1-e076-45e9-d8fd-34d7fb411371": {"width": 76, "height": 100},   # button
     "247cb222-9fb2-4e82-e6b0-9e6c71d38870": {"width": 76, "height": 100},   # button
     "99eee6d6-4260-4497-ec39-a10d84b95c70": {"width": 76, "height": 100},   # button
+
+    # --- Setup page - TabGround: custom spacer container sizes ---
+    "6615d191-ca0d-4020-8b2b-fbb9d0df288b": {"width": 127, "height": 76},   # container 1
+    "d279652b-f3d0-4c83-f814-6af54c156e25": {"width": 137, "height": 76},   # container 2
+
+    # --- Setup page - TabSpecial: custom container size ---
+    "6fa7cb1c-0cbd-4c22-f7a8-bda61a9a166b": {"width": 93, "height": 114},   # container 1
 }
 
 
@@ -235,7 +273,7 @@ def transform_widget(obj):
             if old_size != new_size:
                 obj["width"], obj["height"] = new_size
 
-    # Recurse into children, filtering out removed widgets
+    # Recurse into children, filtering out removed widgets and containers
     for key, value in obj.items():
         if isinstance(value, dict):
             transform_widget(value)
@@ -243,7 +281,10 @@ def transform_widget(obj):
             if key in ("children", "widgets", "components"):
                 obj[key] = [
                     item for item in value
-                    if not (isinstance(item, dict) and item.get("identifier") in REMOVE_IDENTIFIERS)
+                    if not (isinstance(item, dict) and (
+                        item.get("identifier") in REMOVE_IDENTIFIERS or
+                        item.get("objID") in REMOVE_CONTAINERS
+                    ))
                 ]
                 value = obj[key]
             for item in value:
@@ -341,14 +382,11 @@ def replace_bitmaps(project, project_dir):
 
 
 # =============================================================================
-# MISSION PAGE BUTTON INJECTION
+# MISSION PAGE CUSTOMIZATION
 # =============================================================================
 
-def inject_missing_mission_buttons(preserved_page, upstream_page):
-    """Inject missing buttons from upstream into preserved Mission page."""
-    if not INJECT_MISSION_BUTTONS:
-        return 0
-
+def customize_mission_page(page, upstream_page):
+    """Apply customizations to the Mission page after preservation."""
     def find_identifiers(obj, found=None):
         """Recursively find all widget identifiers."""
         if found is None:
@@ -362,20 +400,19 @@ def inject_missing_mission_buttons(preserved_page, upstream_page):
                         find_identifiers(item, found)
         return found
 
-    def find_main_container(page):
+    def find_main_container(pg):
         """Find the main button container on Mission page."""
-        for comp in page.get("components", []):
+        for comp in pg.get("components", []):
             for child in comp.get("children", []):
                 if child.get("type") == "LVGLContainerWidget":
-                    # Check if it contains mission buttons
                     idents = find_identifiers(child)
                     if any(i.startswith("Btn") for i in idents):
                         return child
         return None
 
-    def extract_button_container(page, btn_ident):
+    def extract_button_container(pg, btn_ident):
         """Extract the container for a button from the page."""
-        for comp in page.get("components", []):
+        for comp in pg.get("components", []):
             for child in comp.get("children", []):
                 if child.get("type") == "LVGLContainerWidget":
                     for container in child.get("children", []):
@@ -384,50 +421,249 @@ def inject_missing_mission_buttons(preserved_page, upstream_page):
                                 return container
         return None
 
-    def scale_widget_for_elecrow7(widget):
-        """Scale a widget and its children from 480x320 to 800x480 sizes."""
-        import copy
-        widget = copy.deepcopy(widget)
+    def replace_font(obj, old_font, new_font):
+        """Recursively replace font references."""
+        if isinstance(obj, dict):
+            for key, val in obj.items():
+                if key == "text_font" and val == old_font:
+                    obj[key] = new_font
+                elif isinstance(val, (dict, list)):
+                    replace_font(val, old_font, new_font)
+        elif isinstance(obj, list):
+            for item in obj:
+                replace_font(item, old_font, new_font)
 
-        def scale(obj):
-            if isinstance(obj, dict):
-                # Scale container/button sizes (76x76 -> 114x114)
-                if obj.get("width") == 76 and obj.get("height") == 76:
-                    obj["width"] = 114
-                    obj["height"] = 114
-                for key in ("children", "widgets"):
-                    if key in obj:
-                        for item in obj[key]:
-                            scale(item)
-        scale(widget)
-        return widget
+    def resize_buttons(obj, new_size):
+        """Recursively resize all 114x114 buttons to new_size."""
+        if isinstance(obj, dict):
+            # Resize 114x114 widgets to new_size
+            if obj.get("width") == 114 and obj.get("height") == 114:
+                obj["width"] = new_size
+                obj["height"] = new_size
+            for key in ("children", "widgets", "components"):
+                if key in obj:
+                    for item in obj[key]:
+                        resize_buttons(item, new_size)
 
-    # Find what buttons exist in preserved page
-    preserved_buttons = find_identifiers(preserved_page)
+    def create_mission_button_container(upstream_btn, btn_ident, icon_size, btn_config):
+        """Create a new container from scratch matching reference pattern."""
+        import uuid
 
-    # Find main container in preserved page
-    main_container = find_main_container(preserved_page)
-    if not main_container:
-        print("  Warning: Could not find main container in preserved Mission page")
-        return 0
+        # Extract event handlers and styles from upstream button
+        event_handlers = upstream_btn.get("eventHandlers", [])
+        bg_img_src = None
+        border_color = None
+        if "localStyles" in upstream_btn:
+            definition = upstream_btn["localStyles"].get("definition", {})
+            default_styles = definition.get("MAIN", {}).get("DEFAULT", {})
+            bg_img_src = default_styles.get("bg_img_src")
+            border_color = default_styles.get("border_color")
 
-    injected = 0
-    for btn_ident in INJECT_MISSION_BUTTONS:
-        if btn_ident not in preserved_buttons:
-            # Extract from upstream
-            container = extract_button_container(upstream_page, btn_ident)
-            if container:
-                # Scale for 800x480
-                scaled_container = scale_widget_for_elecrow7(container)
-                # Add to preserved page
-                if "children" in main_container:
-                    main_container["children"].append(scaled_container)
-                    injected += 1
-                    print(f"  Injected missing button: {btn_ident}")
-            else:
-                print(f"  Warning: Could not find {btn_ident} in upstream")
+        # Create new container with proper FLEX layout
+        container = {
+            "objID": str(uuid.uuid4()),
+            "type": "LVGLContainerWidget",
+            "left": btn_config.get("container_left", 0),
+            "top": 0,
+            "width": 32,
+            "height": icon_size,
+            "customInputs": [],
+            "customOutputs": [],
+            "style": {"objID": str(uuid.uuid4()), "useStyle": "default", "conditionalStyles": [], "childStyles": []},
+            "locked": False,
+            "hiddenInEditor": False,
+            "timeline": [],
+            "eventHandlers": [],
+            "leftUnit": "px",
+            "topUnit": "px",
+            "widthUnit": "%",
+            "heightUnit": "content",
+            "children": [],
+            "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|OVERFLOW_VISIBLE",
+            "hiddenFlagType": "literal",
+            "clickableFlag": True,
+            "clickableFlagType": "literal",
+            "flagScrollbarMode": "",
+            "flagScrollDirection": "",
+            "scrollSnapX": "",
+            "scrollSnapY": "",
+            "checkedStateType": "literal",
+            "disabledStateType": "literal",
+            "states": "",
+            "localStyles": {
+                "objID": str(uuid.uuid4()),
+                "definition": {
+                    "MAIN": {
+                        "DEFAULT": {
+                            "layout": "FLEX",
+                            "flex_flow": "ROW_WRAP",
+                            "flex_cross_place": "CENTER",
+                            "pad_column": 8
+                        }
+                    }
+                }
+            },
+            "group": "",
+            "groupIndex": 0
+        }
 
-    return injected
+        # Create button widget
+        button = {
+            "objID": str(uuid.uuid4()),
+            "type": "LVGLButtonWidget",
+            "left": btn_config.get("button_left", 0),
+            "top": btn_config.get("button_top", 0),
+            "width": icon_size,
+            "height": icon_size,
+            "customInputs": [],
+            "customOutputs": [],
+            "style": {"objID": str(uuid.uuid4()), "useStyle": "default", "conditionalStyles": [], "childStyles": []},
+            "locked": False,
+            "hiddenInEditor": False,
+            "timeline": [],
+            "eventHandlers": event_handlers,
+            "identifier": btn_ident,
+            "leftUnit": "px",
+            "topUnit": "px",
+            "widthUnit": "px",
+            "heightUnit": "px",
+            "children": [],
+            "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_ON_FOCUS|SCROLL_WITH_ARROW|SNAPPABLE",
+            "hiddenFlagType": "literal",
+            "clickableFlag": True,
+            "clickableFlagType": "literal",
+            "flagScrollbarMode": "",
+            "flagScrollDirection": "",
+            "scrollSnapX": "",
+            "scrollSnapY": "",
+            "checkedStateType": "literal",
+            "disabledStateType": "literal",
+            "states": "",
+            "useStyle": "ButtonStd",
+            "localStyles": {
+                "objID": str(uuid.uuid4()),
+                "definition": {
+                    "MAIN": {
+                        "DEFAULT": {}
+                    }
+                }
+            },
+            "group": "",
+            "groupIndex": 0
+        }
+
+        # Add image and border color if present
+        if bg_img_src:
+            button["localStyles"]["definition"]["MAIN"]["DEFAULT"]["bg_img_src"] = bg_img_src
+        if border_color:
+            button["localStyles"]["definition"]["MAIN"]["DEFAULT"]["border_color"] = border_color
+
+        # Create label widget
+        label = {
+            "objID": str(uuid.uuid4()),
+            "type": "LVGLLabelWidget",
+            "left": 0,
+            "top": 0,
+            "width": btn_config.get("label_width", 72),
+            "height": btn_config.get("label_height", 32),
+            "customInputs": [],
+            "customOutputs": [],
+            "style": {"objID": str(uuid.uuid4()), "useStyle": "default", "conditionalStyles": [], "childStyles": []},
+            "locked": False,
+            "hiddenInEditor": False,
+            "timeline": [],
+            "eventHandlers": [],
+            "leftUnit": "px",
+            "topUnit": "px",
+            "widthUnit": "content",
+            "heightUnit": "content",
+            "children": [],
+            "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+            "hiddenFlagType": "literal",
+            "clickableFlagType": "literal",
+            "flagScrollbarMode": "",
+            "flagScrollDirection": "",
+            "scrollSnapX": "",
+            "scrollSnapY": "",
+            "checkedStateType": "literal",
+            "disabledStateType": "literal",
+            "states": "",
+            "localStyles": {
+                "objID": str(uuid.uuid4()),
+                "definition": {"MAIN": {"DEFAULT": {"text_font": "MONTSERRAT_14"}}}
+            },
+            "group": "",
+            "groupIndex": 0,
+            "text": btn_config.get("label", ""),
+            "textType": "literal",
+            "longMode": "WRAP",
+            "recolor": False
+        }
+
+        # Add button and label to container
+        container["children"].append(button)
+        container["children"].append(label)
+
+        return container
+
+    results = {"font": False, "resize": False, "injected": 0}
+
+    # 1. Replace font
+    if "font_replacement" in MISSION_CUSTOMIZATIONS:
+        old_font, new_font = MISSION_CUSTOMIZATIONS["font_replacement"]
+        replace_font(page, old_font, new_font)
+        results["font"] = True
+        print(f"  Changed font: {old_font} -> {new_font}")
+
+    # 2. Resize existing buttons to new icon_size
+    icon_size = MISSION_CUSTOMIZATIONS.get("icon_size", 114)
+    if icon_size != 114:
+        resize_buttons(page, icon_size)
+        results["resize"] = True
+        print(f"  Resized icons: 114x114 -> {icon_size}x{icon_size}")
+
+    # 3. Inject missing buttons from upstream
+    if INJECT_MISSION_BUTTONS:
+        preserved_buttons = find_identifiers(page)
+        main_container = find_main_container(page)
+
+        if not main_container:
+            print("  Warning: Could not find main container in preserved Mission page")
+        else:
+            injected_buttons = MISSION_CUSTOMIZATIONS.get("injected_buttons", {})
+            for btn_ident in INJECT_MISSION_BUTTONS:
+                if btn_ident not in preserved_buttons:
+                    # Extract button from upstream to get event handlers and styles
+                    upstream_container = extract_button_container(upstream_page, btn_ident)
+                    if upstream_container:
+                        # Find the button widget within the container
+                        upstream_btn = None
+                        for child in upstream_container.get("children", []):
+                            if child.get("identifier") == btn_ident:
+                                upstream_btn = child
+                                break
+
+                        if upstream_btn:
+                            btn_config = injected_buttons.get(btn_ident, {})
+                            new_container = create_mission_button_container(
+                                upstream_btn, btn_ident, icon_size, btn_config
+                            )
+                            if "children" in main_container:
+                                main_container["children"].append(new_container)
+                                results["injected"] += 1
+                                info_parts = []
+                                if "button_left" in btn_config and "button_top" in btn_config:
+                                    info_parts.append(f"pos=({btn_config['button_left']}, {btn_config['button_top']})")
+                                if "label" in btn_config:
+                                    info_parts.append(f'label="{btn_config["label"]}"')
+                                info = " " + ", ".join(info_parts) if info_parts else ""
+                                print(f"  Injected: {btn_ident}{info}")
+                        else:
+                            print(f"  Warning: Could not find button {btn_ident} in container")
+                    else:
+                        print(f"  Warning: Could not find {btn_ident} in upstream")
+
+    return results
 
 
 # =============================================================================
@@ -490,14 +726,12 @@ def transform_eez_project(input_path, output_path, project_dir=None):
                     project["userPages"][i] = ref_pages[page_name]
                     print(f"  Preserved page: {page_name}")
 
-                    # Inject missing buttons from upstream
+                    # Apply Mission page customizations
                     if page_name == "Mission" and page_name in upstream_pages:
-                        injected = inject_missing_mission_buttons(
+                        customize_mission_page(
                             project["userPages"][i],
                             upstream_pages[page_name]
                         )
-                        if injected:
-                            print(f"  Injected {injected} mission button(s)")
         else:
             print(f"  Warning: Reference file not found: {ref_path}")
 

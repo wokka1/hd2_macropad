@@ -170,7 +170,8 @@
                       "enableClose": false,
                       "icon": "svg:hierarchy"
                     }
-                  ]
+                  ],
+                  "active": true
                 },
                 {
                   "type": "tabset",
@@ -208,8 +209,7 @@
                   },
                   "icon": "svg:page"
                 }
-              ],
-              "active": true
+              ]
             },
             {
               "type": "row",
@@ -993,9 +993,14 @@
     "[HD2 Macropad-upstream.eez-project]:/userPages/1[flow-state]": {
       "selection": {
         "0": {
-          "1": {
-            "$selected": true
-          }
+          "0": {
+            "1": {
+              "$selected": true
+            }
+          },
+          "1": {},
+          "2": {},
+          "3": {}
         }
       },
       "transform": {

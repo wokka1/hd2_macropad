@@ -1,10 +1,8 @@
 {
   "navigation": {
-    "selectedUserPageObject": "[hd2-wokka.eez-project]:/userPages/5",
-    "selectedStyleObject": "[hd2-wokka.eez-project]:/lvglStyles/styles/0",
-    "selectedBitmapObject": "[hd2-wokka.eez-project]:/bitmaps/61",
+    "selectedUserPageObject": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/1",
     "subnavigationSelectedItems": {
-      "variables-tab/sub-navigation/selected-item": "Actions"
+      "variables-tab/sub-navigation/selected-item": "Global"
     }
   },
   "layoutModel": {
@@ -25,7 +23,6 @@
           },
           {
             "type": "border",
-            "selected": 2,
             "size": 240,
             "location": "right",
             "children": [
@@ -82,7 +79,7 @@
           {
             "type": "border",
             "selected": 0,
-            "size": 76.5,
+            "size": 103.5,
             "location": "bottom",
             "children": [
               {
@@ -124,16 +121,16 @@
         ],
         "layout": {
           "type": "row",
-          "id": "#d21c8c89-3546-4420-8d54-5f969da41843",
+          "id": "#937f0fe8-f458-45ae-97f1-ef537fe9ff2d",
           "children": [
             {
               "type": "row",
-              "id": "#ded35d78-68e8-47a5-ac0a-08054c2d21c4",
-              "weight": 11.958566304294347,
+              "id": "#e8c72684-6b89-46b8-b696-02eb80af952a",
+              "weight": 15,
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#d070d209-d07d-495a-88ea-d2c2b8abecf0",
+                  "id": "#0443fe3f-cb63-423b-9642-f629b9498c8e",
                   "weight": 1,
                   "enableClose": false,
                   "children": [
@@ -165,24 +162,25 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#d4cfa9a9-9bd9-4260-8f60-cba47df1062b",
-                  "weight": 1.4343065693430657,
+                  "id": "#3587cec4-583d-45ff-bf72-3a41fb226f21",
+                  "weight": 1.303964757709251,
                   "enableClose": false,
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#b7ad190c-7c76-4eb1-a37f-835863b613ca",
+                      "id": "#08536f58-beb9-43c4-be15-7e748a9e7c1c",
                       "name": "Widgets Structure",
                       "component": "flow-structure",
                       "enableClose": false,
                       "icon": "svg:hierarchy"
                     }
-                  ]
+                  ],
+                  "active": true
                 },
                 {
                   "type": "tabset",
-                  "id": "#c2bb599f-931e-4ca4-b23c-a506ce31665a",
-                  "weight": 0.5656934306569343,
+                  "id": "#bd5d5294-203d-40c3-979a-ca59e649322a",
+                  "weight": 0.6960352422907489,
                   "enableClose": false,
                   "children": [
                     {
@@ -200,32 +198,31 @@
             {
               "type": "tabset",
               "id": "EDITORS",
-              "weight": 70.62226280990996,
+              "weight": 65,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
                 {
                   "type": "tab",
-                  "id": "#ea5c4de4-3f36-4587-a9f9-9cd16cd6d447",
-                  "name": "Game",
+                  "id": "#abb70c58-f78a-4ba4-b86c-f4ca44fe09c2",
+                  "name": "Setup",
                   "component": "editor",
                   "config": {
-                    "objectPath": "[hd2-wokka.eez-project]:/userPages/5",
+                    "objectPath": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/1",
                     "permanent": false
                   },
                   "icon": "svg:page"
                 }
-              ],
-              "active": true
+              ]
             },
             {
               "type": "row",
-              "id": "#8ee3a671-aceb-4235-9fa2-faa91147260a",
-              "weight": 17.419170885795864,
+              "id": "#ad158c76-bc88-4522-998c-493253ceaa03",
+              "weight": 20,
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#58bb7022-9931-4d60-950e-b48f52824e23",
+                  "id": "#fdb93c63-bc09-495f-9269-cf4d1d529699",
                   "weight": 2,
                   "children": [
                     {
@@ -240,7 +237,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#0f835621-7924-49de-869c-3bac7bf59b2d",
+                  "id": "#ab52cfba-07ed-4bd8-bac9-8b693c8179e5",
                   "weight": 1,
                   "children": [
                     {
@@ -323,11 +320,11 @@
         ],
         "layout": {
           "type": "row",
-          "id": "#c64d79d6-814b-4f5c-9b8e-e95e67bbd078",
+          "id": "#8a6b5c34-7a82-4ebd-a2e4-d46889740b75",
           "children": [
             {
               "type": "tabset",
-              "id": "#422e478c-717e-4756-94ff-f251f7016548",
+              "id": "#6e22e15a-f1fb-4084-9cd9-f171bc35bc53",
               "weight": 0,
               "enableClose": false,
               "children": [
@@ -352,7 +349,7 @@
             },
             {
               "type": "tabset",
-              "id": "#213d46f7-475e-4f08-9886-37a8dae6855f",
+              "id": "#ed814174-6e7a-4b1d-ae61-d27f60f22db0",
               "weight": 0,
               "children": [
                 {
@@ -381,17 +378,17 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#cb6aa5a9-f957-46c8-bc9e-ff13f68797ca",
+          "id": "#48bb3e05-0def-4e1a-9a6f-f4a15c0d1f79",
           "children": [
             {
               "type": "row",
-              "id": "#774ae968-52d6-497f-b3f4-423c31b41981",
+              "id": "#d4ac7df7-a2ef-4bd2-9a17-75e353f67f33",
               "weight": 0,
               "width": 320,
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#8b06dab8-b811-46bb-9a08-583b4239be72",
+                  "id": "#7e92c96a-cd56-4455-9d55-fbfe5480797e",
                   "weight": 1,
                   "children": [
                     {
@@ -422,12 +419,12 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#84614b5a-fed4-4acc-accd-8e057d916ff0",
+                  "id": "#8194ec80-febd-4abf-941a-cf4cb8e18bc2",
                   "weight": 1,
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#54514868-dfbf-4032-8031-b53f9fcbff16",
+                      "id": "#198bd293-dea8-4809-960b-89bd2a74c0bb",
                       "name": "Active Flows",
                       "component": "active-flows",
                       "enableClose": false,
@@ -437,12 +434,12 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#6ba9bfe8-b108-434b-8fec-2be3520538ca",
+                  "id": "#c32b35de-ba32-4e0f-a573-915a0ab82cc6",
                   "weight": 2,
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#76b4d39f-6f72-4399-8ff9-7e7558799f64",
+                      "id": "#286771d8-175c-425f-b316-87aed47c8cdf",
                       "name": "Watch",
                       "component": "watch",
                       "enableClose": false,
@@ -459,23 +456,22 @@
               "selected": -1,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
-              "children": [],
-              "active": true
+              "children": []
             },
             {
               "type": "row",
-              "id": "#4a21c1a0-2e4f-4b3c-a5a1-076ef35474f6",
+              "id": "#ca58712e-c153-40c8-adf3-f5a51b6c87d8",
               "weight": 0,
               "width": 320,
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#0c9fec18-032f-4caa-84e7-9d1169892c9b",
+                  "id": "#20fac04a-c350-4fd0-9893-ca076d588fbb",
                   "weight": 1,
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#614bef67-1a6c-4d12-92f1-4cf39731e429",
+                      "id": "#cb7c5252-d73c-46dd-98d2-7babda5675f9",
                       "name": "Queue",
                       "component": "queue",
                       "enableClose": false,
@@ -493,7 +489,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#9a369565-e614-4b6f-892b-05e321c2d725",
+                  "id": "#33b80510-e9d5-4cbd-94d8-c90f6912db3a",
                   "weight": 2,
                   "children": [
                     {
@@ -524,15 +520,15 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#045aed0b-df4f-4ecc-aaef-a4d0f3310ea2",
+          "id": "#1c5c86f2-04b7-40fe-88f4-65c6ba824294",
           "children": [
             {
               "type": "row",
-              "id": "#abeace9f-d077-4d8f-9cc0-a3ababacac7f",
+              "id": "#b402b9a6-c9da-438a-87ab-5f9a00319891",
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#87702185-3c36-48ea-b89e-c967964161eb",
+                  "id": "#b5005d2c-4b7a-474e-801a-45208ae6ac54",
                   "weight": 75,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -541,17 +537,16 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#1cb680a4-37cb-4c3c-9695-195a77ec8462",
+                      "id": "#186a25b1-a2d8-4b93-966c-f71b5a6dc33f",
                       "name": "Bitmaps",
                       "component": "bitmaps",
                       "enableClose": false
                     }
-                  ],
-                  "active": true
+                  ]
                 },
                 {
                   "type": "tabset",
-                  "id": "#566fe912-e3b3-4030-bb28-e69eab6b37c8",
+                  "id": "#29270fd3-7e3c-48f8-a4ff-ac030f1f5e66",
                   "weight": 25,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -560,7 +555,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#a391be2e-ae9e-4230-9f1f-2f6c8886c343",
+                      "id": "#675611c4-c8c1-4230-b89b-237084092852",
                       "name": "Preview",
                       "component": "preview",
                       "enableClose": false
@@ -585,11 +580,11 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#c299f61a-fb60-4039-9902-336c66812674",
+          "id": "#8033621e-5de2-4cb3-b984-c803086bcdc4",
           "children": [
             {
               "type": "tabset",
-              "id": "#483fe4e9-dff3-4da0-95f5-d896eeef3fe5",
+              "id": "#e68f1bbe-de93-4418-b9aa-ccf9c202446b",
               "enableDrop": false,
               "enableDrag": false,
               "enableClose": false,
@@ -597,7 +592,7 @@
               "children": [
                 {
                   "type": "tab",
-                  "id": "#91126172-0f28-46c9-98e4-d7c034bd4d6c",
+                  "id": "#e978cf4a-e3fa-4349-9437-bc3fcf7f6687",
                   "component": "glyphs",
                   "enableClose": false
                 }
@@ -605,7 +600,7 @@
             },
             {
               "type": "tabset",
-              "id": "#74d29c92-a5fa-415b-9645-01abbf1f8739",
+              "id": "#d7bae203-b522-4fd9-9119-f8641dc41716",
               "enableDrop": false,
               "enableDrag": false,
               "enableClose": false,
@@ -613,7 +608,7 @@
               "children": [
                 {
                   "type": "tab",
-                  "id": "#3dab2971-c751-4a50-b529-8d6022b0cec8",
+                  "id": "#66014e20-5d51-4295-99d4-83306eb875a6",
                   "component": "editor",
                   "enableClose": false
                 }
@@ -635,15 +630,15 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#cb96e306-c324-463c-beb9-f303068dbc0c",
+          "id": "#169d27a1-6067-4020-8abd-099a33761166",
           "children": [
             {
               "type": "row",
-              "id": "#57ec371d-718b-4664-8013-4f33bc0d8db4",
+              "id": "#e9fb19ea-a251-42cc-a6ee-5463aa247d96",
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#b7517f5e-fd84-42f7-bf4d-fb95850852a1",
+                  "id": "#3f4a3873-9af6-4c56-aa9a-9eb89e198305",
                   "children": [
                     {
                       "type": "tab",
@@ -663,7 +658,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#06038b12-0a3b-4fbf-a920-8b281f9d5ebc",
+                  "id": "#3e1e284a-47ca-4306-a538-14433ebaa8a3",
                   "children": [
                     {
                       "type": "tab",
@@ -692,15 +687,15 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#902dceb3-e54b-4599-bab4-4047f1277f57",
+          "id": "#6a87eb91-8e63-4430-b473-d6d025ea5450",
           "children": [
             {
               "type": "row",
-              "id": "#da3c9717-1bc9-4587-84f3-2e30234badab",
+              "id": "#d9c3d6b3-0852-431a-b487-d2695755b433",
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#e87f4e9e-f57a-4ebf-921e-a9b08acf4493",
+                  "id": "#37170c25-967e-4b55-af8a-589fb5c624eb",
                   "weight": 75,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -709,7 +704,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#151c4f1e-e3d1-427b-900d-1143e2b4c720",
+                      "id": "#b49ac705-e0a0-4480-ba4a-ccd191edb03e",
                       "name": "Styles",
                       "component": "styles",
                       "enableClose": false
@@ -718,7 +713,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#044293f6-ffb7-4d7f-83f7-21c74e4ab23d",
+                  "id": "#409686e2-48d7-4718-86de-f2c5c0cb24c9",
                   "weight": 25,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -727,7 +722,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#c7082cfa-abb5-4cd1-8e7d-1d0bf33ca26f",
+                      "id": "#c0acf42e-f20b-40e4-abcc-a5e9f8436189",
                       "name": "Preview",
                       "component": "preview",
                       "enableClose": false
@@ -752,15 +747,15 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#02ab29f5-0764-4f90-9bc9-d48721a23530",
+          "id": "#a8206aa0-8448-4203-82f6-7beca6d317c5",
           "children": [
             {
               "type": "row",
-              "id": "#7126c62d-301a-4f4d-b13f-c4f2a1fbf5bf",
+              "id": "#7a1e1c1f-6f0a-4c6f-b5d3-b1d7704b14c6",
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#3ebae4e0-d23e-47ff-925a-2d4479fdb391",
+                  "id": "#a6072364-edd7-4d2f-a664-22dd815b3dd7",
                   "weight": 75,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -769,17 +764,16 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#ea84d6ac-7cc4-4999-b05e-846a1db6c8ef",
+                      "id": "#b6782578-e429-49c4-b56e-4913e8a7b8bb",
                       "name": "Styles",
                       "component": "styles",
                       "enableClose": false
                     }
-                  ],
-                  "active": true
+                  ]
                 },
                 {
                   "type": "tabset",
-                  "id": "#0ef031e1-49f7-488a-9932-2d4b23af7893",
+                  "id": "#a3c4dc42-cf02-44b5-aa36-b829ed7e4538",
                   "weight": 25,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -788,7 +782,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#bdd8b521-ed86-4213-bb90-8cd260e94fe9",
+                      "id": "#50e488d8-4977-4fbb-92e7-62860300a57e",
                       "name": "Preview",
                       "component": "preview",
                       "enableClose": false
@@ -813,15 +807,15 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#869fb075-60c4-4be0-8fa5-75c1f4aa5a86",
+          "id": "#666448f5-7c16-4159-9875-e252491fbbd3",
           "children": [
             {
               "type": "row",
-              "id": "#9d4c5601-3194-4d57-b507-53883cac5808",
+              "id": "#159d0ded-7057-4285-826e-80670eeb2f33",
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#3f22f151-f995-4192-93de-8d281f4a3512",
+                  "id": "#b4037413-e8ed-4949-803d-f1a21dcb4db0",
                   "enableDrop": false,
                   "enableDrag": false,
                   "enableClose": false,
@@ -829,7 +823,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#14646494-a35d-49b7-9457-193df6890317",
+                      "id": "#5246483b-5f6d-4903-8dc7-2c7b0a1c4f83",
                       "component": "themes",
                       "enableClose": false
                     }
@@ -837,7 +831,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#d88726cd-6427-49d1-851a-88973592ffd7",
+                  "id": "#b0d3a546-0943-4985-87a5-b0b9e6460de7",
                   "enableDrop": false,
                   "enableDrag": false,
                   "enableClose": false,
@@ -845,7 +839,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#e639df78-c1b7-4631-b805-392b619b86b2",
+                      "id": "#0e3be1e0-98aa-4663-aa35-946566b23f1a",
                       "component": "colors",
                       "enableClose": false
                     }
@@ -869,15 +863,15 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#345e9bc2-0da0-46f0-a876-80dcec9fff66",
+          "id": "#ed51c48f-a94f-46df-a3ca-bdb4045ce4d3",
           "children": [
             {
               "type": "row",
-              "id": "#2257411d-a0f7-4484-b277-675cf9e1fbda",
+              "id": "#f15666f7-9391-40d2-81ca-55e0a7d21c52",
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#72fd4ed2-67e3-4adf-b1af-af1d0f37ad01",
+                  "id": "#25113db7-b484-4a1e-b7e2-f1f238a490e3",
                   "children": [
                     {
                       "type": "tab",
@@ -890,7 +884,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#11f685f1-f009-461c-9d78-f7f4241df57f",
+                  "id": "#173fbf5a-56a5-4bb7-b807-f69996df9801",
                   "children": [
                     {
                       "type": "tab",
@@ -903,7 +897,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#ac07f2ff-b052-4e69-9b6c-71bcce094723",
+                  "id": "#8025a0e7-236d-46a4-a987-e89d25bbdb73",
                   "children": [
                     {
                       "type": "tab",
@@ -932,15 +926,15 @@
         "borders": [],
         "layout": {
           "type": "row",
-          "id": "#ed05a188-6332-4f87-845b-8697432e0656",
+          "id": "#4944dc7f-6559-4986-8596-bcb5769e70dd",
           "children": [
             {
               "type": "row",
-              "id": "#41787b03-a317-4dfa-949b-f3d8f1980ed5",
+              "id": "#532c8a4c-c199-4c56-8c52-4fffe76901dc",
               "children": [
                 {
                   "type": "tabset",
-                  "id": "#76ba5619-ccf0-47e6-b453-235242477202",
+                  "id": "#bdcaeeb5-b3da-4edb-a2cf-42f8d4061957",
                   "weight": 50,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -949,7 +943,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#1521cdc6-c6f9-49fb-8690-8a076aae4dae",
+                      "id": "#08f1d7b5-6a1d-4379-9a09-385df258a195",
                       "name": "Groups",
                       "component": "groups",
                       "enableClose": false
@@ -958,7 +952,7 @@
                 },
                 {
                   "type": "tabset",
-                  "id": "#d2c48133-e661-4654-a5c4-86771c948e46",
+                  "id": "#8f62125b-a21f-4b8d-af0a-204f7b4c5576",
                   "weight": 50,
                   "enableDrop": false,
                   "enableDrag": false,
@@ -967,7 +961,7 @@
                   "children": [
                     {
                       "type": "tab",
-                      "id": "#860072b9-f6f1-456b-ba25-33ad0f268641",
+                      "id": "#3c9dda88-80f6-49ec-94f9-a131966633d8",
                       "name": "Group Widgets",
                       "component": "order",
                       "enableClose": false
@@ -984,7 +978,7 @@
   "selectedBuildConfiguration": "Default",
   "features": {},
   "objects": {
-    "[HD2 Macropad.eez-project]:/userPages/0[flow-state]": {
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/0[flow-state]": {
       "selection": {
         "0": {
           "0": {
@@ -994,8 +988,8 @@
       },
       "transform": {
         "translate": {
-          "x": -240,
-          "y": -160
+          "x": -400,
+          "y": -240
         },
         "scale": 1
       },
@@ -1006,346 +1000,20 @@
         "scrollLeft": 0
       }
     },
-    "[HD2 Macropad.eez-project]:/userPages/1[flow-state]": {
-      "selection": {
-        "1": {
-          "$selected": true
-        }
-      },
-      "transform": {
-        "translate": {
-          "x": -403.0170454545439,
-          "y": -341.8201349431823
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/2[flow-state]": {
-      "selection": {
-        "0": {
-          "0": {}
-        },
-        "4": {}
-      },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -160
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/3[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -160
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/5[flow-state]": {
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/1[flow-state]": {
       "selection": {
         "0": {
           "0": {
-            "0": {}
+            "0": {
+              "$selected": true
+            }
           },
-          "1": {
-            "2": {
-              "$selected": true
-            }
-          }
+          "1": {},
+          "3": {}
         },
-        "1": {}
-      },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -280
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/4[flow-state]": {
-      "selection": {
-        "0": {
-          "1": {
-            "0": {}
-          }
-        },
-        "3": {
-          "$selected": true
-        }
-      },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -296.9149999999998
-        },
-        "scale": 1.1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/6[flow-state]": {
-      "selection": {
-        "0": {
-          "0": {
-            "0": {},
-            "1": {},
-            "2": {},
-            "3": {},
-            "4": {},
-            "5": {},
-            "6": {},
-            "7": {},
-            "8": {}
-          }
-        },
-        "1": {}
-      },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -160
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/7[flow-state]": {
-      "selection": {
-        "0": {
-          "0": {
-            "1": {
-              "$selected": true
-            }
-          }
-        }
-      },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -160
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/8[flow-state]": {
-      "selection": {
-        "0": {
-          "0": {}
-        },
+        "1": {},
         "3": {}
       },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -280
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/9[flow-state]": {
-      "selection": {
-        "0": {
-          "0": {
-            "2": {
-              "$selected": true
-            },
-            "3": {
-              "$selected": true
-            },
-            "4": {
-              "$selected": true
-            }
-          }
-        },
-        "1": {}
-      },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -160
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/userPages/10[flow-state]": {
-      "selection": {
-        "0": {
-          "1": {}
-        }
-      },
-      "transform": {
-        "translate": {
-          "x": -240,
-          "y": -400
-        },
-        "scale": 1.25
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[HD2 Macropad.eez-project]:/actions/0[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": 0,
-          "y": 0
-        },
-        "scale": 1
-      }
-    },
-    "[HD2 Macropad.eez-project]:/actions/1[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": 0,
-          "y": 0
-        },
-        "scale": 1
-      }
-    },
-    "[HD2 Macropad.eez-project]:/lvglStyles/styles[tree-state]": {},
-    "[hd2-wokka.eez-project]:/userPages/4[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": -400,
-          "y": -240
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[hd2-wokka.eez-project]:/userPages/6[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": -400,
-          "y": -240
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[hd2-wokka.eez-project]:/userPages/7[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": -400,
-          "y": -240
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[hd2-wokka.eez-project]:/userPages/8[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": -400,
-          "y": -240
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[hd2-wokka.eez-project]:/userPages/3[flow-state]": {
-      "selection": {},
-      "transform": {
-        "translate": {
-          "x": -400,
-          "y": -240
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[hd2-wokka.eez-project]:/userPages/2[flow-state]": {
-      "selection": {},
       "transform": {
         "translate": {
           "x": -400,
@@ -1360,33 +1028,7 @@
         "scrollLeft": 0
       }
     },
-    "[hd2-wokka.eez-project]:/userPages/1[flow-state]": {
-      "selection": {
-        "0": {
-          "0": {},
-          "1": {},
-          "2": {
-            "5": {
-              "$selected": true
-            }
-          }
-        }
-      },
-      "transform": {
-        "translate": {
-          "x": -400,
-          "y": -120
-        },
-        "scale": 1
-      },
-      "timeline": {
-        "isEditorActive": false,
-        "position": 0,
-        "secondToPx": 200,
-        "scrollLeft": 0
-      }
-    },
-    "[hd2-wokka.eez-project]:/userPages/0[flow-state]": {
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/3[flow-state]": {
       "selection": {},
       "transform": {
         "translate": {
@@ -1402,32 +1044,158 @@
         "scrollLeft": 0
       }
     },
-    "[hd2-wokka.eez-project]:/lvglStyles/styles[tree-state]": {
-      "0": {
-        "$selected": true
-      },
-      "1": {
-        "$selected": true
-      },
-      "2": {
-        "$selected": true
-      },
-      "3": {
-        "$selected": true
-      },
-      "4": {
-        "$selected": true
-      }
-    },
-    "[hd2-wokka.eez-project]:/userPages/5[flow-state]": {
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/2[flow-state]": {
       "selection": {
         "0": {
-          "0": {},
-          "4": {
+          "0": {
             "$selected": true
-          }
+          },
+          "2": {}
         }
       },
+      "transform": {
+        "translate": {
+          "x": -400,
+          "y": -240
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/4[flow-state]": {
+      "selection": {
+        "0": {
+          "1": {}
+        }
+      },
+      "transform": {
+        "translate": {
+          "x": -400,
+          "y": -240
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/5[flow-state]": {
+      "selection": {
+        "0": {
+          "0": {
+            "7": {}
+          },
+          "1": {}
+        },
+        "1": {},
+        "2": {
+          "$selected": true
+        }
+      },
+      "transform": {
+        "translate": {
+          "x": -400,
+          "y": -240
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/6[flow-state]": {
+      "selection": {
+        "0": {
+          "0": {}
+        },
+        "1": {}
+      },
+      "transform": {
+        "translate": {
+          "x": -400,
+          "y": -360
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/7[flow-state]": {
+      "selection": {
+        "0": {
+          "0": {
+            "0": {},
+            "1": {
+              "$selected": true
+            }
+          },
+          "1": {},
+          "2": {}
+        }
+      },
+      "transform": {
+        "translate": {
+          "x": -400,
+          "y": -240
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/8[flow-state]": {
+      "selection": {},
+      "transform": {
+        "translate": {
+          "x": -400,
+          "y": -240
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/9[flow-state]": {
+      "selection": {},
+      "transform": {
+        "translate": {
+          "x": -400,
+          "y": -240
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/10[flow-state]": {
+      "selection": {},
       "transform": {
         "translate": {
           "x": -400,
@@ -1449,7 +1217,6 @@
   "searchMatchWholeWord": false,
   "replaceEnabled": false,
   "replaceText": "",
-  "pageEditorFrontFace": false,
   "pageRuntimeFrontFace": true,
   "breakpoints": {},
   "watchExpressions": [],
@@ -1459,12 +1226,9 @@
   "lvglPart": "MAIN",
   "lvglState": "DEFAULT",
   "lvglExpandedPropertiesGroup": [
-    "TEXT",
+    "LAYOUT",
     "PADDING",
-    "BORDER",
-    "MISCELLANEOUS",
-    "POSITION AND SIZE",
-    "BACKGROUND"
+    "POSITION AND SIZE"
   ],
   "showInactiveFlowsInDebugger": true,
   "globalFlowZoom": true,

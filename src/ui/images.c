@@ -1,6 +1,6 @@
 #include "images.h"
 
-const ext_img_desc_t images[232] = {
+const ext_img_desc_t images[246] = {
     { "splash", &img_splash },
     { "tabIcons", &img_tab_icons },
     { "IconBack", &img_icon_back },
@@ -204,6 +204,12 @@ const ext_img_desc_t images[232] = {
     { "WP2", &img_wp2 },
     { "WSP1", &img_wsp1 },
     { "WSP2", &img_wsp2 },
+    { "CSD1", &img_csd1 },
+    { "CSD2", &img_csd2 },
+    { "C4P1", &img_c4p1 },
+    { "C4P2", &img_c4p2 },
+    { "CC1", &img_cc1 },
+    { "CC2", &img_cc2 },
     { "Mission_Conduct_Geological_Survey", &img_mission_conduct_geological_survey },
     { "Mission_Emergency_Evacuation", &img_mission_emergency_evacuation },
     { "Mission_Enable_E-710_Extraction", &img_mission_enable_e_710_extraction },
@@ -233,4 +239,12 @@ const ext_img_desc_t images[232] = {
     { "Stratagem_Arrow_Up1", &img_stratagem_arrow_up1 },
     { "Stratagem_Arrow_Left1", &img_stratagem_arrow_left1 },
     { "Stratagem_Arrow_Down1", &img_stratagem_arrow_down1 },
+    { "BMK2", &img_bmk2 },
+    { "BFGL2", &img_bfgl2 },
+    { "CQC2", &img_cqc2 },
+    { "BMK1", &img_bmk1 },
+    { "BFGL1", &img_bfgl1 },
+    { "CQC1", &img_cqc1 },
+    { "EATL2", &img_eatl2 },
+    { "EATL1", &img_eatl1 },
 };
