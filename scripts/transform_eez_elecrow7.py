@@ -217,6 +217,9 @@ OBJID_OVERRIDES = {
 
     # --- Setup page - TabSpecial: custom container size ---
     "6fa7cb1c-0cbd-4c22-f7a8-bda61a9a166b": {"width": 93, "height": 114},   # container 1
+
+    # --- Image page: main container ---
+    "7a5961be-cb84-4a73-b287-6b956ed21ac8": {"width": 90, "height": 421},    # button container
 }
 
 
