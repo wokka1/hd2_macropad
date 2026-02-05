@@ -98,6 +98,19 @@ MISSION_CUSTOMIZATIONS = {
             "label_width": 72, "label_height": 32,
         },
     },
+    # Spacer container for future additions (hidden button + spacing label)
+    "spacer_container": {
+        "container_left": 0,
+        "container_height": 16,  # Small height for vertical spacing
+        "button_identifier": "Empty",
+        "button_hidden": True,
+        "button_left": 997,
+        "button_top": 1140,
+        "button_userData": 15,
+        "button_bg_img": "CC1",
+        "button_border_color": "sgBrown",
+        "label_height": 16,
+    },
 }
 
 # =============================================================================
@@ -606,7 +619,163 @@ def customize_mission_page(page, upstream_page):
 
         return container
 
-    results = {"font": False, "resize": False, "injected": 0}
+    def create_spacer_container(icon_size, spacer_config):
+        """Create a spacer container with hidden button for future additions."""
+        import uuid
+
+        # Create container with FLEX layout
+        container = {
+            "objID": str(uuid.uuid4()),
+            "type": "LVGLContainerWidget",
+            "left": spacer_config.get("container_left", 0),
+            "top": 0,
+            "width": 32,
+            "height": spacer_config.get("container_height", 16),
+            "customInputs": [],
+            "customOutputs": [],
+            "style": {"objID": str(uuid.uuid4()), "useStyle": "default", "conditionalStyles": [], "childStyles": []},
+            "locked": False,
+            "hiddenInEditor": False,
+            "timeline": [],
+            "eventHandlers": [],
+            "leftUnit": "px",
+            "topUnit": "px",
+            "widthUnit": "%",
+            "heightUnit": "content",
+            "children": [],
+            "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|OVERFLOW_VISIBLE",
+            "hiddenFlagType": "literal",
+            "clickableFlag": True,
+            "clickableFlagType": "literal",
+            "flagScrollbarMode": "",
+            "flagScrollDirection": "",
+            "scrollSnapX": "",
+            "scrollSnapY": "",
+            "checkedStateType": "literal",
+            "disabledStateType": "literal",
+            "states": "",
+            "localStyles": {
+                "objID": str(uuid.uuid4()),
+                "definition": {
+                    "MAIN": {
+                        "DEFAULT": {
+                            "layout": "FLEX",
+                            "flex_flow": "ROW_WRAP",
+                            "flex_cross_place": "CENTER",
+                            "pad_column": 8
+                        }
+                    }
+                }
+            },
+            "group": "",
+            "groupIndex": 0
+        }
+
+        # Create hidden button widget
+        button = {
+            "objID": str(uuid.uuid4()),
+            "type": "LVGLButtonWidget",
+            "left": spacer_config.get("button_left", 997),
+            "top": spacer_config.get("button_top", 1140),
+            "width": icon_size,
+            "height": icon_size,
+            "customInputs": [],
+            "customOutputs": [],
+            "style": {"objID": str(uuid.uuid4()), "useStyle": "default", "conditionalStyles": [], "childStyles": []},
+            "locked": False,
+            "hiddenInEditor": False,
+            "timeline": [],
+            "eventHandlers": [
+                {
+                    "eventName": "CLICKED",
+                    "action": "triggerStratagemBase",
+                    "handlerType": "flow",
+                    "userData": spacer_config.get("button_userData", 15)
+                }
+            ],
+            "identifier": spacer_config.get("button_identifier", "Empty"),
+            "leftUnit": "px",
+            "topUnit": "px",
+            "widthUnit": "px",
+            "heightUnit": "px",
+            "children": [],
+            "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_ON_FOCUS|SCROLL_WITH_ARROW|SNAPPABLE",
+            "hiddenFlagType": "literal",
+            "hiddenFlag": spacer_config.get("button_hidden", True),
+            "clickableFlag": True,
+            "clickableFlagType": "literal",
+            "flagScrollbarMode": "",
+            "flagScrollDirection": "",
+            "scrollSnapX": "",
+            "scrollSnapY": "",
+            "checkedStateType": "literal",
+            "disabledStateType": "literal",
+            "states": "",
+            "useStyle": "ButtonStd",
+            "localStyles": {
+                "objID": str(uuid.uuid4()),
+                "definition": {
+                    "MAIN": {
+                        "DEFAULT": {
+                            "bg_img_src": spacer_config.get("button_bg_img", "CC1"),
+                            "border_color": spacer_config.get("button_border_color", "sgBrown")
+                        }
+                    }
+                }
+            },
+            "group": "",
+            "groupIndex": 0
+        }
+
+        # Create spacing label widget
+        label = {
+            "objID": str(uuid.uuid4()),
+            "type": "LVGLLabelWidget",
+            "left": 0,
+            "top": 0,
+            "width": 0,
+            "height": spacer_config.get("label_height", 16),
+            "customInputs": [],
+            "customOutputs": [],
+            "style": {"objID": str(uuid.uuid4()), "useStyle": "default", "conditionalStyles": [], "childStyles": []},
+            "locked": False,
+            "hiddenInEditor": False,
+            "timeline": [],
+            "eventHandlers": [],
+            "leftUnit": "px",
+            "topUnit": "px",
+            "widthUnit": "content",
+            "heightUnit": "content",
+            "children": [],
+            "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+            "hiddenFlagType": "literal",
+            "clickableFlagType": "literal",
+            "flagScrollbarMode": "",
+            "flagScrollDirection": "",
+            "scrollSnapX": "",
+            "scrollSnapY": "",
+            "checkedStateType": "literal",
+            "disabledStateType": "literal",
+            "states": "",
+            "localStyles": {
+                "objID": str(uuid.uuid4()),
+                "definition": {"MAIN": {"DEFAULT": {"text_font": "MONTSERRAT_14"}}}
+            },
+            "group": "",
+            "groupIndex": 0,
+            "text": "",
+            "textType": "literal",
+            "longMode": "WRAP",
+            "recolor": False
+        }
+
+        # Add button and label to container
+        container["children"].append(button)
+        container["children"].append(label)
+
+        return container
+
+    results = {"font": False, "resize": False, "injected": 0, "spacer": False}
 
     # 1. Replace font
     if "font_replacement" in MISSION_CUSTOMIZATIONS:
@@ -662,6 +831,24 @@ def customize_mission_page(page, upstream_page):
                             print(f"  Warning: Could not find button {btn_ident} in container")
                     else:
                         print(f"  Warning: Could not find {btn_ident} in upstream")
+
+    # 4. Inject spacer container at the end (for future additions)
+    if "spacer_container" in MISSION_CUSTOMIZATIONS:
+        main_container = find_main_container(page)
+        if not main_container:
+            print("  Warning: Could not find main container for spacer injection")
+        else:
+            # Check if spacer already exists (identifier "Empty")
+            preserved_buttons = find_identifiers(page)
+            spacer_ident = MISSION_CUSTOMIZATIONS["spacer_container"].get("button_identifier", "Empty")
+
+            if spacer_ident not in preserved_buttons:
+                spacer_config = MISSION_CUSTOMIZATIONS["spacer_container"]
+                spacer = create_spacer_container(icon_size, spacer_config)
+                if "children" in main_container:
+                    main_container["children"].append(spacer)
+                    results["spacer"] = True
+                    print(f"  Injected: Spacer container (hidden button '{spacer_ident}', height={spacer_config.get('container_height', 16)})")
 
     return results
 

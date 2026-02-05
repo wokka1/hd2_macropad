@@ -29,8 +29,26 @@ MISSION_CUSTOMIZATIONS = {
             "label_width": 72, "label_height": 32,
         },
     },
+    "spacer_container": {
+        "container_left": 0,
+        "container_height": 16,  # Small height for vertical spacing
+        "button_identifier": "Empty",
+        "button_hidden": True,
+        "button_left": 997,
+        "button_top": 1140,
+        "button_userData": 15,
+        "button_bg_img": "CC1",
+        "button_border_color": "sgBrown",
+        "label_height": 16,
+    },
 }
 ```
+
+**Spacer Container:**
+- Added at the end of Mission page for future button additions
+- Contains hidden button "Empty" positioned off-screen (997, 1140)
+- Provides 16px vertical spacing via label height
+- Uses FLEX layout matching other Mission containers
 
 ### 2. Setup Page Container Removals
 **Issue:** Upstream has extra empty spacer containers that should be removed for 800x480 layout.

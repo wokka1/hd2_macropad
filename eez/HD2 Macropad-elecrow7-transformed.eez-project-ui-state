@@ -1,6 +1,6 @@
 {
   "navigation": {
-    "selectedUserPageObject": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/1",
+    "selectedUserPageObject": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/6",
     "subnavigationSelectedItems": {
       "variables-tab/sub-navigation/selected-item": "Global"
     }
@@ -204,10 +204,10 @@
                 {
                   "type": "tab",
                   "id": "#abb70c58-f78a-4ba4-b86c-f4ca44fe09c2",
-                  "name": "Setup",
+                  "name": "Mission",
                   "component": "editor",
                   "config": {
-                    "objectPath": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/1",
+                    "objectPath": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/6",
                     "permanent": false
                   },
                   "icon": "svg:page"
@@ -1004,10 +1004,8 @@
       "selection": {
         "0": {
           "0": {
-            "5": {
-              "5": {
-                "$selected": true
-              }
+            "1": {
+              "$selected": true
             }
           },
           "1": {},

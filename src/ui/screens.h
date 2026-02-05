@@ -181,6 +181,7 @@ typedef struct _objects_t {
     lv_obj_t *btn_dfv;
     lv_obj_t *btn_csd;
     lv_obj_t *btn_cc;
+    lv_obj_t *empty;
     lv_obj_t *obj41;
     lv_obj_t *tab_view_config;
     lv_obj_t *sld_brightness;
