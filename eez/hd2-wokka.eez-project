@@ -1473,7 +1473,7 @@
                     {
                       "objID": "6fa7cb1c-0cbd-4c22-f7a8-bda61a9a166b",
                       "type": "LVGLContainerWidget",
-                      "left": 1046,
+                      "left": 0,
                       "top": 0,
                       "width": 93,
                       "height": 114,
@@ -5120,7 +5120,7 @@
                     {
                       "objID": "6615d191-ca0d-4020-8b2b-fbb9d0df288b",
                       "type": "LVGLContainerWidget",
-                      "left": 379,
+                      "left": 0,
                       "top": 0,
                       "width": 127,
                       "height": 76,
@@ -5432,16 +5432,16 @@
                       "groupIndex": 0
                     },
                     {
-                      "objID": "d60c5d59-4d18-48e6-b0f6-755ac63c1b19",
+                      "objID": "d279652b-f3d0-4c83-f814-6af54c156e25",
                       "type": "LVGLContainerWidget",
-                      "left": 166,
+                      "left": 0,
                       "top": 0,
                       "width": 137,
                       "height": 76,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
-                        "objID": "522e6b80-0cad-49e4-e133-ac7d6cfde704",
+                        "objID": "52896886-8b1a-4134-c808-f4861f294fc7",
                         "useStyle": "default",
                         "conditionalStyles": [],
                         "childStyles": []
@@ -5449,14 +5449,14 @@
                       "timeline": [],
                       "eventHandlers": [
                         {
-                          "objID": "9d6422c3-e1bb-49c0-ff3b-c2318c844553",
+                          "objID": "5e6b0ec4-bd33-4936-9664-587bb766b0aa",
                           "eventName": "CHECKED",
                           "handlerType": "action",
                           "action": "selectStratagem",
                           "userData": 0
                         },
                         {
-                          "objID": "558cf411-9697-4f36-f19c-f410f3d7c747",
+                          "objID": "457cbf25-17d1-481e-85f8-bcced13da4f5",
                           "eventName": "UNCHECKED",
                           "handlerType": "action",
                           "action": "deselectStratagem",
@@ -5480,7 +5480,7 @@
                       "disabledStateType": "literal",
                       "states": "",
                       "localStyles": {
-                        "objID": "bd6a2e57-4e33-43a3-f146-34e19e9c8ebe"
+                        "objID": "2278ad21-82e4-4dd6-edf5-795fcd853085"
                       },
                       "group": "",
                       "groupIndex": 0
@@ -5488,7 +5488,7 @@
                     {
                       "objID": "b63bbca9-9309-483e-ec08-3ed54fb8029a",
                       "type": "LVGLButtonWidget",
-                      "left": -158,
+                      "left": -78,
                       "top": -19,
                       "width": 114,
                       "height": 114,
@@ -7733,7 +7733,7 @@
               "type": "LVGLContainerWidget",
               "left": -3,
               "top": 139,
-              "width": 63,
+              "width": 85,
               "height": 64,
               "customInputs": [],
               "customOutputs": [],
@@ -7756,7 +7756,7 @@
                   "type": "LVGLLabelWidget",
                   "left": 0,
                   "top": 0,
-                  "width": 43,
+                  "width": 65,
                   "height": 44,
                   "customInputs": [],
                   "customOutputs": [],
@@ -7860,7 +7860,7 @@
           "objID": "b5d55bd6-2075-4b93-e2e0-d427984baede",
           "type": "LVGLActionComponent",
           "left": 578,
-          "top": 717,
+          "top": 286,
           "width": 305,
           "height": 54,
           "customInputs": [],
@@ -7911,8 +7911,8 @@
         {
           "objID": "65d98cb3-927d-4540-c856-c7cc79aac59a",
           "type": "CallActionActionComponent",
-          "left": 928,
-          "top": 465,
+          "left": 593,
+          "top": 209,
           "width": 95,
           "height": 24,
           "customInputs": [],
@@ -7956,8 +7956,8 @@
         {
           "objID": "bfb084d9-d17c-4922-ca2a-dd1fb75e8cc5",
           "type": "LVGLActionComponent",
-          "left": 48,
-          "top": 690,
+          "left": 154,
+          "top": 445,
           "width": 299,
           "height": 54,
           "customInputs": [],
@@ -7982,8 +7982,8 @@
         {
           "objID": "cab59a63-e40b-4c41-d0f3-0750de61abc6",
           "type": "LVGLActionComponent",
-          "left": 516,
-          "top": 557,
+          "left": 478,
+          "top": 372,
           "width": 311,
           "height": 54,
           "customInputs": [],
@@ -9365,7 +9365,7 @@
               "left": 0,
               "top": 0,
               "width": 90,
-              "height": 282,
+              "height": 421,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -10472,7 +10472,7 @@
               "left": 0,
               "top": 0,
               "width": 100,
-              "height": 356,
+              "height": 240,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -10951,7 +10951,7 @@
               "left": 0,
               "top": 0,
               "width": 67,
-              "height": 118,
+              "height": 80,
               "customInputs": [],
               "customOutputs": [],
               "style": {

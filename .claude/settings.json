@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/Users/wokka/.platformio/penv/bin/platformio run:*)"
+    ]
+  }
+}

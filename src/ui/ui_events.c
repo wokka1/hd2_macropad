@@ -854,6 +854,9 @@ void lookupManualSequence()
 
 		lv_obj_set_style_bg_img_src(objects.manual_preview_item, "", LV_PART_MAIN | LV_STATE_DEFAULT);
 	}
+}
+
+void resetCooldowns()
 {
 	for (uint8_t c = 0; c < MAX_USER_STRATAGEMS; c++)
 	{
