@@ -786,6 +786,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // CQC-9 Defoliation Tool
     {
         {INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_RIGHT, INPUT_DOWN, 0, 0, 0, 0},
+        480,
         SND_WEAPON,
         sgBlue,
         &img_dt2,
@@ -795,6 +796,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // M-1000 Maxigun
     {
         {INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, INPUT_UP, 0, 0, 0},
+        480,
         SND_WEAPON,
         sgBlue,
         &img_mxg2,
@@ -804,6 +806,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // AX/FLAM-75 "Guard Dog" Hot Dog
     {
         {INPUT_DOWN, INPUT_UP, INPUT_LEFT, INPUT_UP, INPUT_LEFT, INPUT_LEFT, 0, 0, 0},
+        480,
         SND_BACKPACK,
         sgBlue,
         &img_gdhd2,
@@ -813,6 +816,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // B/MD C4 Pack
     {
         {INPUT_DOWN, INPUT_RIGHT, INPUT_UP, INPUT_UP, INPUT_RIGHT, INPUT_UP, 0, 0, 0},
+        480,
         SND_BACKPACK,
         sgBlue,
         &img_c4p2,
@@ -822,6 +826,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // TD-220 Bastion MK XVI
     {
         {INPUT_LEFT, INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, INPUT_LEFT, INPUT_DOWN, INPUT_UP, INPUT_DOWN, INPUT_UP},
+        780,
         SND_SUPPLY,
         sgBlue,
         &img_bmk2,
@@ -831,6 +836,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // CQC-20 Breaching Hammer
     {
         {INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT, INPUT_UP, 0, 0, 0, 0},
+        480,
         SND_SUPPLY,
         sgBlue,
         &img_cqc2,
@@ -840,6 +846,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // EAT-411 Leveller
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_DOWN, 0, 0, 0, 0},
+        140,
         SND_SUPPLY,
         sgBlue,
         &img_eatl2,
@@ -849,6 +856,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // GL-28 Belt-Fed Grenade Launcher
     {
         {INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_LEFT, INPUT_UP, INPUT_UP, 0, 0, 0},
+        480,
         SND_SUPPLY,
         sgBlue,
         &img_bfgl2,
