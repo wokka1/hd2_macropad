@@ -306,7 +306,9 @@ void _executeUserStratagem(uint8_t index)
 	ESP_LOGI(TAG_EVT, "Stratagem: slot=%d, idx=%d", index, itemIndex);
 	setStratagemCode(item.sequence, INPUT_CTRL_MASK, false);
 
+	extern bool cooldownBeepTriggered[MAX_USER_STRATAGEMS];
 	cooldownValues[index] = getNow() + item.cooldown;
+	cooldownBeepTriggered[index] = false;  // Reset beep flag for new cooldown
 
 	char *path = item.soundPath;
 
@@ -328,7 +330,15 @@ void action_trigger_stratagem_base(lv_event_t *e)
 	if (index == 1 && cooldown > 0)
 	{
 		extern uint64_t resupplyCooldownValue;
-		resupplyCooldownValue = getNow() + cooldown;
+		extern bool resupplyBeepTriggered;
+		extern bool debugLogging;
+		uint64_t now = getNow();
+		resupplyCooldownValue = now + cooldown;
+		resupplyBeepTriggered = false;  // Reset beep flag for new cooldown
+		if (debugLogging) {
+			ESP_LOGI(TAG_EVT, "*** RESUPPLY COOLDOWN STARTED *** (now=%llu, expires=%llu, duration=%d sec)",
+			         now, resupplyCooldownValue, cooldown);
+		}
 	}
 
 	if (index > 5) // Mission stratagems

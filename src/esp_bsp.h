@@ -167,6 +167,28 @@ esp_err_t bsp_display_backlight_on(void);
 esp_err_t bsp_display_backlight_off(void);
 
 /**
+ * @brief Turn on buzzer (CrowPanel Advance only)
+ *
+ * @return ESP_OK on success, ESP_ERR_NOT_SUPPORTED on non-I2C boards
+ */
+esp_err_t bsp_buzzer_on(void);
+
+/**
+ * @brief Turn off buzzer (CrowPanel Advance only)
+ *
+ * @return ESP_OK on success
+ */
+esp_err_t bsp_buzzer_off(void);
+
+/**
+ * @brief Beep buzzer for specified duration (CrowPanel Advance only)
+ *
+ * @param duration_ms Duration of beep in milliseconds
+ * @return ESP_OK on success, ESP_ERR_NOT_SUPPORTED on non-I2C boards
+ */
+esp_err_t bsp_buzzer_beep(uint16_t duration_ms);
+
+/**
  * @brief Take LVGL mutex
  *
  * @param timeout_ms Timeout in [ms]. 0 will block indefinitely.

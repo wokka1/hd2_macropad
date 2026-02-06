@@ -72,15 +72,22 @@ static bool backlight_i2c_ready = false;
 
 static esp_err_t stc8h_write_brightness(uint8_t value)
 {
+    extern bool debugLogging;
+
     if (!backlight_i2c_ready) {
         ESP_LOGW(TAG, "Backlight I2C not ready");
         return ESP_ERR_INVALID_STATE;
     }
 
+    if (debugLogging) {
+        ESP_LOGI(TAG, "STC8H1K28: Writing value %d to I2C addr 0x%02X", value, BACKLIGHT_I2C_ADDR);
+    }
     esp_err_t ret = i2c_master_write_to_device(BSP_I2C_NUM, BACKLIGHT_I2C_ADDR,
                                                 &value, 1, pdMS_TO_TICKS(100));
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to write to STC8H1K28: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Failed to write to STC8H1K28: %s (0x%04X)", esp_err_to_name(ret), ret);
+    } else if (debugLogging) {
+        ESP_LOGI(TAG, "STC8H1K28: Write successful");
     }
     return ret;
 }
@@ -131,6 +138,41 @@ esp_err_t bsp_display_backlight_on(void)
 {
     ESP_LOGI(TAG, "Backlight ON (max brightness)");
     return stc8h_write_brightness(BACKLIGHT_MAX);
+}
+
+esp_err_t bsp_buzzer_on(void)
+{
+    extern bool debugLogging;
+    if (debugLogging) ESP_LOGI(TAG, "Buzzer ON");
+    return stc8h_write_brightness(246);  // 246 = buzzer on
+}
+
+esp_err_t bsp_buzzer_off(void)
+{
+    extern bool debugLogging;
+    if (debugLogging) ESP_LOGI(TAG, "Buzzer OFF");
+    return stc8h_write_brightness(247);  // 247 = buzzer off
+}
+
+esp_err_t bsp_buzzer_beep(uint16_t duration_ms)
+{
+    extern bool debugLogging;
+    if (debugLogging) ESP_LOGI(TAG, "=== BUZZER BEEP START (duration: %d ms) ===", duration_ms);
+    esp_err_t ret = bsp_buzzer_on();
+    if (ret == ESP_OK) {
+        if (debugLogging) ESP_LOGI(TAG, "Buzzer ON successful, delaying %d ms...", duration_ms);
+        vTaskDelay(pdMS_TO_TICKS(duration_ms));
+        if (debugLogging) ESP_LOGI(TAG, "Delay complete, turning buzzer OFF...");
+        ret = bsp_buzzer_off();
+        if (ret == ESP_OK) {
+            if (debugLogging) ESP_LOGI(TAG, "=== BUZZER BEEP COMPLETE ===");
+        } else {
+            ESP_LOGE(TAG, "=== BUZZER BEEP FAILED (turning off) ===");
+        }
+    } else {
+        ESP_LOGE(TAG, "=== BUZZER BEEP FAILED (turning on) ===");
+    }
+    return ret;
 }
 
 #else
@@ -189,6 +231,24 @@ esp_err_t bsp_display_backlight_off(void)
 esp_err_t bsp_display_backlight_on(void)
 {
     return bsp_display_brightness_set(100);
+}
+
+// Buzzer stubs for non-I2C boards (no buzzer hardware)
+esp_err_t bsp_buzzer_on(void)
+{
+    ESP_LOGW(TAG, "Buzzer not available on this board");
+    return ESP_ERR_NOT_SUPPORTED;
+}
+
+esp_err_t bsp_buzzer_off(void)
+{
+    return ESP_OK;  // No-op
+}
+
+esp_err_t bsp_buzzer_beep(uint16_t duration_ms)
+{
+    ESP_LOGW(TAG, "Buzzer not available on this board");
+    return ESP_ERR_NOT_SUPPORTED;
 }
 
 #endif // BACKLIGHT_USE_I2C

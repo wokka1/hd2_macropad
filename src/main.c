@@ -60,11 +60,13 @@ int screenRotation = LV_DISP_ROT_NONE;
 extern lv_obj_t *cooldownLabels[MAX_USER_STRATAGEMS];
 extern uint64_t cooldownValues[MAX_USER_STRATAGEMS];
 uint16_t lastCooldownDiffs[MAX_USER_STRATAGEMS];
+bool cooldownBeepTriggered[MAX_USER_STRATAGEMS] = {false};  // Track beeps for custom stratagems
 
 // Resupply cooldown tracking
 extern lv_obj_t *labelSupplies;
 uint64_t resupplyCooldownValue = 0;
 uint16_t lastResupplyCooldownDiff = 0;
+bool resupplyBeepTriggered = false;  // Track if we've beeped for current cooldown
 
 // Set stratagem code sequence which should be executed
 // sequence - keycode buffer
@@ -283,9 +285,27 @@ void ui_update_task(lv_timer_t *timer)
         lv_obj_clear_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN);
       }
     }
+    else if (cooldownValue > 0 && diff <= 0)
+    {
+      // Cooldown just expired - trigger buzzer beep
+      if (!cooldownBeepTriggered[c])
+      {
+        if (debugLogging) ESP_LOGI(TAG, "*** STRATAGEM %d COOLDOWN EXPIRED ***", c + 1);
+        cooldownBeepTriggered[c] = true;
+        bsp_buzzer_beep(400);  // 400ms beep
+      }
+
+      cooldownValues[c] = 0;
+
+      if (!lv_obj_has_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN))
+      {
+        lv_obj_add_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN);
+      }
+    }
     else
     {
       cooldownValues[c] = 0;
+      cooldownBeepTriggered[c] = false;  // Reset for next cooldown
 
       if (!lv_obj_has_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN))
       {
@@ -322,9 +342,31 @@ void ui_update_task(lv_timer_t *timer)
       }
     }
   }
+  else if (resupplyCooldownValue > 0 && resupplyDiff <= 0)
+  {
+    // Cooldown just expired - trigger buzzer beep
+    if (debugLogging) ESP_LOGI(TAG, "*** RESUPPLY COOLDOWN EXPIRED *** (diff=%d, beepTriggered=%d)", resupplyDiff, resupplyBeepTriggered);
+    if (!resupplyBeepTriggered)
+    {
+      if (debugLogging) ESP_LOGI(TAG, ">>> Triggering buzzer beep now...");
+      resupplyBeepTriggered = true;
+      esp_err_t beep_result = bsp_buzzer_beep(400);  // 400ms beep
+      if (debugLogging) ESP_LOGI(TAG, ">>> Buzzer beep result: %s (0x%04X)", esp_err_to_name(beep_result), beep_result);
+    } else {
+      if (debugLogging) ESP_LOGI(TAG, ">>> Beep already triggered, skipping");
+    }
+
+    resupplyCooldownValue = 0;
+
+    if (!lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
+    {
+      lv_obj_add_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN);
+    }
+  }
   else
   {
     resupplyCooldownValue = 0;
+    resupplyBeepTriggered = false;  // Reset for next cooldown
 
     if (!lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
     {
