@@ -47,10 +47,8 @@ void ui_post()
   cooldownLabels[4] = objects.label_cooldown5;
   cooldownLabels[5] = objects.label_cooldown6;
 
-  // Initialize Resupply cooldown label (if it exists in EEZ Studio)
-  // After exporting from EEZ Studio, this should be: labelSupplies = objects.label_supplies;
-  // For now, it will remain NULL until EEZ export adds the object
-  // labelSupplies = objects.label_supplies;
+  // Initialize Resupply cooldown label
+  labelSupplies = objects.label_supplies;
 
   // Position cooldown labels - COMMENTED OUT: Using EEZ Studio positions instead
   // If you want code-based positioning, uncomment these lines:
