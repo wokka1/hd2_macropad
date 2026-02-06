@@ -46,5 +46,21 @@ void ui_post()
   cooldownLabels[4] = objects.label_cooldown5;
   cooldownLabels[5] = objects.label_cooldown6;
 
+  // Position cooldown labels at bottom-center of stratagem buttons
+  lv_obj_align_to(objects.label_cooldown1, objects.custom_stratagem1, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  lv_obj_align_to(objects.label_cooldown2, objects.custom_stratagem2, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  lv_obj_align_to(objects.label_cooldown3, objects.custom_stratagem3, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  lv_obj_align_to(objects.label_cooldown4, objects.custom_stratagem4, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  lv_obj_align_to(objects.label_cooldown5, objects.custom_stratagem5, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  lv_obj_align_to(objects.label_cooldown6, objects.custom_stratagem6, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+
+  // Set cooldown label style
+  lv_obj_set_style_text_color(objects.label_cooldown1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_color(objects.label_cooldown2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_color(objects.label_cooldown3, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_color(objects.label_cooldown4, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_color(objects.label_cooldown5, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_color(objects.label_cooldown6, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+
   resetCooldowns();
 }
