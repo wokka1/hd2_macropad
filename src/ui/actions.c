@@ -3,6 +3,7 @@
 #include "screens.h"
 #include "ui_events.h"
 #include "configration.h"
+#include "esp_log.h"
 
 // Change HID input delay
 void action_change_delay(lv_event_t *e)
@@ -34,14 +35,27 @@ void action_action_toggle_debug(lv_event_t *e)
 	bool debug = lv_obj_get_state(e->current_target) & LV_STATE_CHECKED ? true : false;
 
 	setDebugLogging(debug, false);
+
+	// Immediate feedback to user
+	if (debug)
+	{
+		ESP_LOGI("Config", "Debug logging ENABLED");
+	}
+	else
+	{
+		ESP_LOGI("Config", "Debug logging DISABLED");
+	}
 }
 
-// Toggle cooldown display
+// Toggle cooldown display (switch is labeled "Disable", so invert logic)
 void action_action_toggle_cooldowns(lv_event_t *e)
 {
-	bool show = lv_obj_get_state(e->current_target) & LV_STATE_CHECKED ? true : false;
+	bool disable = lv_obj_get_state(e->current_target) & LV_STATE_CHECKED ? true : false;
 
-	setShowCooldowns(show, false);
+	setShowCooldowns(!disable, false);  // Invert: checked = disable = hide cooldowns
+
+	// Immediate feedback to user
+	ESP_LOGI("Config", "Cooldown display %s", disable ? "DISABLED (hidden)" : "ENABLED (visible)");
 }
 
 // Trigger when tab navigation has changed

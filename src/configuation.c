@@ -256,6 +256,7 @@ void setDebugLogging(bool debug, bool restore)
 }
 
 // Write the cooldown display state to configuration
+// NOTE: Switch is labeled "Disable", so checkbox logic is inverted
 void setShowCooldowns(bool show, bool restore)
 {
     extern bool showCooldowns;
@@ -263,13 +264,14 @@ void setShowCooldowns(bool show, bool restore)
 
     if (restore)
     {
+        // Invert checkbox state: show=true means unchecked (not disabled)
         if (show)
         {
-            lv_obj_add_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
+            lv_obj_clear_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
         }
         else
         {
-            lv_obj_clear_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
+            lv_obj_add_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
         }
     }
     else

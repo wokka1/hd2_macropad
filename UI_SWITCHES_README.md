@@ -270,7 +270,26 @@ Potential improvements for consideration:
 - [Project Memory](~/.claude/projects/-Users-wokka-hd2-macropad-hd2-macropad/memory/MEMORY.md)
 - [Sound Research](SOUND_RESEARCH.md)
 
+## Bug Fixes and Improvements
+
+### Fix: Inverted Cooldown Toggle Logic (2024-02-06)
+**Issue**: The "Disable Cooldowns" switch behavior was inverted - checking it would show cooldowns instead of hiding them.
+
+**Solution**: Inverted the boolean logic in both the action handler and restore function:
+- [actions.c](src/ui/actions.c): `setShowCooldowns(!disable, false)` - inverts checkbox state
+- [configuation.c](src/configuation.c): Inverted checkbox restore logic - show=true means unchecked
+- Added immediate feedback log message
+
+### Improvement: Debug Logging Immediate Feedback (2024-02-06)
+**Issue**: Debug toggle appeared to do nothing because debug messages only appear during specific events.
+
+**Solution**: Added immediate feedback messages when toggling:
+- [actions.c](src/ui/actions.c): Added ESP_LOGI messages on toggle
+- Added `#include "esp_log.h"` for logging support
+- User now sees "Debug logging ENABLED/DISABLED" immediately in serial monitor
+
 ## Commit History
-- Initial implementation: [commit hash]
-- Buzzer beep for all timers (400ms): [previous commit]
-- Debug logging and UI switches: [this commit]
+- Initial implementation: 27fd46b
+- Buzzer beep for all timers (400ms): cece586
+- Debug logging and UI switches: 27fd46b
+- Bug fixes: inverted cooldown logic and debug feedback: [current commit]
