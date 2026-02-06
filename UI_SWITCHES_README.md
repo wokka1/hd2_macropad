@@ -38,11 +38,19 @@ All settings are persisted to NVS (Non-Volatile Storage) and restored on device 
 
 **Behavior**:
 - When **enabled**: Outputs detailed logging including:
-  - HID command execution details
-  - Buzzer beep events with timing and results
-  - Cooldown expiration notifications
-  - Connection state changes
-- When **disabled** (default): Only essential logging (errors and warnings) is shown
+  - **Touch Events**: Touch press/release with X/Y coordinates
+  - **BLE Connection Events**: Detailed connection, pairing, and disconnection info
+  - **BLE GAP Events**: Security requests, connection parameters, RSSI, packet length
+  - **BLE Keep-Alive**: 30-second keep-alive messages
+  - **HID Command Execution**: Command index, values, and timing
+  - **Buzzer Events**: Beep start, duration, completion with timing
+  - **Cooldown Events**: Stratagem and Resupply cooldown expiration
+  - **Backlight I2C**: STC8H1K28 write operations and results
+- When **disabled** (default): Only essential logging:
+  - Stratagem selection events (always visible)
+  - BLE connection/disconnection status
+  - BLE pairing success/failure
+  - Errors and warnings
 
 **Implementation**:
 - Global flag: `bool debugLogging` in [main.c](src/main.c)
@@ -302,6 +310,38 @@ Potential improvements for consideration:
 - All files now properly reference the extern declaration from [main.h](src/main.h) line 68
 
 **Technical Note**: While declaring `extern` inside functions is legal C, it can cause linking issues when the header isn't included. The proper approach is to include the header that declares the extern variable once, rather than redeclaring it locally in each function.
+
+### Enhancement: Comprehensive Debug Logging (2026-02-06)
+**Feature**: Added extensive debug logging throughout the codebase, all controlled by the debugLogging toggle.
+
+**Implementation**:
+- **Touch Events** ([esp_bsp.c](src/esp_bsp.c)):
+  - Logs touch press with X/Y coordinates (only on initial press)
+  - Logs touch release with last known position
+  - Uses static state tracking to prevent duplicate logs during continuous touch
+
+- **BLE Connection Events** ([ble_controller.c](src/ble/ble_controller.c)):
+  - Connection: Always shows "BLE CONNECTED", debug adds connection ID
+  - Disconnection: Always shows "BLE DISCONNECTED", debug adds keep-alive count
+  - Pairing: Always shows "BLE PAIRED successfully/FAILED", debug adds BD_ADDR and address type
+  - Keep-alive timer: Start/stop messages behind debug flag
+
+- **BLE GAP Events** ([ble_controller.c](src/ble/ble_controller.c)):
+  - Advertising data set complete
+  - Security requests with BD_ADDR details
+  - Connection parameter updates (interval, latency, timeout)
+  - Packet length configuration
+  - RSSI readings
+  - All unhandled GAP events with event codes
+
+**User Experience**:
+- **Debug OFF**: Clean output showing only important events (pairing, connection, stratagems)
+- **Debug ON**: Verbose output showing every touch, every BLE event, all internal operations
+- **No performance impact**: All debug checks are simple boolean comparisons
+
+**Files Modified**:
+- [src/esp_bsp.c](src/esp_bsp.c) - Added touch event logging in `lvgl_touch_cb()`
+- [src/ble/ble_controller.c](src/ble/ble_controller.c) - Enhanced logging in `hidd_event_callback()` and `gap_event_handler()`
 
 ## Commit History
 - Initial implementation: 27fd46b

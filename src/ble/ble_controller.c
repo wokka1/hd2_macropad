@@ -116,20 +116,25 @@ void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param)
         break;
     case ESP_HIDD_EVENT_BLE_CONNECT:
     {
-        ESP_LOGI(TAG_BLE, "ESP_HIDD_EVENT_BLE_CONNECT");
+        ESP_LOGI(TAG_BLE, "BLE CONNECTED");
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "Connection ID: 0x%04x", param->connect.conn_id);
+        }
         hid_conn_id = param->connect.conn_id;
         break;
     }
     case ESP_HIDD_EVENT_BLE_DISCONNECT:
     {
         sec_conn = false;
-        ESP_LOGW(TAG_BLE, "=== BLE DISCONNECTED after %lu keep-alives ===", keepalive_count);
+        ESP_LOGW(TAG_BLE, "BLE DISCONNECTED (after %lu keep-alives)", keepalive_count);
 
         // Stop keep-alive timer
         if (ble_keepalive_timer != NULL)
         {
             xTimerStop(ble_keepalive_timer, 0);
-            ESP_LOGI(TAG_BLE, "Keep-alive timer stopped");
+            if (debugLogging) {
+                ESP_LOGI(TAG_BLE, "Keep-alive timer stopped");
+            }
         }
         keepalive_count = 0;  // Reset for next connection
 
@@ -140,14 +145,18 @@ void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param)
     }
     case ESP_HIDD_EVENT_BLE_VENDOR_REPORT_WRITE_EVT:
     {
-        ESP_LOGI(TAG_BLE, "%s, ESP_HIDD_EVENT_BLE_VENDOR_REPORT_WRITE_EVT", __func__);
-        ESP_LOG_BUFFER_HEX(TAG_BLE, param->vendor_write.data, param->vendor_write.length);
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "VENDOR_REPORT_WRITE_EVT");
+            ESP_LOG_BUFFER_HEX(TAG_BLE, param->vendor_write.data, param->vendor_write.length);
+        }
         break;
     }
     case ESP_HIDD_EVENT_BLE_LED_REPORT_WRITE_EVT:
     {
-        ESP_LOGI(TAG_BLE, "ESP_HIDD_EVENT_BLE_LED_REPORT_WRITE_EVT");
-        ESP_LOG_BUFFER_HEX(TAG_BLE, param->led_write.data, param->led_write.length);
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "LED_REPORT_WRITE_EVT");
+            ESP_LOG_BUFFER_HEX(TAG_BLE, param->led_write.data, param->led_write.length);
+        }
         break;
     }
     default:
@@ -161,12 +170,18 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
     switch (event)
     {
     case ESP_GAP_BLE_ADV_DATA_SET_COMPLETE_EVT:
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "GAP: Advertising data set, starting advertisement");
+        }
         esp_ble_gap_start_advertising(&hidd_adv_params);
         break;
     case ESP_GAP_BLE_SEC_REQ_EVT:
-        for (int i = 0; i < ESP_BD_ADDR_LEN; i++)
-        {
-            ESP_LOG_BUFFER_HEX(TAG_BLE, "%x:", param->ble_security.ble_req.bd_addr[i]);
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "GAP: Security request from device");
+            for (int i = 0; i < ESP_BD_ADDR_LEN; i++)
+            {
+                ESP_LOGI(TAG_BLE, "  BD_ADDR[%d]: 0x%02x", i, param->ble_security.ble_req.bd_addr[i]);
+            }
         }
         esp_ble_gap_security_rsp(param->ble_security.ble_req.bd_addr, true);
         break;
@@ -174,14 +189,19 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
         sec_conn = true;
         esp_bd_addr_t bd_addr;
         memcpy(bd_addr, param->ble_security.auth_cmpl.bd_addr, sizeof(esp_bd_addr_t));
-        ESP_LOGI(TAG_BLE, "remote BD_ADDR: %08x%04x",
-                 (bd_addr[0] << 24) + (bd_addr[1] << 16) + (bd_addr[2] << 8) + bd_addr[3],
-                 (bd_addr[4] << 8) + bd_addr[5]);
-        ESP_LOGI(TAG_BLE, "address type = %d", param->ble_security.auth_cmpl.addr_type);
-        ESP_LOGI(TAG_BLE, "pair status = %s", param->ble_security.auth_cmpl.success ? "success" : "fail");
+
+        ESP_LOGI(TAG_BLE, "BLE PAIRED %s", param->ble_security.auth_cmpl.success ? "successfully" : "FAILED");
+
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "  BD_ADDR: %08x%04x",
+                     (bd_addr[0] << 24) + (bd_addr[1] << 16) + (bd_addr[2] << 8) + bd_addr[3],
+                     (bd_addr[4] << 8) + bd_addr[5]);
+            ESP_LOGI(TAG_BLE, "  Address type: %d", param->ble_security.auth_cmpl.addr_type);
+        }
+
         if (!param->ble_security.auth_cmpl.success)
         {
-            ESP_LOGE(TAG_BLE, "fail reason = 0x%x", param->ble_security.auth_cmpl.fail_reason);
+            ESP_LOGE(TAG_BLE, "Pairing fail reason: 0x%x", param->ble_security.auth_cmpl.fail_reason);
         }
         else
         {
@@ -190,7 +210,9 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
             {
                 keepalive_count = 0;  // Reset counter for new connection
                 xTimerStart(ble_keepalive_timer, 0);
-                ESP_LOGI(TAG_BLE, "Keep-alive timer started (30s interval)");
+                if (debugLogging) {
+                    ESP_LOGI(TAG_BLE, "Keep-alive timer started (30s interval)");
+                }
             }
 
             // Request longer supervision timeout to prevent disconnects during NVS writes
@@ -201,25 +223,39 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
             conn_params.latency = 0;       // No slave latency
             conn_params.timeout = 600;     // 6 seconds (units of 10ms) - increased from default ~2s
             esp_ble_gap_update_conn_params(&conn_params);
+
+            if (debugLogging) {
+                ESP_LOGI(TAG_BLE, "Requesting connection params: int=20-40ms, timeout=6s");
+            }
         }
 
         updateConnection();
         break;
     case ESP_GAP_BLE_UPDATE_CONN_PARAMS_EVT:
-        ESP_LOGI(TAG_BLE, "Conn params updated: int=%d, lat=%d, timeout=%d",
-                 param->update_conn_params.conn_int,
-                 param->update_conn_params.latency,
-                 param->update_conn_params.timeout);
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "GAP: Connection params updated");
+            ESP_LOGI(TAG_BLE, "  Interval: %d (%.1fms)", param->update_conn_params.conn_int,
+                     param->update_conn_params.conn_int * 1.25);
+            ESP_LOGI(TAG_BLE, "  Latency: %d", param->update_conn_params.latency);
+            ESP_LOGI(TAG_BLE, "  Timeout: %d (%dms)", param->update_conn_params.timeout,
+                     param->update_conn_params.timeout * 10);
+        }
         break;
     case ESP_GAP_BLE_SET_PKT_LENGTH_COMPLETE_EVT:
-        ESP_LOGI(TAG_BLE, "Packet length set complete");
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "GAP: Packet length set complete");
+        }
         break;
     case ESP_GAP_BLE_READ_RSSI_COMPLETE_EVT:
-        ESP_LOGI(TAG_BLE, "RSSI: %d dBm", param->read_rssi_cmpl.rssi);
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "GAP: RSSI = %d dBm", param->read_rssi_cmpl.rssi);
+        }
         break;
     default:
-        // Log all GAP events for diagnostics
-        ESP_LOGI(TAG_BLE, "GAP event: %d", event);
+        // Log all other GAP events when debug enabled
+        if (debugLogging) {
+            ESP_LOGI(TAG_BLE, "GAP: Unhandled event %d", event);
+        }
         break;
     }
 }

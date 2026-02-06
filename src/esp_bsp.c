@@ -441,13 +441,26 @@ static bool gt911_read_touch(int16_t *x, int16_t *y)
 static void lvgl_touch_cb(lv_indev_drv_t *drv, lv_indev_data_t *data)
 {
     int16_t x, y;
+    static bool was_pressed = false;  // Track previous state
 
     if (gt911_read_touch(&x, &y)) {
         touch_last_x = x;
         touch_last_y = y;
         data->state = LV_INDEV_STATE_PRESSED;
+
+        // Log touch press (only on initial press, not continuous)
+        if (!was_pressed && debugLogging) {
+            ESP_LOGI(TAG, "TOUCH PRESSED at X=%d, Y=%d", x, y);
+        }
+        was_pressed = true;
     } else {
         data->state = LV_INDEV_STATE_RELEASED;
+
+        // Log touch release (only once)
+        if (was_pressed && debugLogging) {
+            ESP_LOGI(TAG, "TOUCH RELEASED at X=%d, Y=%d", touch_last_x, touch_last_y);
+        }
+        was_pressed = false;
     }
 
     data->point.x = touch_last_x;
