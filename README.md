@@ -30,6 +30,13 @@ Get the game on [PC](https://store.steampowered.com/app/553850/HELLDIVERS_2/), [
 
 Based on an affordable IoT platform device with a capacitive touchscreen it's very handy for a PC, Playstation&trade; since it's connected via Bluetooth or USB as a keyboard input device.
 
+### Features
+
+- **Cooldown Timers**: Visual countdown timers on custom stratagem buttons showing when each stratagem will be available again (format: M:SS)
+- **Live Configuration**: Configure up to 6 custom stratagems per drop with individual presets
+- **Multiple Input Methods**: Bluetooth, USB, or manual input mode
+- **Mission-Specific Stratagems**: Quick access to mission objectives and special stratagems
+
 > HELLDIVERS and Playstation are registered trademarks of SONY INTERACTIVE ENTERTAINMENT LLC.
 
 ## Videos
@@ -90,6 +97,7 @@ If you enjoy the project and want to support our private work feel free to make 
 
 - [Icon Set](https://github.com/nvigneux/Helldivers-2-Stratagems-icons-svg) from [@nvigneux](https://github.com/nvigneux)
 - [Demo project](https://github.com/NorthernMan54/JC3248W535EN) from [@NorthernMan54](https://github.com/NorthernMan54)
+- [Stratagem cooldown data](https://helldivers.wiki.gg/wiki/Stratagems) from [Helldivers Wiki](https://helldivers.wiki.gg/)
 
 ## Disclaimer and copyright
 > This is a private opensource project and is not associated in any kind with SONY INTERACTIVE ENTERTAINMENT LLC.

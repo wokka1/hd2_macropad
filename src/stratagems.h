@@ -14,10 +14,12 @@
 #define INPUT_RIGHT 4
 
 // Struct for stratagem data (command sequence, sound id, button color, hires icon)
+// Cooldown times sourced from: https://helldivers.wiki.gg/wiki/Stratagems
+// Cooldown values are in seconds (base cooldown without ship module upgrades)
 typedef struct
 {
 uint8_t sequence[9];
-    uint16_t cooldown;
+    uint16_t cooldown;  // Cooldown time in seconds
     char *soundPath;
     const int color;
     const lv_img_dsc_t *imgHiRes;
@@ -781,6 +783,9 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         sgBlue,
         &img_sg2,
         SG_SG},
+
+    // === Siege Breakers Warbond Stratagems ===
+    // Cooldown times sourced from: https://helldivers.wiki.gg/wiki/Stratagems
 
     // 75
     // CQC-9 Defoliation Tool
