@@ -288,6 +288,21 @@ Potential improvements for consideration:
 - Added `#include "esp_log.h"` for logging support
 - User now sees "Debug logging ENABLED/DISABLED" immediately in serial monitor
 
+### Fix: Debug Logging Toggle Not Working (2026-02-06)
+**Issue**: Debug toggle showed immediate feedback message but didn't actually enable debug output throughout the codebase. When manually setting `debugLogging = true` in main.c, debug messages appeared, but the UI toggle didn't work.
+
+**Root Cause**: [esp_bsp.c](src/esp_bsp.c) wasn't including [main.h](src/main.h), so local `extern bool debugLogging;` declarations inside functions weren't properly linked to the actual variable definition in main.c. This caused the variable to not be shared correctly across compilation units.
+
+**Solution**:
+- Added `#include "main.h"` to [esp_bsp.c](src/esp_bsp.c)
+- Removed redundant local `extern bool debugLogging;` declarations from functions in:
+  - [esp_bsp.c](src/esp_bsp.c) (4 functions: stc8h_write_brightness, bsp_buzzer_on, bsp_buzzer_off, bsp_buzzer_beep)
+  - [configuation.c](src/configuation.c) (setDebugLogging, setShowCooldowns)
+  - [ui_events.c](src/ui/ui_events.c) (event handler)
+- All files now properly reference the extern declaration from [main.h](src/main.h) line 68
+
+**Technical Note**: While declaring `extern` inside functions is legal C, it can cause linking issues when the header isn't included. The proper approach is to include the header that declares the extern variable once, rather than redeclaring it locally in each function.
+
 ## Commit History
 - Initial implementation: 27fd46b
 - Buzzer beep for all timers (400ms): cece586

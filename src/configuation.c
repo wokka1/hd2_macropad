@@ -235,8 +235,6 @@ void setMuted(bool muted, bool restore)
 // Write the debug logging state to configuration
 void setDebugLogging(bool debug, bool restore)
 {
-    extern bool debugLogging;
-
     // Always print this message regardless of debug flag to verify function is called
     ESP_LOGI(TAG_CFG, "setDebugLogging called: debug=%d, restore=%d", debug, restore);
 
@@ -266,7 +264,6 @@ void setDebugLogging(bool debug, bool restore)
 // NOTE: Switch is labeled "Disable", so checkbox logic is inverted
 void setShowCooldowns(bool show, bool restore)
 {
-    extern bool showCooldowns;
     showCooldowns = show;
 
     if (restore)

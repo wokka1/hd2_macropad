@@ -331,7 +331,6 @@ void action_trigger_stratagem_base(lv_event_t *e)
 	{
 		extern uint64_t resupplyCooldownValue;
 		extern bool resupplyBeepTriggered;
-		extern bool debugLogging;
 		uint64_t now = getNow();
 		resupplyCooldownValue = now + cooldown;
 		resupplyBeepTriggered = false;  // Reset beep flag for new cooldown

@@ -23,6 +23,7 @@
 #include "lvgl.h"
 
 #include "esp_bsp.h"
+#include "main.h"
 
 static const char *TAG = "BSP";
 
@@ -72,8 +73,6 @@ static bool backlight_i2c_ready = false;
 
 static esp_err_t stc8h_write_brightness(uint8_t value)
 {
-    extern bool debugLogging;
-
     if (!backlight_i2c_ready) {
         ESP_LOGW(TAG, "Backlight I2C not ready");
         return ESP_ERR_INVALID_STATE;
@@ -142,21 +141,18 @@ esp_err_t bsp_display_backlight_on(void)
 
 esp_err_t bsp_buzzer_on(void)
 {
-    extern bool debugLogging;
     if (debugLogging) ESP_LOGI(TAG, "Buzzer ON");
     return stc8h_write_brightness(246);  // 246 = buzzer on
 }
 
 esp_err_t bsp_buzzer_off(void)
 {
-    extern bool debugLogging;
     if (debugLogging) ESP_LOGI(TAG, "Buzzer OFF");
     return stc8h_write_brightness(247);  // 247 = buzzer off
 }
 
 esp_err_t bsp_buzzer_beep(uint16_t duration_ms)
 {
-    extern bool debugLogging;
     if (debugLogging) ESP_LOGI(TAG, "=== BUZZER BEEP START (duration: %d ms) ===", duration_ms);
     esp_err_t ret = bsp_buzzer_on();
     if (ret == ESP_OK) {
