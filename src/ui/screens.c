@@ -4713,7 +4713,7 @@ void create_screen_game() {
             // LabelCooldown1
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_cooldown1 = obj;
-            lv_obj_set_pos(obj, 100, 319);
+            lv_obj_set_pos(obj, 115, 319);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
             add_style_label_cooldown(obj);
@@ -4725,7 +4725,7 @@ void create_screen_game() {
             // LabelCooldown2
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_cooldown2 = obj;
-            lv_obj_set_pos(obj, 279, 319);
+            lv_obj_set_pos(obj, 294, 319);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
             add_style_label_cooldown(obj);
@@ -4737,7 +4737,7 @@ void create_screen_game() {
             // LabelCooldown3
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_cooldown3 = obj;
-            lv_obj_set_pos(obj, 478, 319);
+            lv_obj_set_pos(obj, 472, 319);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
             add_style_label_cooldown(obj);
@@ -4749,7 +4749,7 @@ void create_screen_game() {
             // LabelCooldown4
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_cooldown4 = obj;
-            lv_obj_set_pos(obj, 661, 319);
+            lv_obj_set_pos(obj, 650, 319);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
             add_style_label_cooldown(obj);
@@ -4761,7 +4761,7 @@ void create_screen_game() {
             // LabelCooldown5
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_cooldown5 = obj;
-            lv_obj_set_pos(obj, 276, 447);
+            lv_obj_set_pos(obj, 265, 447);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
             add_style_label_cooldown(obj);
@@ -4773,7 +4773,7 @@ void create_screen_game() {
             // LabelCooldown6
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_cooldown6 = obj;
-            lv_obj_set_pos(obj, 392, 447);
+            lv_obj_set_pos(obj, 381, 447);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
             add_style_label_cooldown(obj);
@@ -4785,7 +4785,7 @@ void create_screen_game() {
             // LabelSupplies
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_supplies = obj;
-            lv_obj_set_pos(obj, 291, 110);
+            lv_obj_set_pos(obj, 297, 146);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
             add_style_label_cooldown(obj);

@@ -11328,7 +11328,7 @@
             {
               "objID": "489fce7b-fe92-4c94-e399-c88b01550739",
               "type": "LVGLLabelWidget",
-              "left": 100,
+              "left": 115,
               "top": 319,
               "width": 35,
               "height": 18,
@@ -11381,7 +11381,7 @@
             {
               "objID": "99fccc66-ca76-42ac-ec58-c88b6be5e0e7",
               "type": "LVGLLabelWidget",
-              "left": 279,
+              "left": 294,
               "top": 319,
               "width": 35,
               "height": 18,
@@ -11434,7 +11434,7 @@
             {
               "objID": "637b3d5e-8c1c-448e-d1dc-ff9dbb18eca1",
               "type": "LVGLLabelWidget",
-              "left": 478,
+              "left": 472,
               "top": 319,
               "width": 35,
               "height": 18,
@@ -11487,7 +11487,7 @@
             {
               "objID": "d6e87261-7c6a-43e6-988e-2f3e5fcff9c8",
               "type": "LVGLLabelWidget",
-              "left": 661,
+              "left": 650,
               "top": 319,
               "width": 35,
               "height": 18,
@@ -11540,7 +11540,7 @@
             {
               "objID": "f731655e-9b05-47a7-b59d-7ce85ce1447c",
               "type": "LVGLLabelWidget",
-              "left": 276,
+              "left": 265,
               "top": 447,
               "width": 35,
               "height": 18,
@@ -11593,7 +11593,7 @@
             {
               "objID": "d5503435-2611-42c8-a52d-319aa32c2886",
               "type": "LVGLLabelWidget",
-              "left": 392,
+              "left": 381,
               "top": 447,
               "width": 35,
               "height": 18,
@@ -11646,8 +11646,8 @@
             {
               "objID": "bd99660a-f02d-456a-d469-6673bb930112",
               "type": "LVGLLabelWidget",
-              "left": 291,
-              "top": 110,
+              "left": 297,
+              "top": 146,
               "width": 29,
               "height": 16,
               "customInputs": [],
