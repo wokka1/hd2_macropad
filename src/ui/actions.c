@@ -77,3 +77,25 @@ void action_finalize_manual_execution(lv_event_t *e)
 {
 	finalizeManualExecution();
 }
+
+void action_config_2_setup(lv_event_t *e)
+{
+	lv_scr_load_anim(objects.setup, LV_SCR_LOAD_ANIM_MOVE_LEFT, 1000, 0, false);
+}
+
+void action_game_2_setup(lv_event_t *e)
+{
+	resetCooldowns();
+
+	lv_scr_load_anim(objects.setup, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 1000, 0, false);
+}
+
+void action_game_2_mission(lv_event_t *e)
+{
+	lv_scr_load_anim(objects.mission, LV_SCR_LOAD_ANIM_NONE, 0, 0, false);
+}
+
+void action_mission_2_game(lv_event_t *e)
+{
+	lv_scr_load_anim(objects.game, LV_SCR_LOAD_ANIM_NONE, 0, 0, false);
+}

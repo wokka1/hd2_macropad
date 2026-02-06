@@ -8,6 +8,7 @@
 #include "screens.h"
 #include "hid_dev.h"
 #include "esp_log.h"
+#include "esp_timer.h"
 #include "stratagems.h"
 #include "i2s_player.h"
 #include "main.h"
@@ -18,7 +19,6 @@
 
 const char *TAG_EVT = "Events";
 
-#define MAX_USER_STRATAGEMS 6
 #define MAX_USER_PRESETS 6
 
 // User button list
@@ -30,11 +30,16 @@ int types[MAX_USER_STRATAGEMS];
 // Amount of user assigned stratagems
 uint8_t strategemsAmount = 0;
 
+// Manual execution variables
 int manualIndex = 0;
 int manualList = 0;
 int manualSequence[MAX_CMD_LENGTH] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 int manualMatch = -1;
 lv_timer_t *timerManual = NULL;
+
+// Cooldown tracking
+lv_obj_t *cooldownLabels[MAX_USER_STRATAGEMS];
+uint64_t cooldownValues[MAX_USER_STRATAGEMS];
 
 lv_timer_t *timerMsg = NULL;
 bool presetImageMode = false;
@@ -300,6 +305,8 @@ void _executeUserStratagem(uint8_t index)
 
 	ESP_LOGI(TAG_EVT, "Stratagem: slot=%d, idx=%d", index, itemIndex);
 	setStratagemCode(item.sequence, INPUT_CTRL_MASK, false);
+
+	cooldownValues[index] = getNow() + item.cooldown;
 
 	char *path = item.soundPath;
 
@@ -847,4 +854,16 @@ void lookupManualSequence()
 
 		lv_obj_set_style_bg_img_src(objects.manual_preview_item, "", LV_PART_MAIN | LV_STATE_DEFAULT);
 	}
+{
+	for (uint8_t c = 0; c < MAX_USER_STRATAGEMS; c++)
+	{
+		lv_obj_add_flag(cooldownLabels[c], LV_OBJ_FLAG_HIDDEN);
+
+		cooldownValues[c] = 0;
+	}
+}
+
+uint64_t getNow()
+{
+	return esp_timer_get_time() / 1000000;
 }
