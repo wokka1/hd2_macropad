@@ -236,7 +236,14 @@ void setMuted(bool muted, bool restore)
 void setDebugLogging(bool debug, bool restore)
 {
     extern bool debugLogging;
+
+    // Always print this message regardless of debug flag to verify function is called
+    ESP_LOGI(TAG_CFG, "setDebugLogging called: debug=%d, restore=%d", debug, restore);
+
     debugLogging = debug;
+
+    // Verify the value was set
+    ESP_LOGI(TAG_CFG, "debugLogging variable is now: %d", debugLogging);
 
     if (restore)
     {
