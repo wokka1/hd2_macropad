@@ -1,6 +1,7 @@
 {
   "navigation": {
-    "selectedUserPageObject": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/4",
+    "selectedUserPageObject": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/5",
+    "selectedActionObject": "[HD2 Macropad-elecrow7-transformed.eez-project]:/actions/27",
     "subnavigationSelectedItems": {
       "variables-tab/sub-navigation/selected-item": "Global"
     }
@@ -23,6 +24,7 @@
           },
           {
             "type": "border",
+            "selected": 2,
             "size": 240,
             "location": "right",
             "children": [
@@ -126,12 +128,12 @@
             {
               "type": "row",
               "id": "#e8c72684-6b89-46b8-b696-02eb80af952a",
-              "weight": 15,
+              "weight": 18.346915017462166,
               "children": [
                 {
                   "type": "tabset",
                   "id": "#0443fe3f-cb63-423b-9642-f629b9498c8e",
-                  "weight": 1,
+                  "weight": 0.7800101262850476,
                   "enableClose": false,
                   "children": [
                     {
@@ -163,7 +165,7 @@
                 {
                   "type": "tabset",
                   "id": "#3587cec4-583d-45ff-bf72-3a41fb226f21",
-                  "weight": 1.303964757709251,
+                  "weight": 1.8843255380506165,
                   "enableClose": false,
                   "children": [
                     {
@@ -179,7 +181,7 @@
                 {
                   "type": "tabset",
                   "id": "#bd5d5294-203d-40c3-979a-ca59e649322a",
-                  "weight": 0.6960352422907489,
+                  "weight": 0.3356643356643357,
                   "enableClose": false,
                   "children": [
                     {
@@ -197,17 +199,29 @@
             {
               "type": "tabset",
               "id": "EDITORS",
-              "weight": 65,
+              "weight": 60.16320894525162,
+              "selected": 1,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
                 {
                   "type": "tab",
-                  "id": "#abb70c58-f78a-4ba4-b86c-f4ca44fe09c2",
-                  "name": "Image",
+                  "id": "#9627d791-b08c-48d9-8839-6a0300a88094",
+                  "name": "action_toggle_cooldowns",
                   "component": "editor",
                   "config": {
-                    "objectPath": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/4",
+                    "objectPath": "[HD2 Macropad-elecrow7-transformed.eez-project]:/actions/27",
+                    "permanent": false
+                  },
+                  "icon": "material:code"
+                },
+                {
+                  "type": "tab",
+                  "id": "#abb70c58-f78a-4ba4-b86c-f4ca44fe09c2",
+                  "name": "Game",
+                  "component": "editor",
+                  "config": {
+                    "objectPath": "[HD2 Macropad-elecrow7-transformed.eez-project]:/userPages/5",
                     "permanent": false
                   },
                   "icon": "svg:page"
@@ -218,7 +232,7 @@
             {
               "type": "row",
               "id": "#ad158c76-bc88-4522-998c-493253ceaa03",
-              "weight": 20,
+              "weight": 21.48987603728637,
               "children": [
                 {
                   "type": "tabset",
@@ -769,7 +783,8 @@
                       "component": "styles",
                       "enableClose": false
                     }
-                  ]
+                  ],
+                  "active": true
                 },
                 {
                   "type": "tabset",
@@ -1091,21 +1106,30 @@
       "selection": {
         "0": {
           "0": {
+            "4": {},
+            "5": {},
+            "6": {},
             "7": {}
           },
-          "1": {}
+          "1": {
+            "0": {
+              "0": {
+                "$selected": true
+              }
+            },
+            "1": {}
+          },
+          "5": {}
         },
         "1": {},
-        "2": {
-          "$selected": true
-        }
+        "2": {}
       },
       "transform": {
         "translate": {
-          "x": -400,
-          "y": -240
+          "x": -522.7013888888882,
+          "y": -294.43750000000006
         },
-        "scale": 1
+        "scale": 1.25
       },
       "timeline": {
         "isEditorActive": false,
@@ -1139,10 +1163,10 @@
       "selection": {
         "0": {
           "0": {
-            "0": {},
-            "1": {
+            "0": {
               "$selected": true
-            }
+            },
+            "1": {}
           },
           "1": {},
           "2": {}
@@ -1150,10 +1174,10 @@
       },
       "transform": {
         "translate": {
-          "x": -400,
-          "y": -240
+          "x": -601.9454545454544,
+          "y": -418.9568181818182
         },
-        "scale": 1
+        "scale": 1.5
       },
       "timeline": {
         "isEditorActive": false,
@@ -1209,6 +1233,29 @@
         "secondToPx": 200,
         "scrollLeft": 0
       }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/lvglStyles/styles[tree-state]": {
+      "5": {}
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/actions/26[flow-state]": {
+      "selection": {},
+      "transform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "scale": 1
+      }
+    },
+    "[HD2 Macropad-elecrow7-transformed.eez-project]:/actions/27[flow-state]": {
+      "selection": {},
+      "transform": {
+        "translate": {
+          "x": 0,
+          "y": 0
+        },
+        "scale": 1
+      }
     }
   },
   "activeOutputSection": 0,
@@ -1228,10 +1275,13 @@
   "lvglExpandedPropertiesGroup": [
     "LAYOUT",
     "PADDING",
-    "POSITION AND SIZE"
+    "POSITION AND SIZE",
+    "TEXT",
+    "MISCELLANEOUS",
+    "BORDER"
   ],
   "showInactiveFlowsInDebugger": true,
   "globalFlowZoom": true,
-  "flowZoom": 1,
+  "flowZoom": 1.25,
   "implementationLanguage": "C"
 }
