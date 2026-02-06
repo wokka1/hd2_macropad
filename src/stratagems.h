@@ -29,6 +29,7 @@ uint8_t sequence[9];
 typedef struct
 {
     uint8_t sequence[9];
+    uint16_t cooldown;  // Cooldown time in seconds
     char *soundPath;
     const lv_img_dsc_t *imgHiRes;
 } stratagemBase;
@@ -872,6 +873,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Reinforce
     {
         {INPUT_UP, INPUT_DOWN, INPUT_RIGHT, INPUT_LEFT, INPUT_UP, 0, 0, 0, 0},
+        0,  // No cooldown for Reinforce
         SND_REINFORCE,
         &img_rf2},
 
@@ -879,6 +881,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Resupply
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_UP, INPUT_RIGHT, 0, 0, 0, 0, 0},
+        180,  // 180 second (3 minute) cooldown
         SND_SUPPLY,
         &img_res2},
 
@@ -886,6 +889,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // SOS
     {
         {INPUT_UP, INPUT_DOWN, INPUT_RIGHT, INPUT_UP, 0, 0, 0, 0, 0},
+        0,  // No cooldown
         SND_SOS,
         &img_sos2},
 
@@ -893,6 +897,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Eagle rearm
     {
         {INPUT_UP, INPUT_UP, INPUT_LEFT, INPUT_UP, INPUT_RIGHT, 0, 0, 0, 0},
+        0,  // No cooldown
         SND_EAGLE_RELOAD,
         &img_er2},
 
@@ -900,6 +905,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Hellbomb
     {
         {INPUT_DOWN, INPUT_UP, INPUT_LEFT, INPUT_DOWN, INPUT_UP, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, 0},
+        0,  // No cooldown
         SND_BACKPACK,
         &img_hb2},
 
@@ -907,6 +913,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // S.E.A.F.
     {
         {INPUT_RIGHT, INPUT_UP, INPUT_UP, INPUT_DOWN, 0, 0, 0, 0, 0},
+        0,  // No cooldown
         NULL,
         &img_seaf2},
 
@@ -914,6 +921,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // SSSD Delivery
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_DOWN, INPUT_UP, INPUT_UP, 0, 0, 0, 0},
+        0,  // No cooldown (mission-specific)
         NULL,
         NULL},
 
@@ -921,6 +929,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Upload data
     {
         {INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_UP, INPUT_UP, 0, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -928,6 +937,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Super Earth Flag
     {
         {INPUT_DOWN, INPUT_UP, INPUT_DOWN, INPUT_UP, 0, 0, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -935,6 +945,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Hive breaker drill
     {
         {INPUT_LEFT, INPUT_UP, INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, INPUT_DOWN, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -942,6 +953,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Tectonic drill
     {
         {INPUT_UP, INPUT_DOWN, INPUT_UP, INPUT_DOWN, INPUT_UP, INPUT_DOWN, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -949,6 +961,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Prospection drill
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_DOWN, INPUT_DOWN, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -956,6 +969,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Seismic probe
     {
         {INPUT_UP, INPUT_UP, INPUT_LEFT, INPUT_RIGHT, INPUT_DOWN, INPUT_DOWN, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -963,6 +977,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Orbital illumination flare
     {
         {INPUT_RIGHT, INPUT_RIGHT, INPUT_LEFT, INPUT_LEFT, 0, 0, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -970,6 +985,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Dark fluid vessel
     {
         {INPUT_UP, INPUT_LEFT, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, INPUT_UP, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -977,6 +993,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Cargo container
     {
         {INPUT_UP, INPUT_UP, INPUT_DOWN, INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, 0, 0, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL},
 
@@ -984,6 +1001,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Call in Super Destroyer
     {
         {INPUT_UP, INPUT_UP, INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT, INPUT_RIGHT, 0},
+        0,  // Mission objective, no cooldown
         NULL,
         NULL}};
 

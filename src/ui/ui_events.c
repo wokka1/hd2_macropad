@@ -319,9 +319,17 @@ void action_trigger_stratagem_base(lv_event_t *e)
 	int index = (int)e->user_data;
 	uint8_t *sequence = (uint8_t *)strategemBaseList[index].sequence;
 	char *path = strategemBaseList[index].soundPath;
+	uint16_t cooldown = strategemBaseList[index].cooldown;
 
 	ESP_LOGI(TAG_EVT, "Base stratagem: idx=%d", index);
 	_executeStdStratagem(sequence, path);
+
+	// Track cooldown for Resupply (index 1)
+	if (index == 1 && cooldown > 0)
+	{
+		extern uint64_t resupplyCooldownValue;
+		resupplyCooldownValue = getNow() + cooldown;
+	}
 
 	if (index > 5) // Mission stratagems
 	{

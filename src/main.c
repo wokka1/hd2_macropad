@@ -61,6 +61,11 @@ extern lv_obj_t *cooldownLabels[MAX_USER_STRATAGEMS];
 extern uint64_t cooldownValues[MAX_USER_STRATAGEMS];
 uint16_t lastCooldownDiffs[MAX_USER_STRATAGEMS];
 
+// Resupply cooldown tracking
+extern lv_obj_t *labelSupplies;
+uint64_t resupplyCooldownValue = 0;
+uint16_t lastResupplyCooldownDiff = 0;
+
 // Set stratagem code sequence which should be executed
 // sequence - keycode buffer
 // mask - modifier keys
@@ -286,6 +291,44 @@ void ui_update_task(lv_timer_t *timer)
       {
         lv_obj_add_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN);
       }
+    }
+  }
+
+  // Update Resupply cooldown label
+  int16_t resupplyDiff = resupplyCooldownValue - getNow();
+  if (resupplyCooldownValue > 0 && resupplyDiff > 0)
+  {
+    if (lastResupplyCooldownDiff != resupplyDiff)
+    {
+      lastResupplyCooldownDiff = resupplyDiff;
+
+      uint8_t min = 0;
+      uint16_t sec = resupplyDiff;
+
+      while (sec >= 60)
+      {
+        min++;
+        sec -= 60;
+      }
+
+      char *textCooldown = (char *)malloc(8 * sizeof(char));
+      sprintf(textCooldown, "%d:%02d", min, sec);
+
+      lv_label_set_text(labelSupplies, (void *)textCooldown);
+
+      if (lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
+      {
+        lv_obj_clear_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN);
+      }
+    }
+  }
+  else
+  {
+    resupplyCooldownValue = 0;
+
+    if (!lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
+    {
+      lv_obj_add_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN);
     }
   }
 }

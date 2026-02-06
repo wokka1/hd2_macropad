@@ -5,6 +5,7 @@
 
 
 extern lv_obj_t *cooldownLabels[MAX_USER_STRATAGEMS];
+lv_obj_t *labelSupplies = NULL;  // Will be initialized from EEZ Studio
 
 
 void ui_post()
@@ -46,13 +47,19 @@ void ui_post()
   cooldownLabels[4] = objects.label_cooldown5;
   cooldownLabels[5] = objects.label_cooldown6;
 
-  // Position cooldown labels at bottom-center of stratagem buttons
-  lv_obj_align_to(objects.label_cooldown1, objects.custom_stratagem1, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
-  lv_obj_align_to(objects.label_cooldown2, objects.custom_stratagem2, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
-  lv_obj_align_to(objects.label_cooldown3, objects.custom_stratagem3, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
-  lv_obj_align_to(objects.label_cooldown4, objects.custom_stratagem4, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
-  lv_obj_align_to(objects.label_cooldown5, objects.custom_stratagem5, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
-  lv_obj_align_to(objects.label_cooldown6, objects.custom_stratagem6, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  // Initialize Resupply cooldown label (if it exists in EEZ Studio)
+  // After exporting from EEZ Studio, this should be: labelSupplies = objects.label_supplies;
+  // For now, it will remain NULL until EEZ export adds the object
+  // labelSupplies = objects.label_supplies;
+
+  // Position cooldown labels - COMMENTED OUT: Using EEZ Studio positions instead
+  // If you want code-based positioning, uncomment these lines:
+  // lv_obj_align_to(objects.label_cooldown1, objects.custom_stratagem1, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  // lv_obj_align_to(objects.label_cooldown2, objects.custom_stratagem2, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  // lv_obj_align_to(objects.label_cooldown3, objects.custom_stratagem3, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  // lv_obj_align_to(objects.label_cooldown4, objects.custom_stratagem4, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  // lv_obj_align_to(objects.label_cooldown5, objects.custom_stratagem5, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+  // lv_obj_align_to(objects.label_cooldown6, objects.custom_stratagem6, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
 
   // Set cooldown label style
   lv_obj_set_style_text_color(objects.label_cooldown1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);

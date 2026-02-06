@@ -215,6 +215,7 @@ typedef struct _objects_t {
     lv_obj_t *label_cooldown4;
     lv_obj_t *label_cooldown5;
     lv_obj_t *label_cooldown6;
+    lv_obj_t *label_supplies;
     lv_obj_t *obj51;
     lv_obj_t *lbl_brightness;
     lv_obj_t *lbl_delay;
