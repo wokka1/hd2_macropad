@@ -167,12 +167,6 @@ typedef struct _objects_t {
     lv_obj_t *custom_stratagem4;
     lv_obj_t *custom_stratagem5;
     lv_obj_t *custom_stratagem6;
-    lv_obj_t *label_cooldown1;
-    lv_obj_t *label_cooldown2;
-    lv_obj_t *label_cooldown3;
-    lv_obj_t *label_cooldown4;
-    lv_obj_t *label_cooldown5;
-    lv_obj_t *label_cooldown6;
     lv_obj_t *btn_seaf;
     lv_obj_t *obj39;
     lv_obj_t *obj40;
@@ -215,6 +209,12 @@ typedef struct _objects_t {
     lv_obj_t *msg_box;
     lv_obj_t *msg_label;
     lv_obj_t *img_connection2;
+    lv_obj_t *label_cooldown1;
+    lv_obj_t *label_cooldown2;
+    lv_obj_t *label_cooldown3;
+    lv_obj_t *label_cooldown4;
+    lv_obj_t *label_cooldown5;
+    lv_obj_t *label_cooldown6;
     lv_obj_t *obj51;
     lv_obj_t *lbl_brightness;
     lv_obj_t *lbl_delay;
