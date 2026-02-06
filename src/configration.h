@@ -14,6 +14,8 @@ void setDelay(int delay, bool restore);
 void setRotation(int rotation, bool restore);
 void setBrightness(int brightness, bool restore);
 void setMuted(bool muted, bool restore);
+void setDebugLogging(bool debug, bool restore);
+void setShowCooldowns(bool show, bool restore);
 void setConnectivity(uint8_t index, bool restore);
 void setKeymap(uint8_t index, bool restore);
 void loadConfig();

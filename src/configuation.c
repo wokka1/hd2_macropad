@@ -232,6 +232,52 @@ void setMuted(bool muted, bool restore)
     // playbackSound(SND_SWITCH);  // Audio removed for BLE-only build
 }
 
+// Write the debug logging state to configuration
+void setDebugLogging(bool debug, bool restore)
+{
+    extern bool debugLogging;
+    debugLogging = debug;
+
+    if (restore)
+    {
+        if (debug)
+        {
+            lv_obj_add_state(objects.chb_debug_1, LV_STATE_CHECKED);
+        }
+        else
+        {
+            lv_obj_clear_state(objects.chb_debug_1, LV_STATE_CHECKED);
+        }
+    }
+    else
+    {
+        setConfig("debug", debugLogging ? 1 : 0);
+    }
+}
+
+// Write the cooldown display state to configuration
+void setShowCooldowns(bool show, bool restore)
+{
+    extern bool showCooldowns;
+    showCooldowns = show;
+
+    if (restore)
+    {
+        if (show)
+        {
+            lv_obj_add_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
+        }
+        else
+        {
+            lv_obj_clear_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
+        }
+    }
+    else
+    {
+        setConfig("cooldowns", showCooldowns ? 1 : 0);
+    }
+}
+
 // Write the keymap assignment to configuration
 void setConnectivity(uint8_t index, bool restore)
 {
@@ -335,6 +381,12 @@ void loadConfig()
 
     uint8_t sound_muted = getConfig("muted", 0);
     setMuted(sound_muted == 1, true);
+
+    uint8_t debug_enabled = getConfig("debug", 0);
+    setDebugLogging(debug_enabled == 1, true);
+
+    uint8_t cooldowns_enabled = getConfig("cooldowns", 1);  // Default ON
+    setShowCooldowns(cooldowns_enabled == 1, true);
 
     uint8_t connectivity_index = getConfig("connectivity", 0);
     setConnectivity(connectivity_index, true);

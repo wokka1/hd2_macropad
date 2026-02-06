@@ -67,4 +67,7 @@ void updateBatteryInfo();
 // Debug logging toggle (key press logging)
 extern bool debugLogging;
 
+// Cooldown display toggle
+extern bool showCooldowns;
+
 #endif

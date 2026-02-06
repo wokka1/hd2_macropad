@@ -28,6 +28,22 @@ void action_mute_sound(lv_event_t *e)
 	setMuted(muted, false);
 }
 
+// Toggle debug logging
+void action_action_toggle_debug(lv_event_t *e)
+{
+	bool debug = lv_obj_get_state(e->current_target) & LV_STATE_CHECKED ? true : false;
+
+	setDebugLogging(debug, false);
+}
+
+// Toggle cooldown display
+void action_action_toggle_cooldowns(lv_event_t *e)
+{
+	bool show = lv_obj_get_state(e->current_target) & LV_STATE_CHECKED ? true : false;
+
+	setShowCooldowns(show, false);
+}
+
 // Trigger when tab navigation has changed
 void action_tab_changed(lv_event_t *e)
 {

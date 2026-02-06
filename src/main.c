@@ -50,6 +50,8 @@ char *soundFile;
 bool playerMuted;
 // Flag for verbose debug logging (key presses, etc.)
 bool debugLogging = false;
+// Flag for showing/hiding cooldown timers
+bool showCooldowns = true;
 
 // Delay for HID input execution in milliseconds (default: 100)
 int inputDelay = 100;
@@ -280,7 +282,7 @@ void ui_update_task(lv_timer_t *timer)
 
       lv_label_set_text(cooldownLabel, (void *)textCooldown);
 
-      if (lv_obj_has_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN))
+      if (showCooldowns && lv_obj_has_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN))
       {
         lv_obj_clear_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN);
       }
@@ -292,7 +294,10 @@ void ui_update_task(lv_timer_t *timer)
       {
         if (debugLogging) ESP_LOGI(TAG, "*** STRATAGEM %d COOLDOWN EXPIRED ***", c + 1);
         cooldownBeepTriggered[c] = true;
-        bsp_buzzer_beep(400);  // 400ms beep
+        if (!playerMuted)
+        {
+          bsp_buzzer_beep(400);  // 400ms beep
+        }
       }
 
       cooldownValues[c] = 0;
@@ -311,6 +316,12 @@ void ui_update_task(lv_timer_t *timer)
       {
         lv_obj_add_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN);
       }
+    }
+
+    // Hide cooldown label if showCooldowns is disabled
+    if (!showCooldowns && !lv_obj_has_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN))
+    {
+      lv_obj_add_flag(cooldownLabel, LV_OBJ_FLAG_HIDDEN);
     }
   }
 
@@ -336,7 +347,7 @@ void ui_update_task(lv_timer_t *timer)
 
       lv_label_set_text(labelSupplies, (void *)textCooldown);
 
-      if (lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
+      if (showCooldowns && lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
       {
         lv_obj_clear_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN);
       }
@@ -350,8 +361,15 @@ void ui_update_task(lv_timer_t *timer)
     {
       if (debugLogging) ESP_LOGI(TAG, ">>> Triggering buzzer beep now...");
       resupplyBeepTriggered = true;
-      esp_err_t beep_result = bsp_buzzer_beep(400);  // 400ms beep
-      if (debugLogging) ESP_LOGI(TAG, ">>> Buzzer beep result: %s (0x%04X)", esp_err_to_name(beep_result), beep_result);
+      if (!playerMuted)
+      {
+        esp_err_t beep_result = bsp_buzzer_beep(400);  // 400ms beep
+        if (debugLogging) ESP_LOGI(TAG, ">>> Buzzer beep result: %s (0x%04X)", esp_err_to_name(beep_result), beep_result);
+      }
+      else if (debugLogging)
+      {
+        ESP_LOGI(TAG, ">>> Buzzer muted, skipping beep");
+      }
     } else {
       if (debugLogging) ESP_LOGI(TAG, ">>> Beep already triggered, skipping");
     }
@@ -372,6 +390,12 @@ void ui_update_task(lv_timer_t *timer)
     {
       lv_obj_add_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN);
     }
+  }
+
+  // Hide resupply cooldown label if showCooldowns is disabled
+  if (!showCooldowns && !lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
+  {
+    lv_obj_add_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN);
   }
 }
 
