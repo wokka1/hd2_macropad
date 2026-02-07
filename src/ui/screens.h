@@ -170,6 +170,7 @@ typedef struct _objects_t {
     lv_obj_t *btn_seaf;
     lv_obj_t *obj39;
     lv_obj_t *obj40;
+    lv_obj_t *clear_cooldowns;
     lv_obj_t *btn_sssd;
     lv_obj_t *btn_ud;
     lv_obj_t *btn_sef;

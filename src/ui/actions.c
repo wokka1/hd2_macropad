@@ -130,3 +130,39 @@ void action_mission_2_game(lv_event_t *e)
 {
 	lv_scr_load_anim(objects.game, LV_SCR_LOAD_ANIM_NONE, 0, 0, false);
 }
+
+// Clear all cooldowns without triggering buzzer
+void action_action_clear_cooldowns(lv_event_t *e)
+{
+	extern lv_obj_t *cooldownLabels[MAX_USER_STRATAGEMS];
+	extern uint64_t cooldownValues[MAX_USER_STRATAGEMS];
+	extern bool cooldownBeepTriggered[MAX_USER_STRATAGEMS];
+	extern uint64_t resupplyCooldownValue;
+	extern bool resupplyBeepTriggered;
+	extern lv_obj_t *labelSupplies;
+
+	// Clear all custom stratagem cooldowns
+	for (uint8_t c = 0; c < MAX_USER_STRATAGEMS; c++)
+	{
+		cooldownValues[c] = 0;
+		cooldownBeepTriggered[c] = false;
+
+		// Hide cooldown label if visible
+		if (cooldownLabels[c] && !lv_obj_has_flag(cooldownLabels[c], LV_OBJ_FLAG_HIDDEN))
+		{
+			lv_obj_add_flag(cooldownLabels[c], LV_OBJ_FLAG_HIDDEN);
+		}
+	}
+
+	// Clear resupply cooldown
+	resupplyCooldownValue = 0;
+	resupplyBeepTriggered = false;
+
+	// Hide resupply label if visible
+	if (labelSupplies && !lv_obj_has_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN))
+	{
+		lv_obj_add_flag(labelSupplies, LV_OBJ_FLAG_HIDDEN);
+	}
+
+	ESP_LOGI("Actions", "All cooldowns cleared (no buzzer)");
+}

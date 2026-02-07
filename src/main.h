@@ -70,4 +70,8 @@ extern bool debugLogging;
 // Cooldown display toggle
 extern bool showCooldowns;
 
+// Buzzer configuration
+extern uint16_t buzzerDuration;  // Duration of each beep in milliseconds
+extern uint8_t buzzerRepeats;    // Number of additional beeps (0 = single beep)
+
 #endif

@@ -53,6 +53,10 @@ bool debugLogging = false;
 // Flag for showing/hiding cooldown timers
 bool showCooldowns = true;
 
+// Buzzer configuration
+uint16_t buzzerDuration = 50;  // Duration of each beep in milliseconds
+uint8_t buzzerRepeats = 3;      // Number of additional beeps (0 = single beep)
+
 // Delay for HID input execution in milliseconds (default: 100)
 int inputDelay = 100;
 
@@ -296,7 +300,15 @@ void ui_update_task(lv_timer_t *timer)
         cooldownBeepTriggered[c] = true;
         if (!playerMuted)
         {
-          bsp_buzzer_beep(400);  // 400ms beep
+          // Beep with configured duration and repeats
+          for (uint8_t i = 0; i <= buzzerRepeats; i++)
+          {
+            bsp_buzzer_beep(buzzerDuration);
+            if (i < buzzerRepeats)
+            {
+              vTaskDelay(pdMS_TO_TICKS(100));  // 100ms pause between beeps
+            }
+          }
         }
       }
 
@@ -363,7 +375,16 @@ void ui_update_task(lv_timer_t *timer)
       resupplyBeepTriggered = true;
       if (!playerMuted)
       {
-        esp_err_t beep_result = bsp_buzzer_beep(400);  // 400ms beep
+        // Beep with configured duration and repeats
+        esp_err_t beep_result = ESP_OK;
+        for (uint8_t i = 0; i <= buzzerRepeats; i++)
+        {
+          beep_result = bsp_buzzer_beep(buzzerDuration);
+          if (i < buzzerRepeats)
+          {
+            vTaskDelay(pdMS_TO_TICKS(100));  // 100ms pause between beeps
+          }
+        }
         if (debugLogging) ESP_LOGI(TAG, ">>> Buzzer beep result: %s (0x%04X)", esp_err_to_name(beep_result), beep_result);
       }
       else if (debugLogging)

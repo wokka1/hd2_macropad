@@ -2234,6 +2234,17 @@ static void event_handler_cb_game_obj40(lv_event_t *e) {
     }
 }
 
+static void event_handler_cb_game_clear_cooldowns(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    (void)flowState;
+    
+    if (event == LV_EVENT_CLICKED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 24, 0, e);
+    }
+}
+
 static void event_handler_cb_mission_btn_sssd(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
@@ -4836,6 +4847,17 @@ void create_screen_game() {
             add_style_label_cooldown(obj);
             lv_label_set_text(obj, "Text");
         }
+        {
+            // ClearCooldowns
+            lv_obj_t *obj = lv_btn_create(parent_obj);
+            objects.clear_cooldowns = obj;
+            lv_obj_set_pos(obj, 94, 375);
+            lv_obj_set_size(obj, 76, 38);
+            lv_obj_add_event_cb(obj, event_handler_cb_game_clear_cooldowns, LV_EVENT_ALL, flowState);
+            add_style_button_std(obj);
+            lv_obj_set_style_border_color(obj, lv_color_hex(theme_colors[eez_flow_get_selected_theme_index()][4]), LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_bg_img_src(obj, &img_icon_no, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
     }
     
     tick_screen_game();
@@ -6416,6 +6438,8 @@ void change_color_theme(uint32_t theme_index) {
     
     lv_obj_set_style_border_color(objects.btn_seaf, lv_color_hex(theme_colors[theme_index][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
     
+    lv_obj_set_style_border_color(objects.clear_cooldowns, lv_color_hex(theme_colors[theme_index][4]), LV_PART_MAIN | LV_STATE_DEFAULT);
+    
     lv_obj_set_style_border_color(objects.btn_sssd, lv_color_hex(theme_colors[theme_index][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
     
     lv_obj_set_style_border_color(objects.btn_ud, lv_color_hex(theme_colors[theme_index][5]), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -6465,7 +6489,7 @@ extern void add_style(lv_obj_t *obj, int32_t styleIndex);
 extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
 
 static const char *screen_names[] = { "Intro", "Setup", "Preset", "ResetPreset", "Image", "Game", "Mission", "Config", "ResetConfig", "About", "Manual" };
-static const char *object_names[] = { "intro", "setup", "preset", "reset_preset", "image", "game", "mission", "config", "reset_config", "about", "manual", "tab_view_setup", "tab_rifle", "weapons_mg", "weapons_hmg", "weapons_sw", "weapons_ac", "weapons_amr", "weapons_rg", "weapons_lc", "weapons_qc", "weapons_at", "weapons_e", "weapons_sg", "weapons_mxg", "tab_special", "obj0", "weapons_arl", "weapons_c", "weapons_eat", "weapons_en", "weapons_rr", "obj1", "obj2", "weapons_eatl", "weapons_spr", "weapons_wsp", "weapons_gl", "weapons_bfgl", "weapons_de", "weapons_ste", "weapons_ft", "weapons_dt", "tab_backpack", "obj3", "backpack_bsb", "backpack_sgp", "backpack_ds", "backpack_gd", "backpack_gdb", "obj4", "obj5", "backpack_gdr", "backpack_gdk", "backpack_gdhd", "backpack_sup", "backpack_ph", "backpack_c4_p", "backpack_jp", "backpack_hp", "backpack_wp", "tab_supply", "obj6", "supply_frv", "supply_bmk", "supply_pe", "supply_ee", "obj7", "supply_otf", "supply_cqc", "supply_ss", "tab_sentry", "obj8", "sentry_mgs", "sentry_gs", "sentry_acs", "sentry_hmge", "sentry_ate", "sentry_fs", "sentry_ms", "sentry_rs", "sentry_ems", "sentry_ls", "tab_ground", "obj9", "ground_gm", "ground_tt", "ground_sgr", "ground_apm", "obj10", "ground_atm", "ground_im", "ground_gb", "tab_strike", "strike120", "strike380", "strike_ors", "strike_ogb", "strike_oas", "strike_ol", "strike_ops", "strike_owb", "strike_oes", "strike_onb", "strike_ogs", "strike_oss", "tab_eagle", "obj11", "eagle110", "eagle500", "eagle_a", "eagle_cb", "obj12", "eagle_sr", "eagle_na", "eagle_ss", "obj13", "obj14", "obj15", "obj16", "obj17", "btn_preset1", "btn_preset2", "btn_preset3", "btn_preset4", "btn_preset5", "btn_preset6", "obj18", "btn_preset_image", "obj19", "obj20", "obj21", "obj22", "obj23", "obj24", "obj25", "obj26", "obj27", "obj28", "obj29", "obj30", "obj31", "obj32", "obj33", "obj34", "obj35", "obj36", "obj37", "obj38", "btn_reinforce", "btn_resupply", "btn_rearm", "btn_hellbomb_1", "custom_stratagem1", "custom_stratagem2", "custom_stratagem3", "custom_stratagem4", "custom_stratagem5", "custom_stratagem6", "btn_seaf", "obj39", "obj40", "btn_sssd", "btn_ud", "btn_sef", "btn_hbd", "btn_td", "btn_pd", "btn_sp", "btn_oif", "btn_dfv", "btn_csd", "btn_cc", "empty", "obj41", "tab_view_config", "sld_brightness", "chb_flip", "chb_mute", "chb_cooldowns_1", "chb_debug_1", "sld_delay", "dd_connectivity", "obj42", "dd_keymap", "obj43", "obj44", "obj45", "obj46", "obj47", "obj48", "obj49", "manual_arrow_left", "manual_arrow_up", "manual_arrow_down", "manual_arrow_right", "obj50", "img_splash", "bar_amount", "label_amount", "msg_box", "msg_label", "label_cooldown1", "label_cooldown2", "label_cooldown3", "label_cooldown4", "label_cooldown5", "label_cooldown6", "img_connection2", "label_supplies", "obj51", "lbl_brightness", "lbl_delay", "img_connection1", "obj52", "lbl_version", "manual_preview_item", "manual_cmd1", "manual_cmd2", "manual_cmd3", "manual_cmd4", "manual_cmd5", "manual_cmd6", "manual_cmd7", "manual_cmd8", "manual_cmd9" };
+static const char *object_names[] = { "intro", "setup", "preset", "reset_preset", "image", "game", "mission", "config", "reset_config", "about", "manual", "tab_view_setup", "tab_rifle", "weapons_mg", "weapons_hmg", "weapons_sw", "weapons_ac", "weapons_amr", "weapons_rg", "weapons_lc", "weapons_qc", "weapons_at", "weapons_e", "weapons_sg", "weapons_mxg", "tab_special", "obj0", "weapons_arl", "weapons_c", "weapons_eat", "weapons_en", "weapons_rr", "obj1", "obj2", "weapons_eatl", "weapons_spr", "weapons_wsp", "weapons_gl", "weapons_bfgl", "weapons_de", "weapons_ste", "weapons_ft", "weapons_dt", "tab_backpack", "obj3", "backpack_bsb", "backpack_sgp", "backpack_ds", "backpack_gd", "backpack_gdb", "obj4", "obj5", "backpack_gdr", "backpack_gdk", "backpack_gdhd", "backpack_sup", "backpack_ph", "backpack_c4_p", "backpack_jp", "backpack_hp", "backpack_wp", "tab_supply", "obj6", "supply_frv", "supply_bmk", "supply_pe", "supply_ee", "obj7", "supply_otf", "supply_cqc", "supply_ss", "tab_sentry", "obj8", "sentry_mgs", "sentry_gs", "sentry_acs", "sentry_hmge", "sentry_ate", "sentry_fs", "sentry_ms", "sentry_rs", "sentry_ems", "sentry_ls", "tab_ground", "obj9", "ground_gm", "ground_tt", "ground_sgr", "ground_apm", "obj10", "ground_atm", "ground_im", "ground_gb", "tab_strike", "strike120", "strike380", "strike_ors", "strike_ogb", "strike_oas", "strike_ol", "strike_ops", "strike_owb", "strike_oes", "strike_onb", "strike_ogs", "strike_oss", "tab_eagle", "obj11", "eagle110", "eagle500", "eagle_a", "eagle_cb", "obj12", "eagle_sr", "eagle_na", "eagle_ss", "obj13", "obj14", "obj15", "obj16", "obj17", "btn_preset1", "btn_preset2", "btn_preset3", "btn_preset4", "btn_preset5", "btn_preset6", "obj18", "btn_preset_image", "obj19", "obj20", "obj21", "obj22", "obj23", "obj24", "obj25", "obj26", "obj27", "obj28", "obj29", "obj30", "obj31", "obj32", "obj33", "obj34", "obj35", "obj36", "obj37", "obj38", "btn_reinforce", "btn_resupply", "btn_rearm", "btn_hellbomb_1", "custom_stratagem1", "custom_stratagem2", "custom_stratagem3", "custom_stratagem4", "custom_stratagem5", "custom_stratagem6", "btn_seaf", "obj39", "obj40", "clear_cooldowns", "btn_sssd", "btn_ud", "btn_sef", "btn_hbd", "btn_td", "btn_pd", "btn_sp", "btn_oif", "btn_dfv", "btn_csd", "btn_cc", "empty", "obj41", "tab_view_config", "sld_brightness", "chb_flip", "chb_mute", "chb_cooldowns_1", "chb_debug_1", "sld_delay", "dd_connectivity", "obj42", "dd_keymap", "obj43", "obj44", "obj45", "obj46", "obj47", "obj48", "obj49", "manual_arrow_left", "manual_arrow_up", "manual_arrow_down", "manual_arrow_right", "obj50", "img_splash", "bar_amount", "label_amount", "msg_box", "msg_label", "label_cooldown1", "label_cooldown2", "label_cooldown3", "label_cooldown4", "label_cooldown5", "label_cooldown6", "img_connection2", "label_supplies", "obj51", "lbl_brightness", "lbl_delay", "img_connection1", "obj52", "lbl_version", "manual_preview_item", "manual_cmd1", "manual_cmd2", "manual_cmd3", "manual_cmd4", "manual_cmd5", "manual_cmd6", "manual_cmd7", "manual_cmd8", "manual_cmd9" };
 static const char *style_names[] = { "ButtonStd", "TabStratagem", "TabConfig", "SliderConfig", "CheckboxConfig", "LabelCooldown" };
 static const char *theme_names[] = { "Default" };
 

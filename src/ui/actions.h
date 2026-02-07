@@ -35,6 +35,7 @@ extern void action_manual_execute(lv_event_t * e);
 extern void action_finalize_manual_execution(lv_event_t * e);
 extern void action_action_toggle_debug(lv_event_t * e);
 extern void action_action_toggle_cooldowns(lv_event_t * e);
+extern void action_action_clear_cooldowns(lv_event_t * e);
 
 
 #ifdef __cplusplus
