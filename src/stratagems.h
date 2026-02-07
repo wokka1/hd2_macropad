@@ -359,7 +359,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // A/MG-43 Machine Gun Sentry
     {
 {INPUT_DOWN, INPUT_UP, INPUT_RIGHT, INPUT_RIGHT, INPUT_UP, 0, 0, 0, 0},
-        90,
+        85,
         SND_SENTRY,
         sgGreen,
         &img_mgs2,
@@ -369,7 +369,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // A/G-16 Gatling Sentry
     {
 {INPUT_DOWN, INPUT_UP, INPUT_RIGHT, INPUT_LEFT, 0, 0, 0, 0, 0},
-        150,
+        140,
         SND_SENTRY,
         sgGreen,
         &img_gs2,
