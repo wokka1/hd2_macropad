@@ -2,6 +2,10 @@
 
 This document describes the adaptation of the HD2 Macropad project to work with the ESP32-8048S070 display module.
 
+> [!IMPORTANT] Newer builds will not work with this board because of the limited flash.  Backwards porting will likely not be performed, due to the  effort to downsize items.  Highly recommend getting the Electrow Advance with 16mb of flash.  
+
+**Product Page:** https://www.elecrow.com/crowpanel-advance-7-hmi-esp32-ai-display-800x480-ai-ips-touch-screen.html
+
 ## Hardware Specifications
 
 ### ESP32-8048S070 Display Module

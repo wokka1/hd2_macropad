@@ -24,6 +24,8 @@
 #include "version.h"
 #include "main.h"
 
+// update via OTA added into project
+
 // Tag for logging
 static const char *TAG = "HD2 Macropad";
 
