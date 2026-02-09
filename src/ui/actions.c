@@ -9,6 +9,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include "../wifi/wifi_manager.h"
+#include "../ota/ota_manager.h"
 
 // Global variables for WiFi scan results
 #define MAX_WIFI_APS 20
@@ -347,4 +348,196 @@ void action_action_wifi_connect_manual(lv_event_t *e)
 	} else {
 		lv_label_set_text(objects.wifi_status_label, "Connection failed");
 	}
+}
+
+// ============================================================================
+// OTA Update Actions
+// ============================================================================
+// Note: OTA UI elements (ota_status_label, ota_progress_bar, etc.) need to be
+// created in EEZ Studio. These functions work via logging until UI is added.
+// See OTA_UPDATE_GUIDE.md for UI setup instructions.
+
+// Pointers to OTA UI elements - set these in ui_post.c after creating in EEZ Studio
+lv_obj_t *ota_status_label = NULL;
+lv_obj_t *ota_progress_bar = NULL;
+lv_obj_t *ota_available_label = NULL;
+lv_obj_t *ota_install_btn = NULL;
+lv_obj_t *ota_check_btn = NULL;
+
+// Progress callback to update UI during OTA download
+static void ota_progress_callback(int progress_percent)
+{
+	// Update progress bar if it exists
+	if (ota_progress_bar) {
+		lv_bar_set_value(ota_progress_bar, progress_percent, LV_ANIM_OFF);
+	}
+
+	// Update status label with progress
+	if (ota_status_label) {
+		char buf[32];
+		snprintf(buf, sizeof(buf), "Downloading... %d%%", progress_percent);
+		lv_label_set_text(ota_status_label, buf);
+	}
+
+	ESP_LOGI("OTA", "Progress: %d%%", progress_percent);
+}
+
+// Check for firmware updates from GitHub
+void action_action_ota_check(lv_event_t *e)
+{
+	// Check if WiFi is connected
+	if (wifi_manager_get_status() != WIFI_STATUS_CONNECTED) {
+		if (ota_status_label) {
+			lv_label_set_text(ota_status_label, "Connect to WiFi first!");
+		}
+		ESP_LOGW("OTA", "Cannot check for updates: WiFi not connected");
+		return;
+	}
+
+	// Update UI to show checking status
+	if (ota_status_label) {
+		lv_label_set_text(ota_status_label, "Checking for updates...");
+	}
+
+	// Disable check button during check
+	lv_obj_t *btn = lv_event_get_target(e);
+	if (btn) {
+		lv_obj_add_state(btn, LV_STATE_DISABLED);
+	}
+
+	ESP_LOGI("OTA", "Checking for updates...");
+
+	// Small delay for UI to update
+	vTaskDelay(pdMS_TO_TICKS(100));
+
+	// Check for updates
+	esp_err_t ret = ota_manager_check_for_update();
+	const ota_info_t *info = ota_manager_get_info();
+
+	// Re-enable check button
+	if (btn) {
+		lv_obj_clear_state(btn, LV_STATE_DISABLED);
+	}
+
+	if (ret != ESP_OK) {
+		if (ota_status_label) {
+			lv_label_set_text(ota_status_label, info->error_message[0] ? info->error_message : "Check failed");
+		}
+		ESP_LOGE("OTA", "Update check failed: %s", info->error_message);
+		return;
+	}
+
+	// Update UI based on result
+	if (info->status == OTA_STATUS_AVAILABLE) {
+		// Update available
+		if (ota_status_label) {
+			char buf[64];
+			snprintf(buf, sizeof(buf), "Update available: %s", info->available_version);
+			lv_label_set_text(ota_status_label, buf);
+		}
+
+		// Show available version label
+		if (ota_available_label) {
+			char buf[32];
+			snprintf(buf, sizeof(buf), "Available: %s", info->available_version);
+			lv_label_set_text(ota_available_label, buf);
+			lv_obj_clear_flag(ota_available_label, LV_OBJ_FLAG_HIDDEN);
+		}
+
+		// Show install button
+		if (ota_install_btn) {
+			lv_obj_clear_flag(ota_install_btn, LV_OBJ_FLAG_HIDDEN);
+		}
+
+		ESP_LOGI("OTA", "Update available: %s -> %s", info->current_version, info->available_version);
+	} else {
+		// Already up to date
+		if (ota_status_label) {
+			lv_label_set_text(ota_status_label, "Already up to date!");
+		}
+
+		// Hide install button
+		if (ota_install_btn) {
+			lv_obj_add_flag(ota_install_btn, LV_OBJ_FLAG_HIDDEN);
+		}
+
+		ESP_LOGI("OTA", "Firmware is up to date (v%s)", info->current_version);
+	}
+}
+
+// Install the available update
+void action_action_ota_install(lv_event_t *e)
+{
+	const ota_info_t *info = ota_manager_get_info();
+
+	// Verify update is available
+	if (info->status != OTA_STATUS_AVAILABLE) {
+		if (ota_status_label) {
+			lv_label_set_text(ota_status_label, "No update available");
+		}
+		ESP_LOGW("OTA", "No update available to install");
+		return;
+	}
+
+	// Check WiFi connection
+	if (wifi_manager_get_status() != WIFI_STATUS_CONNECTED) {
+		if (ota_status_label) {
+			lv_label_set_text(ota_status_label, "WiFi disconnected!");
+		}
+		ESP_LOGW("OTA", "WiFi disconnected, cannot install update");
+		return;
+	}
+
+	// Show progress bar
+	if (ota_progress_bar) {
+		lv_bar_set_value(ota_progress_bar, 0, LV_ANIM_OFF);
+		lv_obj_clear_flag(ota_progress_bar, LV_OBJ_FLAG_HIDDEN);
+	}
+
+	// Disable buttons during update
+	lv_obj_t *btn = lv_event_get_target(e);
+	if (btn) {
+		lv_obj_add_state(btn, LV_STATE_DISABLED);
+	}
+	if (ota_check_btn) {
+		lv_obj_add_state(ota_check_btn, LV_STATE_DISABLED);
+	}
+
+	if (ota_status_label) {
+		lv_label_set_text(ota_status_label, "Starting update...");
+	}
+
+	ESP_LOGI("OTA", "Starting firmware update to v%s...", info->available_version);
+
+	// Small delay for UI to update
+	vTaskDelay(pdMS_TO_TICKS(100));
+
+	// Perform the update (this will reboot on success)
+	esp_err_t ret = ota_manager_perform_update(ota_progress_callback);
+
+	// If we get here, update failed (success causes reboot)
+	if (ota_status_label) {
+		lv_label_set_text(ota_status_label, info->error_message[0] ? info->error_message : "Update failed!");
+	}
+
+	// Re-enable buttons
+	if (btn) {
+		lv_obj_clear_state(btn, LV_STATE_DISABLED);
+	}
+	if (ota_check_btn) {
+		lv_obj_clear_state(ota_check_btn, LV_STATE_DISABLED);
+	}
+
+	// Hide progress bar
+	if (ota_progress_bar) {
+		lv_obj_add_flag(ota_progress_bar, LV_OBJ_FLAG_HIDDEN);
+	}
+
+	ESP_LOGE("OTA", "Update failed: %s", esp_err_to_name(ret));
+}
+
+// Get current version string for display
+const char* action_get_current_version(void)
+{
+	return ota_manager_get_version();
 }

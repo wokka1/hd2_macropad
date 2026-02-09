@@ -42,6 +42,16 @@ extern void action_action_wifi_connect_manual(lv_event_t * e);
 extern void action_action_enable_wifi(lv_event_t * e);
 extern void action_hide_keyboard(lv_event_t * e);
 extern void action_show_keyboard(lv_event_t * e);
+extern void action_action_ota_check(lv_event_t * e);
+extern void action_action_ota_install(lv_event_t * e);
+extern const char* action_get_current_version(void);
+
+// OTA UI element pointers (defined in actions.c, set in ui_post.c)
+extern lv_obj_t *ota_status_label;
+extern lv_obj_t *ota_progress_bar;
+extern lv_obj_t *ota_available_label;
+extern lv_obj_t *ota_install_btn;
+extern lv_obj_t *ota_check_btn;
 
 
 #ifdef __cplusplus

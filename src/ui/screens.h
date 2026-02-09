@@ -220,6 +220,8 @@ typedef struct _objects_t {
     lv_obj_t *obj55;
     lv_obj_t *wifi_switch;
     lv_obj_t *obj56;
+    lv_obj_t *btn_check_update;
+    lv_obj_t *btn_install_update;
     lv_obj_t *obj57;
     lv_obj_t *img_splash;
     lv_obj_t *bar_amount;
@@ -258,6 +260,10 @@ typedef struct _objects_t {
     lv_obj_t *wifi_status_label_1;
     lv_obj_t *wifi_status;
     lv_obj_t *wifi_status_label;
+    lv_obj_t *lbl_current_version;
+    lv_obj_t *lbl_available_version;
+    lv_obj_t *bar_ota_progress;
+    lv_obj_t *lbl_ota_status;
 } objects_t;
 
 extern objects_t objects;
