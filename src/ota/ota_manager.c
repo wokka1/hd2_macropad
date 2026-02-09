@@ -1,5 +1,6 @@
 #include "ota_manager.h"
 #include "../version.h"
+#include "../ble/ble_controller.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -45,6 +46,7 @@ static TaskHandle_t s_ota_task_handle = NULL;
 static ota_status_callback_t s_status_callback = NULL;
 static ota_progress_callback_t s_progress_callback = NULL;
 static bool s_ota_busy = false;
+static bool s_ble_was_disabled = false;  // Track if we disabled BLE for OTA
 
 // Stack size for OTA tasks (TLS requires ~8KB minimum)
 #define OTA_TASK_STACK_SIZE (8 * 1024)
@@ -120,6 +122,40 @@ static void log_memory_report(const char *context)
     ESP_LOGI(TAG, "DMA-capable:  free=%u, largest=%u",
              (unsigned)dma_free, (unsigned)dma_largest);
     ESP_LOGI(TAG, "=====================================");
+}
+
+// Disable BLE to free internal RAM for OTA operations
+static void ota_disable_ble(void)
+{
+    ESP_LOGI(TAG, "Disabling BLE to free memory for OTA...");
+    log_memory_report("Before BLE Disable");
+
+    esp_err_t ret = ble_controller_deinit();
+    if (ret == ESP_OK) {
+        s_ble_was_disabled = true;
+        ESP_LOGI(TAG, "BLE disabled successfully");
+        // Give some time for memory to be freed
+        vTaskDelay(pdMS_TO_TICKS(100));
+        log_memory_report("After BLE Disable");
+    } else {
+        ESP_LOGW(TAG, "Failed to disable BLE: %s", esp_err_to_name(ret));
+        s_ble_was_disabled = false;
+    }
+}
+
+// Re-enable BLE after OTA operation fails
+static void ota_restore_ble(void)
+{
+    if (s_ble_was_disabled) {
+        ESP_LOGI(TAG, "Restoring BLE after OTA operation...");
+        esp_err_t ret = ble_controller_init();
+        if (ret == ESP_OK) {
+            ESP_LOGI(TAG, "BLE restored successfully");
+        } else {
+            ESP_LOGW(TAG, "Failed to restore BLE: %s", esp_err_to_name(ret));
+        }
+        s_ble_was_disabled = false;
+    }
 }
 
 esp_err_t ota_manager_init(void)
@@ -296,6 +332,12 @@ static void ota_check_task(void *pvParameters)
         }
     }
 
+    // Restore BLE if we disabled it and no update is available (or error occurred)
+    // Keep BLE disabled if update is available so user can proceed with install
+    if (s_ota_info.status != OTA_STATUS_AVAILABLE) {
+        ota_restore_ble();
+    }
+
     s_ota_busy = false;
     s_ota_task_handle = NULL;
     vTaskDelete(NULL);
@@ -311,13 +353,17 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
     // Log detailed memory before OTA
     log_memory_report("Before OTA Check");
 
+    // Disable BLE to free internal RAM for HTTPS/TLS operations
+    ota_disable_ble();
+
     size_t internal_largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
 
     // Need at least 8KB internal RAM for LWIP semaphores, TLS buffers, and HTTP client
     if (internal_largest < 8192) {
         ESP_LOGE(TAG, "Not enough internal RAM (need 8KB, have %u)", (unsigned)internal_largest);
-        strncpy(s_ota_info.error_message, "Low memory - try disabling BLE", sizeof(s_ota_info.error_message) - 1);
+        strncpy(s_ota_info.error_message, "Low memory", sizeof(s_ota_info.error_message) - 1);
         s_ota_info.status = OTA_STATUS_ERROR;
+        ota_restore_ble();  // Restore BLE since we're not proceeding
         return ESP_ERR_NO_MEM;
     }
 
@@ -326,6 +372,7 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
         s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_SPIRAM);
         if (s_ota_task_stack == NULL) {
             ESP_LOGE(TAG, "Failed to allocate task stack from PSRAM");
+            ota_restore_ble();  // Restore BLE since we're not proceeding
             return ESP_ERR_NO_MEM;
         }
         ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from PSRAM", OTA_TASK_STACK_SIZE);
@@ -348,6 +395,7 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
     if (s_ota_task_handle == NULL) {
         ESP_LOGE(TAG, "Failed to create OTA check task");
         s_ota_busy = false;
+        ota_restore_ble();  // Restore BLE since we're not proceeding
         return ESP_FAIL;
     }
 
@@ -491,6 +539,9 @@ static void ota_perform_task(void *pvParameters)
         s_status_callback(OTA_STATUS_ERROR, s_ota_info.error_message);
     }
 
+    // Restore BLE since update failed
+    ota_restore_ble();
+
     s_ota_busy = false;
     s_ota_task_handle = NULL;
     vTaskDelete(NULL);
@@ -508,11 +559,17 @@ esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, 
         return ESP_FAIL;
     }
 
+    // Ensure BLE is disabled (should already be disabled from check, but just in case)
+    if (!s_ble_was_disabled) {
+        ota_disable_ble();
+    }
+
     // Allocate stack from PSRAM if not already allocated
     if (s_ota_task_stack == NULL) {
         s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_SPIRAM);
         if (s_ota_task_stack == NULL) {
             ESP_LOGE(TAG, "Failed to allocate task stack from PSRAM");
+            ota_restore_ble();
             return ESP_ERR_NO_MEM;
         }
         ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from PSRAM", OTA_TASK_STACK_SIZE);
@@ -536,6 +593,7 @@ esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, 
     if (s_ota_task_handle == NULL) {
         ESP_LOGE(TAG, "Failed to create OTA perform task");
         s_ota_busy = false;
+        ota_restore_ble();
         return ESP_FAIL;
     }
 
