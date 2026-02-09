@@ -93,14 +93,14 @@ esp_err_t wifi_manager_init(void)
         }
     }
 
-    // Initialize WiFi with reduced buffer counts for memory-constrained environment
+    // Initialize WiFi with aggressively reduced buffer counts for OTA compatibility
+    // Each static RX buffer is ~1600 bytes, we need internal RAM for LWIP semaphores
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-    // Reduce buffer counts to save memory (defaults are too large)
-    cfg.dynamic_rx_buf_num = 12;      // Default: 32
-    cfg.static_rx_buf_num = 6;        // Default: 10
-    cfg.static_tx_buf_num = 6;        // Default: 16
-    cfg.tx_buf_type = 0;              // Static TX buffer (type 1 = dynamic needs dynamic_tx_buf_num set)
-    cfg.cache_tx_buf_num = 12;        // Default: 32
+    cfg.dynamic_rx_buf_num = 8;       // Default: 32, reduced for memory
+    cfg.static_rx_buf_num = 4;        // Default: 10, minimum for stable operation
+    cfg.static_tx_buf_num = 4;        // Default: 16, minimum for stable operation
+    cfg.tx_buf_type = 0;              // Static TX buffer (saves dynamic allocation)
+    cfg.cache_tx_buf_num = 4;         // Default: 32, reduced significantly
     cfg.ampdu_rx_enable = 0;          // Disable AMPDU RX to save memory
     cfg.ampdu_tx_enable = 0;          // Disable AMPDU TX to save memory
 

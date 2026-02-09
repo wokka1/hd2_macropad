@@ -279,10 +279,20 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
     }
 
     // Log available heap before task creation
-    ESP_LOGI(TAG, "Free heap: %lu, largest block: %lu, PSRAM free: %lu",
-             (unsigned long)esp_get_free_heap_size(),
-             (unsigned long)heap_caps_get_largest_free_block(MALLOC_CAP_8BIT),
+    size_t internal_free = heap_caps_get_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+    size_t internal_largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+    ESP_LOGI(TAG, "Internal RAM: free=%lu, largest=%lu | PSRAM free=%lu",
+             (unsigned long)internal_free,
+             (unsigned long)internal_largest,
              (unsigned long)heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+
+    // Need at least 4KB internal RAM for LWIP semaphores and TLS buffers
+    if (internal_largest < 4096) {
+        ESP_LOGE(TAG, "Not enough internal RAM (need 4KB, have %lu)", (unsigned long)internal_largest);
+        strncpy(s_ota_info.error_message, "Low memory", sizeof(s_ota_info.error_message) - 1);
+        s_ota_info.status = OTA_STATUS_ERROR;
+        return ESP_ERR_NO_MEM;
+    }
 
     // Allocate stack from PSRAM if not already allocated
     if (s_ota_task_stack == NULL) {
