@@ -11,6 +11,7 @@
 #include <cJSON.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <esp_heap_caps.h>
 
 static const char *TAG = "OTA";
 
@@ -46,7 +47,11 @@ static ota_progress_callback_t s_progress_callback = NULL;
 static bool s_ota_busy = false;
 
 // Stack size for OTA tasks (TLS requires ~8KB minimum)
-#define OTA_TASK_STACK_SIZE (10 * 1024)
+#define OTA_TASK_STACK_SIZE (8 * 1024)
+
+// Static task resources (allocated from PSRAM)
+static StaticTask_t s_ota_task_buffer;
+static StackType_t *s_ota_task_stack = NULL;
 
 // Compare two version strings (e.g., "1.0.0" vs "1.1.0")
 // Returns: -1 if v1 < v2, 0 if equal, 1 if v1 > v2
@@ -273,19 +278,37 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
         return ESP_ERR_INVALID_STATE;
     }
 
+    // Log available heap before task creation
+    ESP_LOGI(TAG, "Free heap: %lu, largest block: %lu, PSRAM free: %lu",
+             (unsigned long)esp_get_free_heap_size(),
+             (unsigned long)heap_caps_get_largest_free_block(MALLOC_CAP_8BIT),
+             (unsigned long)heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+
+    // Allocate stack from PSRAM if not already allocated
+    if (s_ota_task_stack == NULL) {
+        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_SPIRAM);
+        if (s_ota_task_stack == NULL) {
+            ESP_LOGE(TAG, "Failed to allocate task stack from PSRAM");
+            return ESP_ERR_NO_MEM;
+        }
+        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from PSRAM", OTA_TASK_STACK_SIZE);
+    }
+
     s_status_callback = status_cb;
     s_ota_busy = true;
 
-    BaseType_t ret = xTaskCreate(
+    // Use static task creation with PSRAM stack
+    s_ota_task_handle = xTaskCreateStatic(
         ota_check_task,
         "ota_check",
         OTA_TASK_STACK_SIZE,
         NULL,
         5,  // Priority
-        &s_ota_task_handle
+        s_ota_task_stack,
+        &s_ota_task_buffer
     );
 
-    if (ret != pdPASS) {
+    if (s_ota_task_handle == NULL) {
         ESP_LOGE(TAG, "Failed to create OTA check task");
         s_ota_busy = false;
         return ESP_FAIL;
@@ -448,20 +471,32 @@ esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, 
         return ESP_FAIL;
     }
 
+    // Allocate stack from PSRAM if not already allocated
+    if (s_ota_task_stack == NULL) {
+        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_SPIRAM);
+        if (s_ota_task_stack == NULL) {
+            ESP_LOGE(TAG, "Failed to allocate task stack from PSRAM");
+            return ESP_ERR_NO_MEM;
+        }
+        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from PSRAM", OTA_TASK_STACK_SIZE);
+    }
+
     s_progress_callback = progress_cb;
     s_status_callback = status_cb;
     s_ota_busy = true;
 
-    BaseType_t ret = xTaskCreate(
+    // Use static task creation with PSRAM stack
+    s_ota_task_handle = xTaskCreateStatic(
         ota_perform_task,
         "ota_update",
         OTA_TASK_STACK_SIZE,
         NULL,
         5,  // Priority
-        &s_ota_task_handle
+        s_ota_task_stack,
+        &s_ota_task_buffer
     );
 
-    if (ret != pdPASS) {
+    if (s_ota_task_handle == NULL) {
         ESP_LOGE(TAG, "Failed to create OTA perform task");
         s_ota_busy = false;
         return ESP_FAIL;
