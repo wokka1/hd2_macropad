@@ -22,7 +22,7 @@ static const char *TAG = "OTA";
 #endif
 
 // GitHub API URL for latest release
-#define GITHUB_API_URL "https://api.github.com/repos/" GITHUB_REPO "/releases/latest"
+#define GITHUB_API_URL "https://github.com/wokka1/hd2_macropad" GITHUB_REPO "/releases/latest"
 
 // Maximum size for GitHub API response
 #define MAX_HTTP_RESPONSE_SIZE 4096

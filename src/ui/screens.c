@@ -2814,7 +2814,7 @@ static void event_handler_cb_wifi_obj57(lv_event_t *e) {
     
     if (event == LV_EVENT_CLICKED) {
         e->user_data = (void *)0;
-        flowPropagateValueLVGLEvent(flowState, 37, 0, e);
+        flowPropagateValueLVGLEvent(flowState, 35, 0, e);
     }
 }
 
@@ -6499,7 +6499,7 @@ void create_screen_wifi() {
                                 {
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
                                     objects.obj52 = obj;
-                                    lv_obj_set_pos(obj, 8, 238);
+                                    lv_obj_set_pos(obj, 197, 196);
                                     lv_obj_set_size(obj, 82, 32);
                                     lv_obj_add_event_cb(obj, event_handler_cb_wifi_obj52, LV_EVENT_ALL, flowState);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_FLOATING);
@@ -6550,7 +6550,7 @@ void create_screen_wifi() {
                                     // Connect
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
                                     objects.connect = obj;
-                                    lv_obj_set_pos(obj, 223, 238);
+                                    lv_obj_set_pos(obj, 290, 196);
                                     lv_obj_set_size(obj, 82, 32);
                                     lv_obj_add_event_cb(obj, event_handler_cb_wifi_connect, LV_EVENT_ALL, flowState);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_FLOATING);
@@ -6792,12 +6792,6 @@ void create_screen_wifi() {
                             {
                                 lv_obj_t *parent_obj = obj;
                                 {
-                                    lv_obj_t *obj = lv_label_create(parent_obj);
-                                    lv_obj_set_pos(obj, 0, 0);
-                                    lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT);
-                                    lv_label_set_text(obj, "Progress");
-                                }
-                                {
                                     // bar_ota_progress
                                     lv_obj_t *obj = lv_bar_create(parent_obj);
                                     objects.bar_ota_progress = obj;
@@ -6831,15 +6825,6 @@ void create_screen_wifi() {
                             lv_obj_set_style_pad_column(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_layout(obj, LV_LAYOUT_FLEX, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_flex_flow(obj, LV_FLEX_FLOW_ROW_WRAP, LV_PART_MAIN | LV_STATE_DEFAULT);
-                            {
-                                lv_obj_t *parent_obj = obj;
-                                {
-                                    lv_obj_t *obj = lv_label_create(parent_obj);
-                                    lv_obj_set_pos(obj, 0, 0);
-                                    lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT);
-                                    lv_label_set_text(obj, "temp");
-                                }
-                            }
                         }
                     }
                 }

@@ -44,7 +44,6 @@ extern void action_hide_keyboard(lv_event_t * e);
 extern void action_show_keyboard(lv_event_t * e);
 extern void action_action_ota_check(lv_event_t * e);
 extern void action_action_ota_install(lv_event_t * e);
-extern const char* action_get_current_version(void);
 
 
 #ifdef __cplusplus

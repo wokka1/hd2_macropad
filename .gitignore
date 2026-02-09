@@ -9,3 +9,4 @@ dependencies.lock
 eez/HD2 Macropad.eez-project-ui-state
 debug.txt
 .DS_Store
+releases/*
