@@ -48,10 +48,10 @@ static ota_progress_callback_t s_progress_callback = NULL;
 static bool s_ota_busy = false;
 static bool s_ble_was_disabled = false;  // Track if we disabled BLE for OTA
 
-// Stack size for OTA tasks (TLS requires ~8KB minimum)
-#define OTA_TASK_STACK_SIZE (8 * 1024)
+// Stack size for OTA tasks (TLS requires ~8KB minimum, image verification needs more)
+#define OTA_TASK_STACK_SIZE (12 * 1024)
 
-// Static task resources (allocated from PSRAM)
+// Static task resources (allocated from internal RAM for flash operation safety)
 static StaticTask_t s_ota_task_buffer;
 static StackType_t *s_ota_task_stack = NULL;
 
@@ -365,30 +365,31 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
 
     size_t internal_largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
 
-    // Need at least 8KB internal RAM for LWIP semaphores, TLS buffers, and HTTP client
-    if (internal_largest < 8192) {
-        ESP_LOGE(TAG, "Not enough internal RAM (need 8KB, have %u)", (unsigned)internal_largest);
+    // Need at least 20KB internal RAM: 12KB task stack + 8KB for LWIP/TLS/HTTP
+    if (internal_largest < 20480) {
+        ESP_LOGE(TAG, "Not enough internal RAM (need 20KB, have %u)", (unsigned)internal_largest);
         strncpy(s_ota_info.error_message, "Low memory", sizeof(s_ota_info.error_message) - 1);
         s_ota_info.status = OTA_STATUS_ERROR;
         ota_restore_ble();  // Restore BLE since we're not proceeding
         return ESP_ERR_NO_MEM;
     }
 
-    // Allocate stack from PSRAM if not already allocated
+    // Allocate stack from internal RAM (not PSRAM) - required for flash operations
+    // During esp_https_ota_finish(), flash cache may be disabled, making PSRAM inaccessible
     if (s_ota_task_stack == NULL) {
-        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_SPIRAM);
+        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
         if (s_ota_task_stack == NULL) {
-            ESP_LOGE(TAG, "Failed to allocate task stack from PSRAM");
+            ESP_LOGE(TAG, "Failed to allocate task stack from internal RAM");
             ota_restore_ble();  // Restore BLE since we're not proceeding
             return ESP_ERR_NO_MEM;
         }
-        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from PSRAM", OTA_TASK_STACK_SIZE);
+        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from internal RAM", OTA_TASK_STACK_SIZE);
     }
 
     s_status_callback = status_cb;
     s_ota_busy = true;
 
-    // Use static task creation with PSRAM stack
+    // Use static task creation with internal RAM stack
     s_ota_task_handle = xTaskCreateStatic(
         ota_check_task,
         "ota_check",
@@ -532,9 +533,13 @@ static esp_err_t ota_perform_internal(void)
 
     s_ota_info.status = OTA_STATUS_INSTALLING;
     s_ota_info.progress_percent = 100;
-    if (progress_cb) {
-        progress_cb(100);
-    }
+
+    // Skip progress callback here - device is about to reboot anyway
+    // and calling lv_async_call during esp_https_ota_finish can cause crashes
+    ESP_LOGI(TAG, "Download complete, finalizing update...");
+
+    // Give time for any pending async operations to complete
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     ret = esp_https_ota_finish(ota_handle);
     if (ret == ESP_OK) {
@@ -593,22 +598,23 @@ esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, 
         ota_disable_ble();
     }
 
-    // Allocate stack from PSRAM if not already allocated
+    // Allocate stack from internal RAM (not PSRAM) - required for flash operations
+    // During esp_https_ota_finish(), flash cache may be disabled, making PSRAM inaccessible
     if (s_ota_task_stack == NULL) {
-        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_SPIRAM);
+        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
         if (s_ota_task_stack == NULL) {
-            ESP_LOGE(TAG, "Failed to allocate task stack from PSRAM");
+            ESP_LOGE(TAG, "Failed to allocate task stack from internal RAM");
             ota_restore_ble();
             return ESP_ERR_NO_MEM;
         }
-        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from PSRAM", OTA_TASK_STACK_SIZE);
+        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from internal RAM", OTA_TASK_STACK_SIZE);
     }
 
     s_progress_callback = progress_cb;
     s_status_callback = status_cb;
     s_ota_busy = true;
 
-    // Use static task creation with PSRAM stack
+    // Use static task creation with internal RAM stack
     s_ota_task_handle = xTaskCreateStatic(
         ota_perform_task,
         "ota_update",
