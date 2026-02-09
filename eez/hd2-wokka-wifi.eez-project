@@ -18315,8 +18315,8 @@
                         {
                           "objID": "536f2070-8573-4932-8a7c-ec6c25a903de",
                           "type": "LVGLButtonWidget",
-                          "left": 119,
-                          "top": 148,
+                          "left": 8,
+                          "top": 238,
                           "width": 82,
                           "height": 32,
                           "customInputs": [],
@@ -18577,8 +18577,8 @@
                         {
                           "objID": "384eaad6-7e98-4d75-8171-27654d0a2076",
                           "type": "LVGLButtonWidget",
-                          "left": 230,
-                          "top": 148,
+                          "left": 223,
+                          "top": 238,
                           "width": 82,
                           "height": 32,
                           "customInputs": [],

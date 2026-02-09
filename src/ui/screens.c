@@ -6499,7 +6499,7 @@ void create_screen_wifi() {
                                 {
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
                                     objects.obj52 = obj;
-                                    lv_obj_set_pos(obj, 119, 148);
+                                    lv_obj_set_pos(obj, 8, 238);
                                     lv_obj_set_size(obj, 82, 32);
                                     lv_obj_add_event_cb(obj, event_handler_cb_wifi_obj52, LV_EVENT_ALL, flowState);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_FLOATING);
@@ -6550,7 +6550,7 @@ void create_screen_wifi() {
                                     // Connect
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
                                     objects.connect = obj;
-                                    lv_obj_set_pos(obj, 230, 148);
+                                    lv_obj_set_pos(obj, 223, 238);
                                     lv_obj_set_size(obj, 82, 32);
                                     lv_obj_add_event_cb(obj, event_handler_cb_wifi_connect, LV_EVENT_ALL, flowState);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_FLOATING);

@@ -2,7 +2,6 @@
 #include "screens.h"
 #include "ui.h"
 #include "ui_events.h"
-#include "actions.h"
 #include "../ota/ota_manager.h"
 #include <stdio.h>
 
@@ -76,13 +75,6 @@ void ui_post()
   // OTA Update UI Setup
   // ============================================================================
 
-  // Wire up OTA UI elements to global pointers in actions.c
-  ota_status_label = objects.lbl_ota_status;
-  ota_progress_bar = objects.bar_ota_progress;
-  ota_available_label = objects.lbl_available_version;
-  ota_install_btn = objects.btn_install_update;
-  ota_check_btn = objects.btn_check_update;
-
   // Set current version label
   if (objects.lbl_current_version) {
     char version_text[32];
@@ -98,19 +90,19 @@ void ui_post()
   }
 
   // Initialize OTA UI state - hide elements that should only show after check
-  if (ota_available_label) {
-    lv_obj_add_flag(ota_available_label, LV_OBJ_FLAG_HIDDEN);
+  if (objects.lbl_available_version) {
+    lv_obj_add_flag(objects.lbl_available_version, LV_OBJ_FLAG_HIDDEN);
   }
-  if (ota_install_btn) {
-    lv_obj_add_flag(ota_install_btn, LV_OBJ_FLAG_HIDDEN);
+  if (objects.btn_install_update) {
+    lv_obj_add_flag(objects.btn_install_update, LV_OBJ_FLAG_HIDDEN);
   }
-  if (ota_progress_bar) {
-    lv_obj_add_flag(ota_progress_bar, LV_OBJ_FLAG_HIDDEN);
+  if (objects.bar_ota_progress) {
+    lv_obj_add_flag(objects.bar_ota_progress, LV_OBJ_FLAG_HIDDEN);
   }
 
   // Set initial status
-  if (ota_status_label) {
-    lv_label_set_text(ota_status_label, "Ready to check for updates");
+  if (objects.lbl_ota_status) {
+    lv_label_set_text(objects.lbl_ota_status, "Ready to check for updates");
   }
 
   // Initialize OTA manager (marks current firmware as valid)
