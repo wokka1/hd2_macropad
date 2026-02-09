@@ -49,7 +49,8 @@ static bool s_ota_busy = false;
 static bool s_ble_was_disabled = false;  // Track if we disabled BLE for OTA
 
 // Stack size for OTA tasks (TLS requires ~8KB minimum, image verification needs more)
-#define OTA_TASK_STACK_SIZE (12 * 1024)
+// Increased to 16KB to prevent Double Exception during esp_https_ota_finish()
+#define OTA_TASK_STACK_SIZE (16 * 1024)
 
 // Static task resources (allocated from internal RAM for flash operation safety)
 static StaticTask_t s_ota_task_buffer;
@@ -510,12 +511,15 @@ static esp_err_t ota_perform_internal(void)
             break;
         }
 
-        // Calculate and report progress
+        // Calculate and report progress (only when percentage changes)
         int downloaded = esp_https_ota_get_image_len_read(ota_handle);
         if (total_size > 0) {
-            s_ota_info.progress_percent = (downloaded * 100) / total_size;
-            if (progress_cb) {
-                progress_cb(s_ota_info.progress_percent);
+            int new_percent = (downloaded * 100) / total_size;
+            if (new_percent != s_ota_info.progress_percent) {
+                s_ota_info.progress_percent = new_percent;
+                if (progress_cb) {
+                    progress_cb(new_percent);
+                }
             }
         }
 
@@ -537,6 +541,7 @@ static esp_err_t ota_perform_internal(void)
     // Skip progress callback here - device is about to reboot anyway
     // and calling lv_async_call during esp_https_ota_finish can cause crashes
     ESP_LOGI(TAG, "Download complete, finalizing update...");
+    log_memory_report("Before OTA Finish");
 
     // Give time for any pending async operations to complete
     vTaskDelay(pdMS_TO_TICKS(500));
