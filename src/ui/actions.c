@@ -4,6 +4,17 @@
 #include "ui_events.h"
 #include "configration.h"
 #include "esp_log.h"
+#include <string.h>
+#include <esp_wifi.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+#include "../wifi/wifi_manager.h"
+
+// Global variables for WiFi scan results
+#define MAX_WIFI_APS 20
+static wifi_ap_record_simple_t wifi_scan_results[MAX_WIFI_APS];
+static uint16_t wifi_scan_count = 0;
+static bool wifi_initialized = false;
 
 // Change HID input delay
 void action_change_delay(lv_event_t *e)
@@ -165,4 +176,175 @@ void action_action_clear_cooldowns(lv_event_t *e)
 	}
 
 	ESP_LOGI("Actions", "All cooldowns cleared (no buzzer)");
+}
+
+// Show on-screen keyboard and link to focused textarea
+void action_show_keyboard(lv_event_t *e)
+{
+	lv_obj_t *textarea = lv_event_get_target(e);
+
+	// Link keyboard to the textarea that triggered this event
+	lv_keyboard_set_textarea(objects.keyboard, textarea);
+
+	// Show the keyboard
+	lv_obj_clear_flag(objects.keyboard, LV_OBJ_FLAG_HIDDEN);
+}
+
+// Hide on-screen keyboard
+void action_hide_keyboard(lv_event_t *e)
+{
+	// Unlink keyboard from any textarea
+	lv_keyboard_set_textarea(objects.keyboard, NULL);
+
+	// Hide the keyboard
+	lv_obj_add_flag(objects.keyboard, LV_OBJ_FLAG_HIDDEN);
+}
+
+// Enable/disable WiFi based on switch state
+void action_action_enable_wifi(lv_event_t *e)
+{
+	lv_obj_t *switch_obj = lv_event_get_target(e);
+	// Note: Switch state is inverted in UI
+	bool is_checked = !lv_obj_has_state(switch_obj, LV_STATE_CHECKED);
+
+	if (is_checked && !wifi_initialized) {
+		// Enable WiFi
+		lv_label_set_text(objects.wifi_status_label, "Initializing WiFi...");
+		esp_err_t ret = wifi_manager_init();
+
+		if (ret == ESP_OK) {
+			wifi_initialized = true;
+			// Brief delay to ensure WiFi is fully started
+			vTaskDelay(pdMS_TO_TICKS(500));
+			lv_label_set_text(objects.wifi_status_label, "WiFi Ready");
+			ESP_LOGI("Actions", "WiFi initialized successfully");
+		} else {
+			lv_label_set_text(objects.wifi_status_label, "WiFi init failed!");
+			// Uncheck the switch on failure
+			lv_obj_clear_state(switch_obj, LV_STATE_CHECKED);
+			ESP_LOGE("Actions", "WiFi initialization failed: %s", esp_err_to_name(ret));
+		}
+	} else if (!is_checked && wifi_initialized) {
+		// Disable WiFi
+		lv_label_set_text(objects.wifi_status_label, "Disabling WiFi...");
+		esp_err_t ret = wifi_manager_deinit();
+		if (ret == ESP_OK) {
+			wifi_initialized = false;
+			lv_label_set_text(objects.wifi_status_label, "WiFi Disabled");
+			ESP_LOGI("Actions", "WiFi disabled");
+		} else {
+			lv_label_set_text(objects.wifi_status_label, "WiFi disable failed!");
+			ESP_LOGE("Actions", "WiFi deinit failed: %s", esp_err_to_name(ret));
+		}
+	}
+}
+
+// Scan for WiFi networks and populate dropdown
+void action_action_wifi_scan(lv_event_t *e)
+{
+	// Check if WiFi is initialized
+	if (!wifi_initialized) {
+		lv_label_set_text(objects.wifi_status_label, "Enable WiFi first!");
+		return;
+	}
+
+	lv_label_set_text(objects.wifi_status_label, "Scanning...");
+
+	// Perform scan
+	esp_err_t ret = wifi_manager_scan(wifi_scan_results, MAX_WIFI_APS, &wifi_scan_count);
+
+	if (ret == ESP_OK && wifi_scan_count > 0) {
+		// Clear dropdown options
+		lv_dropdown_clear_options(objects.wifi_network_dropdown);
+
+		// Add each network to dropdown with signal strength indicator
+		for (uint16_t i = 0; i < wifi_scan_count; i++) {
+			char display_text[64];
+			const char *lock_icon = (wifi_scan_results[i].authmode != WIFI_AUTH_OPEN) ? "🔒" : "";
+			int signal_bars = (wifi_scan_results[i].rssi + 100) / 10; // Rough signal bars
+
+			snprintf(display_text, sizeof(display_text), "%s %s (%d%%)",
+					 lock_icon,
+					 wifi_scan_results[i].ssid,
+					 signal_bars * 10);
+
+			lv_dropdown_add_option(objects.wifi_network_dropdown, display_text, i);
+		}
+
+		// Update status
+		char status[32];
+		snprintf(status, sizeof(status), "Found %d networks", wifi_scan_count);
+		lv_label_set_text(objects.wifi_status_label, status);
+
+		// Show dropdown
+		lv_obj_clear_flag(objects.wifi_network_dropdown, LV_OBJ_FLAG_HIDDEN);
+	} else {
+		lv_label_set_text(objects.wifi_status_label, "No networks found");
+	}
+}
+
+// Connect to selected network from dropdown
+void action_action_wifi_connect_selected(lv_event_t *e)
+{
+	// Check if WiFi is initialized
+	if (!wifi_initialized) {
+		lv_label_set_text(objects.wifi_status_label, "Enable WiFi first!");
+		return;
+	}
+
+	// Get selected network index
+	uint16_t selected = lv_dropdown_get_selected(objects.wifi_network_dropdown);
+
+	if (selected >= wifi_scan_count) {
+		lv_label_set_text(objects.wifi_status_label, "Invalid selection");
+		return;
+	}
+
+	// Get password from input
+	const char *password = lv_textarea_get_text(objects.wifi_password_input);
+
+	// Check if network requires password
+	if (wifi_scan_results[selected].authmode != WIFI_AUTH_OPEN && strlen(password) == 0) {
+		lv_label_set_text(objects.wifi_status_label, "Password required");
+		return;
+	}
+
+	// Connect to selected network
+	lv_label_set_text(objects.wifi_status_label, "Connecting...");
+	esp_err_t ret = wifi_manager_connect_to(wifi_scan_results[selected].ssid, password);
+
+	if (ret == ESP_OK) {
+		lv_label_set_text(objects.wifi_status_label, "Connected!");
+	} else {
+		lv_label_set_text(objects.wifi_status_label, "Connection failed");
+	}
+}
+
+// Manual WiFi connection (for hidden networks)
+void action_action_wifi_connect_manual(lv_event_t *e)
+{
+	// Check if WiFi is initialized
+	if (!wifi_initialized) {
+		lv_label_set_text(objects.wifi_status_label, "Enable WiFi first!");
+		return;
+	}
+
+	// Get SSID and password from UI text inputs
+	const char *ssid = lv_textarea_get_text(objects.wifi_ssid_manual_input);
+	const char *password = lv_textarea_get_text(objects.wifi_password_manual_input);
+
+	if (strlen(ssid) == 0) {
+		lv_label_set_text(objects.wifi_status_label, "SSID required");
+		return;
+	}
+
+	// Connect
+	lv_label_set_text(objects.wifi_status_label, "Connecting...");
+	esp_err_t ret = wifi_manager_connect_to(ssid, password);
+
+	if (ret == ESP_OK) {
+		lv_label_set_text(objects.wifi_status_label, "Connected!");
+	} else {
+		lv_label_set_text(objects.wifi_status_label, "Connection failed");
+	}
 }

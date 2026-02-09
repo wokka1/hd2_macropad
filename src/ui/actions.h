@@ -36,6 +36,12 @@ extern void action_finalize_manual_execution(lv_event_t * e);
 extern void action_action_toggle_debug(lv_event_t * e);
 extern void action_action_toggle_cooldowns(lv_event_t * e);
 extern void action_action_clear_cooldowns(lv_event_t * e);
+extern void action_action_wifi_scan(lv_event_t * e);
+extern void action_action_wifi_connect_selected(lv_event_t * e);
+extern void action_action_wifi_connect_manual(lv_event_t * e);
+extern void action_action_enable_wifi(lv_event_t * e);
+extern void action_hide_keyboard(lv_event_t * e);
+extern void action_show_keyboard(lv_event_t * e);
 
 
 #ifdef __cplusplus

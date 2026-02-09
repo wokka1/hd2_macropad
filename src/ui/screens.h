@@ -19,6 +19,7 @@ typedef struct _objects_t {
     lv_obj_t *reset_config;
     lv_obj_t *about;
     lv_obj_t *manual;
+    lv_obj_t *wifi;
     lv_obj_t *tab_view_setup;
     lv_obj_t *tab_rifle;
     lv_obj_t *weapons_mg;
@@ -201,11 +202,25 @@ typedef struct _objects_t {
     lv_obj_t *obj47;
     lv_obj_t *obj48;
     lv_obj_t *obj49;
+    lv_obj_t *obj50;
     lv_obj_t *manual_arrow_left;
     lv_obj_t *manual_arrow_up;
     lv_obj_t *manual_arrow_down;
     lv_obj_t *manual_arrow_right;
-    lv_obj_t *obj50;
+    lv_obj_t *obj51;
+    lv_obj_t *tab_view_wifi;
+    lv_obj_t *obj52;
+    lv_obj_t *obj53;
+    lv_obj_t *wifi_password_input;
+    lv_obj_t *connect;
+    lv_obj_t *obj54;
+    lv_obj_t *wifi_ssid_manual_input;
+    lv_obj_t *wifi_password_manual_input;
+    lv_obj_t *connect__manual_;
+    lv_obj_t *obj55;
+    lv_obj_t *wifi_switch;
+    lv_obj_t *obj56;
+    lv_obj_t *obj57;
     lv_obj_t *img_splash;
     lv_obj_t *bar_amount;
     lv_obj_t *label_amount;
@@ -219,11 +234,11 @@ typedef struct _objects_t {
     lv_obj_t *label_cooldown6;
     lv_obj_t *img_connection2;
     lv_obj_t *label_supplies;
-    lv_obj_t *obj51;
+    lv_obj_t *obj58;
     lv_obj_t *lbl_brightness;
     lv_obj_t *lbl_delay;
     lv_obj_t *img_connection1;
-    lv_obj_t *obj52;
+    lv_obj_t *obj59;
     lv_obj_t *lbl_version;
     lv_obj_t *manual_preview_item;
     lv_obj_t *manual_cmd1;
@@ -235,6 +250,14 @@ typedef struct _objects_t {
     lv_obj_t *manual_cmd7;
     lv_obj_t *manual_cmd8;
     lv_obj_t *manual_cmd9;
+    lv_obj_t *obj60;
+    lv_obj_t *auto_ssid;
+    lv_obj_t *wifi_network_dropdown;
+    lv_obj_t *keyboard;
+    lv_obj_t *manual_ssid;
+    lv_obj_t *wifi_status_label_1;
+    lv_obj_t *wifi_status;
+    lv_obj_t *wifi_status_label;
 } objects_t;
 
 extern objects_t objects;
@@ -251,6 +274,7 @@ enum ScreensEnum {
     SCREEN_ID_RESET_CONFIG = 9,
     SCREEN_ID_ABOUT = 10,
     SCREEN_ID_MANUAL = 11,
+    SCREEN_ID_WIFI = 12,
 };
 
 void create_screen_intro();
@@ -285,6 +309,9 @@ void tick_screen_about();
 
 void create_screen_manual();
 void tick_screen_manual();
+
+void create_screen_wifi();
+void tick_screen_wifi();
 
 enum Themes {
     THEME_ID_DEFAULT,
