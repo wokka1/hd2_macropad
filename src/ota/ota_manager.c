@@ -425,6 +425,10 @@ bool ota_manager_update_available(void)
     return s_ota_info.status == OTA_STATUS_AVAILABLE;
 }
 
+// Maximum retries for connection errors (504, timeout, etc.)
+#define OTA_MAX_RETRIES 3
+#define OTA_RETRY_DELAY_MS 3000
+
 // Internal blocking update function
 static esp_err_t ota_perform_internal(void)
 {
@@ -456,10 +460,28 @@ static esp_err_t ota_perform_internal(void)
     };
 
     esp_https_ota_handle_t ota_handle = NULL;
-    esp_err_t ret = esp_https_ota_begin(&ota_config, &ota_handle);
+    esp_err_t ret = ESP_FAIL;
+
+    // Retry loop for connection errors (504 server errors, timeouts, etc.)
+    for (int attempt = 1; attempt <= OTA_MAX_RETRIES; attempt++) {
+        ESP_LOGI(TAG, "OTA connection attempt %d/%d", attempt, OTA_MAX_RETRIES);
+
+        ret = esp_https_ota_begin(&ota_config, &ota_handle);
+        if (ret == ESP_OK) {
+            break;  // Success, proceed with download
+        }
+
+        ESP_LOGW(TAG, "OTA begin failed (attempt %d): %s", attempt, esp_err_to_name(ret));
+
+        if (attempt < OTA_MAX_RETRIES) {
+            ESP_LOGI(TAG, "Retrying in %d seconds...", OTA_RETRY_DELAY_MS / 1000);
+            vTaskDelay(pdMS_TO_TICKS(OTA_RETRY_DELAY_MS));
+        }
+    }
+
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "OTA begin failed: %s", esp_err_to_name(ret));
-        strncpy(s_ota_info.error_message, "OTA begin failed", sizeof(s_ota_info.error_message) - 1);
+        ESP_LOGE(TAG, "OTA begin failed after %d attempts", OTA_MAX_RETRIES);
+        strncpy(s_ota_info.error_message, "Connection failed", sizeof(s_ota_info.error_message) - 1);
         s_ota_info.status = OTA_STATUS_ERROR;
         return ret;
     }
