@@ -46,15 +46,22 @@ esp_err_t ota_manager_init(void);
 const char* ota_manager_get_version(void);
 
 /**
- * @brief Check for available updates from GitHub
+ * @brief Check for available updates from GitHub (async, runs in separate task)
  *
- * This is a blocking call that queries the GitHub API.
- * Updates the internal ota_info structure with results.
+ * Spawns a FreeRTOS task with adequate stack for TLS operations.
+ * Call ota_manager_is_busy() to check if operation is in progress.
+ * Call ota_manager_get_info() to get results after completion.
  *
- * @return ESP_OK if check completed (regardless of update availability)
- *         ESP_FAIL on network or parse error
+ * @param status_cb Callback for status updates (called from task context)
+ * @return ESP_OK if task started successfully
  */
-esp_err_t ota_manager_check_for_update(void);
+esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb);
+
+/**
+ * @brief Check if an OTA operation is currently in progress
+ * @return true if busy, false if idle
+ */
+bool ota_manager_is_busy(void);
 
 /**
  * @brief Get current OTA information
@@ -69,15 +76,16 @@ const ota_info_t* ota_manager_get_info(void);
 bool ota_manager_update_available(void);
 
 /**
- * @brief Perform OTA update from previously checked URL
+ * @brief Perform OTA update from previously checked URL (async, runs in separate task)
  *
- * Downloads and installs the firmware. On success, the device will reboot.
+ * Spawns a FreeRTOS task with adequate stack for TLS operations.
+ * On success, the device will reboot automatically.
  *
  * @param progress_cb Callback for progress updates (0-100%)
- * @return ESP_OK if update successful (device will reboot)
- *         ESP_FAIL on error
+ * @param status_cb Callback for status updates
+ * @return ESP_OK if task started successfully
  */
-esp_err_t ota_manager_perform_update(ota_progress_callback_t progress_cb);
+esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, ota_status_callback_t status_cb);
 
 /**
  * @brief Mark current firmware as valid (call after successful boot)

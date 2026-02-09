@@ -39,6 +39,15 @@ static ota_info_t s_ota_info = {
 static char *s_http_response_buffer = NULL;
 static int s_http_response_len = 0;
 
+// Task management
+static TaskHandle_t s_ota_task_handle = NULL;
+static ota_status_callback_t s_status_callback = NULL;
+static ota_progress_callback_t s_progress_callback = NULL;
+static bool s_ota_busy = false;
+
+// Stack size for OTA tasks (TLS requires ~8KB minimum)
+#define OTA_TASK_STACK_SIZE (10 * 1024)
+
 // Compare two version strings (e.g., "1.0.0" vs "1.1.0")
 // Returns: -1 if v1 < v2, 0 if equal, 1 if v1 > v2
 static int version_compare(const char *v1, const char *v2)
@@ -98,7 +107,8 @@ const char* ota_manager_get_version(void)
     return SW_VER;
 }
 
-esp_err_t ota_manager_check_for_update(void)
+// Internal blocking check function
+static esp_err_t ota_check_internal(void)
 {
     esp_err_t ret = ESP_FAIL;
 
@@ -234,6 +244,62 @@ cleanup:
     return ret;
 }
 
+// Task function for checking updates
+static void ota_check_task(void *pvParameters)
+{
+    ESP_LOGI(TAG, "OTA check task started");
+
+    esp_err_t ret = ota_check_internal();
+
+    // Notify via callback
+    if (s_status_callback) {
+        if (ret == ESP_OK) {
+            s_status_callback(s_ota_info.status,
+                s_ota_info.status == OTA_STATUS_AVAILABLE ? s_ota_info.available_version : "Up to date");
+        } else {
+            s_status_callback(OTA_STATUS_ERROR, s_ota_info.error_message);
+        }
+    }
+
+    s_ota_busy = false;
+    s_ota_task_handle = NULL;
+    vTaskDelete(NULL);
+}
+
+esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
+{
+    if (s_ota_busy) {
+        ESP_LOGW(TAG, "OTA operation already in progress");
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    s_status_callback = status_cb;
+    s_ota_busy = true;
+
+    BaseType_t ret = xTaskCreate(
+        ota_check_task,
+        "ota_check",
+        OTA_TASK_STACK_SIZE,
+        NULL,
+        5,  // Priority
+        &s_ota_task_handle
+    );
+
+    if (ret != pdPASS) {
+        ESP_LOGE(TAG, "Failed to create OTA check task");
+        s_ota_busy = false;
+        return ESP_FAIL;
+    }
+
+    ESP_LOGI(TAG, "OTA check task created");
+    return ESP_OK;
+}
+
+bool ota_manager_is_busy(void)
+{
+    return s_ota_busy;
+}
+
 const ota_info_t* ota_manager_get_info(void)
 {
     return &s_ota_info;
@@ -244,8 +310,10 @@ bool ota_manager_update_available(void)
     return s_ota_info.status == OTA_STATUS_AVAILABLE;
 }
 
-esp_err_t ota_manager_perform_update(ota_progress_callback_t progress_cb)
+// Internal blocking update function
+static esp_err_t ota_perform_internal(void)
 {
+    ota_progress_callback_t progress_cb = s_progress_callback;
     if (s_ota_info.download_url[0] == '\0') {
         ESP_LOGE(TAG, "No download URL available");
         strncpy(s_ota_info.error_message, "No update URL", sizeof(s_ota_info.error_message) - 1);
@@ -349,6 +417,58 @@ esp_err_t ota_manager_perform_update(ota_progress_callback_t progress_cb)
     }
 
     return ret;
+}
+
+// Task function for performing update
+static void ota_perform_task(void *pvParameters)
+{
+    ESP_LOGI(TAG, "OTA perform task started");
+
+    (void)ota_perform_internal();  // Result handled internally, success causes reboot
+
+    // If we get here, update failed (success causes reboot)
+    if (s_status_callback) {
+        s_status_callback(OTA_STATUS_ERROR, s_ota_info.error_message);
+    }
+
+    s_ota_busy = false;
+    s_ota_task_handle = NULL;
+    vTaskDelete(NULL);
+}
+
+esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, ota_status_callback_t status_cb)
+{
+    if (s_ota_busy) {
+        ESP_LOGW(TAG, "OTA operation already in progress");
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    if (s_ota_info.download_url[0] == '\0') {
+        ESP_LOGE(TAG, "No download URL available");
+        return ESP_FAIL;
+    }
+
+    s_progress_callback = progress_cb;
+    s_status_callback = status_cb;
+    s_ota_busy = true;
+
+    BaseType_t ret = xTaskCreate(
+        ota_perform_task,
+        "ota_update",
+        OTA_TASK_STACK_SIZE,
+        NULL,
+        5,  // Priority
+        &s_ota_task_handle
+    );
+
+    if (ret != pdPASS) {
+        ESP_LOGE(TAG, "Failed to create OTA perform task");
+        s_ota_busy = false;
+        return ESP_FAIL;
+    }
+
+    ESP_LOGI(TAG, "OTA perform task created");
+    return ESP_OK;
 }
 
 esp_err_t ota_manager_confirm_update(void)
