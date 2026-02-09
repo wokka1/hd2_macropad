@@ -1,6 +1,7 @@
 #include "ota_manager.h"
 #include "../version.h"
 #include "../ble/ble_controller.h"
+#include "../esp_bsp.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -543,8 +544,15 @@ static esp_err_t ota_perform_internal(void)
     ESP_LOGI(TAG, "Download complete, finalizing update...");
     log_memory_report("Before OTA Finish");
 
-    // Give time for any pending async operations to complete
-    vTaskDelay(pdMS_TO_TICKS(500));
+    // CRITICAL: Suspend LVGL before esp_https_ota_finish()
+    // During flash operations, cache is disabled making PSRAM inaccessible.
+    // LVGL uses PSRAM buffers, so it MUST be suspended to prevent crashes.
+    bsp_lvgl_suspend();
+
+    // Give time for LVGL to fully suspend
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    log_memory_report("After LVGL Suspend");
 
     ret = esp_https_ota_finish(ota_handle);
     if (ret == ESP_OK) {
@@ -553,6 +561,9 @@ static esp_err_t ota_perform_internal(void)
         vTaskDelay(pdMS_TO_TICKS(2000));
         esp_restart();
     } else {
+        // Resume LVGL on failure
+        bsp_lvgl_resume();
+
         if (ret == ESP_ERR_OTA_VALIDATE_FAILED) {
             ESP_LOGE(TAG, "Firmware validation failed");
             strncpy(s_ota_info.error_message, "Validation failed", sizeof(s_ota_info.error_message) - 1);

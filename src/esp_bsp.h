@@ -201,6 +201,19 @@ bool bsp_display_lock(uint32_t timeout_ms);
  */
 void bsp_display_unlock(void);
 
+/**
+ * @brief Suspend LVGL task for critical operations (like OTA)
+ *
+ * During esp_https_ota_finish(), flash cache is disabled which makes
+ * PSRAM inaccessible. LVGL uses PSRAM buffers, so we must suspend it.
+ */
+void bsp_lvgl_suspend(void);
+
+/**
+ * @brief Resume LVGL task after critical operation
+ */
+void bsp_lvgl_resume(void);
+
 #ifdef __cplusplus
 }
 #endif

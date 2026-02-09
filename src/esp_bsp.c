@@ -35,6 +35,8 @@ static SemaphoreHandle_t lvgl_mux = NULL;
 static lv_disp_draw_buf_t disp_buf;
 static lv_disp_drv_t disp_drv;
 static lv_disp_t *disp = NULL;
+static TaskHandle_t lvgl_task_handle = NULL;
+static volatile bool lvgl_suspended = false;
 
 // Touch input device
 static lv_indev_drv_t indev_drv;
@@ -552,8 +554,16 @@ static void lvgl_timer_task(void *arg)
     ESP_LOGI(TAG, "LVGL timer task started");
 
     while (1) {
+        // Check if we should suspend (for OTA operations)
+        if (lvgl_suspended) {
+            vTaskDelay(pdMS_TO_TICKS(100));  // Sleep longer when suspended
+            continue;
+        }
+
         if (pdTRUE == xSemaphoreTake(lvgl_mux, portMAX_DELAY)) {
-            lv_timer_handler();
+            if (!lvgl_suspended) {  // Double-check after getting mutex
+                lv_timer_handler();
+            }
             xSemaphoreGive(lvgl_mux);
         }
         vTaskDelay(pdMS_TO_TICKS(5));
@@ -612,11 +622,45 @@ static esp_err_t init_lvgl(const bsp_display_cfg_t *cfg)
     ESP_ERROR_CHECK(esp_timer_create(&periodic_timer_args, &periodic_timer));
     ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, 1000));  // 1ms tick
 
-    // Create LVGL task
-    xTaskCreatePinnedToCore(lvgl_timer_task, "lvgl", 8192, NULL, 4, NULL, 0);
+    // Create LVGL task (save handle for suspend/resume)
+    xTaskCreatePinnedToCore(lvgl_timer_task, "lvgl", 8192, NULL, 4, &lvgl_task_handle, 0);
 
     ESP_LOGI(TAG, "LVGL initialized");
     return ESP_OK;
+}
+
+/**
+ * @brief Suspend LVGL task for critical operations (like OTA)
+ *
+ * During esp_https_ota_finish(), flash cache is disabled which makes
+ * PSRAM inaccessible. LVGL uses PSRAM buffers, so we must suspend it.
+ */
+void bsp_lvgl_suspend(void)
+{
+    if (lvgl_task_handle && !lvgl_suspended) {
+        ESP_LOGI(TAG, "Suspending LVGL task for OTA");
+        lvgl_suspended = true;
+
+        // Wait for current LVGL operation to complete
+        if (xSemaphoreTake(lvgl_mux, pdMS_TO_TICKS(1000)) == pdTRUE) {
+            xSemaphoreGive(lvgl_mux);
+        }
+
+        // Give task time to enter suspended loop
+        vTaskDelay(pdMS_TO_TICKS(50));
+        ESP_LOGI(TAG, "LVGL suspended");
+    }
+}
+
+/**
+ * @brief Resume LVGL task after critical operation
+ */
+void bsp_lvgl_resume(void)
+{
+    if (lvgl_task_handle && lvgl_suspended) {
+        ESP_LOGI(TAG, "Resuming LVGL task");
+        lvgl_suspended = false;
+    }
 }
 
 static esp_err_t init_touch(void)
