@@ -95,6 +95,33 @@ static esp_err_t http_event_handler(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
+// Log detailed memory usage
+static void log_memory_report(const char *context)
+{
+    ESP_LOGI(TAG, "=== Memory Report: %s ===", context);
+
+    // Internal RAM (DRAM)
+    size_t internal_free = heap_caps_get_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+    size_t internal_largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+    size_t internal_min = heap_caps_get_minimum_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+
+    // PSRAM
+    size_t psram_free = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);
+    size_t psram_largest = heap_caps_get_largest_free_block(MALLOC_CAP_SPIRAM);
+
+    // DMA-capable memory (needed for WiFi/BLE)
+    size_t dma_free = heap_caps_get_free_size(MALLOC_CAP_DMA);
+    size_t dma_largest = heap_caps_get_largest_free_block(MALLOC_CAP_DMA);
+
+    ESP_LOGI(TAG, "Internal RAM: free=%u, largest=%u, min_ever=%u",
+             (unsigned)internal_free, (unsigned)internal_largest, (unsigned)internal_min);
+    ESP_LOGI(TAG, "PSRAM:        free=%u, largest=%u",
+             (unsigned)psram_free, (unsigned)psram_largest);
+    ESP_LOGI(TAG, "DMA-capable:  free=%u, largest=%u",
+             (unsigned)dma_free, (unsigned)dma_largest);
+    ESP_LOGI(TAG, "=====================================");
+}
+
 esp_err_t ota_manager_init(void)
 {
     ESP_LOGI(TAG, "OTA manager initialized, current version: %s", SW_VER);
@@ -103,6 +130,9 @@ esp_err_t ota_manager_init(void)
 
     // Mark current firmware as valid to prevent rollback
     ota_manager_confirm_update();
+
+    // Log initial memory state
+    log_memory_report("OTA Init");
 
     return ESP_OK;
 }
@@ -278,18 +308,15 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
         return ESP_ERR_INVALID_STATE;
     }
 
-    // Log available heap before task creation
-    size_t internal_free = heap_caps_get_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
-    size_t internal_largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
-    ESP_LOGI(TAG, "Internal RAM: free=%lu, largest=%lu | PSRAM free=%lu",
-             (unsigned long)internal_free,
-             (unsigned long)internal_largest,
-             (unsigned long)heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+    // Log detailed memory before OTA
+    log_memory_report("Before OTA Check");
 
-    // Need at least 4KB internal RAM for LWIP semaphores and TLS buffers
-    if (internal_largest < 4096) {
-        ESP_LOGE(TAG, "Not enough internal RAM (need 4KB, have %lu)", (unsigned long)internal_largest);
-        strncpy(s_ota_info.error_message, "Low memory", sizeof(s_ota_info.error_message) - 1);
+    size_t internal_largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+
+    // Need at least 8KB internal RAM for LWIP semaphores, TLS buffers, and HTTP client
+    if (internal_largest < 8192) {
+        ESP_LOGE(TAG, "Not enough internal RAM (need 8KB, have %u)", (unsigned)internal_largest);
+        strncpy(s_ota_info.error_message, "Low memory - try disabling BLE", sizeof(s_ota_info.error_message) - 1);
         s_ota_info.status = OTA_STATUS_ERROR;
         return ESP_ERR_NO_MEM;
     }
