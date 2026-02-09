@@ -390,3 +390,21 @@ wifi_status_t wifi_manager_get_status(void)
 {
     return s_wifi_status;
 }
+
+esp_err_t wifi_manager_get_saved_ssid(char *ssid, size_t max_len)
+{
+    if (ssid == NULL || max_len == 0) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    nvs_handle_t nvs_handle;
+    esp_err_t err = nvs_open("storage", NVS_READONLY, &nvs_handle);
+    if (err != ESP_OK) {
+        return ESP_ERR_NOT_FOUND;
+    }
+
+    err = nvs_get_str(nvs_handle, "wifi_ssid", ssid, &max_len);
+    nvs_close(nvs_handle);
+
+    return err;
+}

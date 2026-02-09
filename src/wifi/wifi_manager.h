@@ -78,6 +78,14 @@ wifi_status_t wifi_manager_get_status(void);
  */
 esp_err_t wifi_manager_set_credentials(const char *ssid, const char *password);
 
+/**
+ * @brief Get saved SSID from NVS
+ * @param ssid Buffer to store SSID (must be at least 33 bytes)
+ * @param max_len Maximum length of buffer
+ * @return ESP_OK on success, ESP_ERR_NOT_FOUND if no credentials saved
+ */
+esp_err_t wifi_manager_get_saved_ssid(char *ssid, size_t max_len);
+
 #ifdef __cplusplus
 }
 #endif

@@ -217,8 +217,29 @@ void action_action_enable_wifi(lv_event_t *e)
 			wifi_initialized = true;
 			// Brief delay to ensure WiFi is fully started
 			vTaskDelay(pdMS_TO_TICKS(500));
-			lv_label_set_text(objects.wifi_status_label, "WiFi Ready");
-			ESP_LOGI("Actions", "WiFi initialized successfully");
+
+			// Try to auto-connect with stored credentials
+			lv_label_set_text(objects.wifi_status_label, "Connecting...");
+			ESP_LOGI("Actions", "WiFi initialized, attempting auto-connect...");
+
+			ret = wifi_manager_connect();
+			if (ret == ESP_OK) {
+				// Show which network we connected to
+				char ssid[33];
+				if (wifi_manager_get_saved_ssid(ssid, sizeof(ssid)) == ESP_OK) {
+					char status[64];
+					snprintf(status, sizeof(status), "Connected to %s", ssid);
+					lv_label_set_text(objects.wifi_status_label, status);
+					ESP_LOGI("Actions", "Auto-connected to %s", ssid);
+				} else {
+					lv_label_set_text(objects.wifi_status_label, "Connected!");
+					ESP_LOGI("Actions", "Auto-connected to saved network");
+				}
+			} else {
+				// No saved credentials or connection failed - that's OK
+				lv_label_set_text(objects.wifi_status_label, "WiFi Ready - Scan for networks");
+				ESP_LOGI("Actions", "No saved credentials or auto-connect failed, ready for manual connect");
+			}
 		} else {
 			lv_label_set_text(objects.wifi_status_label, "WiFi init failed!");
 			// Uncheck the switch on failure
@@ -311,11 +332,14 @@ void action_action_wifi_connect_selected(lv_event_t *e)
 	}
 
 	// Connect to selected network
+	const char *ssid = wifi_scan_results[selected].ssid;
 	lv_label_set_text(objects.wifi_status_label, "Connecting...");
-	esp_err_t ret = wifi_manager_connect_to(wifi_scan_results[selected].ssid, password);
+	esp_err_t ret = wifi_manager_connect_to(ssid, password);
 
 	if (ret == ESP_OK) {
-		lv_label_set_text(objects.wifi_status_label, "Connected!");
+		char status[64];
+		snprintf(status, sizeof(status), "Connected to %s", ssid);
+		lv_label_set_text(objects.wifi_status_label, status);
 	} else {
 		lv_label_set_text(objects.wifi_status_label, "Connection failed");
 	}
@@ -344,7 +368,9 @@ void action_action_wifi_connect_manual(lv_event_t *e)
 	esp_err_t ret = wifi_manager_connect_to(ssid, password);
 
 	if (ret == ESP_OK) {
-		lv_label_set_text(objects.wifi_status_label, "Connected!");
+		char status[64];
+		snprintf(status, sizeof(status), "Connected to %s", ssid);
+		lv_label_set_text(objects.wifi_status_label, status);
 	} else {
 		lv_label_set_text(objects.wifi_status_label, "Connection failed");
 	}
