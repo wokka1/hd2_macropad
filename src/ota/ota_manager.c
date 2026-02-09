@@ -18,11 +18,11 @@ static const char *TAG = "OTA";
 
 // GitHub repository for updates
 #ifndef GITHUB_REPO
-#define GITHUB_REPO "wokka/hd2_macropad"
+#define GITHUB_REPO "wokka1/hd2_macropad"
 #endif
 
 // GitHub API URL for latest release
-#define GITHUB_API_URL "https://github.com/wokka1/hd2_macropad" GITHUB_REPO "/releases/latest"
+#define GITHUB_API_URL "https://api.github.com/repos/" GITHUB_REPO "/releases/latest"
 
 // Maximum size for GitHub API response
 #define MAX_HTTP_RESPONSE_SIZE 4096
@@ -298,9 +298,16 @@ static esp_err_t ota_check_internal(void)
 
     // Compare versions
     int cmp = version_compare(SW_VER, s_ota_info.available_version);
-    if (cmp < 0 && s_ota_info.download_url[0] != '\0') {
-        ESP_LOGI(TAG, "Update available: %s -> %s", SW_VER, s_ota_info.available_version);
-        s_ota_info.status = OTA_STATUS_AVAILABLE;
+    if (cmp < 0) {
+        // Newer version exists
+        if (s_ota_info.download_url[0] != '\0') {
+            ESP_LOGI(TAG, "Update available: %s -> %s", SW_VER, s_ota_info.available_version);
+            s_ota_info.status = OTA_STATUS_AVAILABLE;
+        } else {
+            ESP_LOGW(TAG, "Newer version %s exists but no firmware.bin asset found in release!", s_ota_info.available_version);
+            strncpy(s_ota_info.error_message, "No firmware.bin in release", sizeof(s_ota_info.error_message) - 1);
+            s_ota_info.status = OTA_STATUS_UP_TO_DATE;
+        }
     } else {
         ESP_LOGI(TAG, "Already up to date");
         s_ota_info.status = OTA_STATUS_UP_TO_DATE;
