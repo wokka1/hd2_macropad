@@ -48,8 +48,9 @@ static ota_progress_callback_t s_progress_callback = NULL;
 static bool s_ota_busy = false;
 static bool s_ble_was_disabled = false;  // Track if we disabled BLE for OTA
 
-// Stack size for OTA tasks (TLS requires ~8KB minimum)
-#define OTA_TASK_STACK_SIZE (8 * 1024)
+// Stack size for OTA tasks (TLS operations need significant stack space)
+// 16KB provides headroom for mbedTLS + HTTP client + callbacks
+#define OTA_TASK_STACK_SIZE (16 * 1024)
 
 // Static task resources (allocated from PSRAM)
 static StaticTask_t s_ota_task_buffer;
@@ -163,6 +164,23 @@ esp_err_t ota_manager_init(void)
     ESP_LOGI(TAG, "OTA manager initialized, current version: %s", SW_VER);
     strncpy(s_ota_info.current_version, SW_VER, sizeof(s_ota_info.current_version) - 1);
     s_ota_info.status = OTA_STATUS_IDLE;
+
+    // Log which partition we booted from
+    const esp_partition_t *running = esp_ota_get_running_partition();
+    if (running) {
+        ESP_LOGI(TAG, "Running from partition: %s (offset 0x%lx, size 0x%lx)",
+                 running->label, running->address, running->size);
+    }
+
+    // Log all OTA partitions for debugging
+    const esp_partition_t *boot_partition = esp_ota_get_boot_partition();
+    const esp_partition_t *next_update = esp_ota_get_next_update_partition(NULL);
+    if (boot_partition) {
+        ESP_LOGI(TAG, "Boot partition: %s (offset 0x%lx)", boot_partition->label, boot_partition->address);
+    }
+    if (next_update) {
+        ESP_LOGI(TAG, "Next update partition: %s (offset 0x%lx)", next_update->label, next_update->address);
+    }
 
     // Mark current firmware as valid to prevent rollback
     ota_manager_confirm_update();
@@ -441,13 +459,14 @@ static esp_err_t ota_perform_internal(void)
     s_ota_info.error_message[0] = '\0';
 
     ESP_LOGI(TAG, "Starting OTA update from: %s", s_ota_info.download_url);
+    log_memory_report("Before OTA Download");
 
     esp_http_client_config_t http_config = {
         .url = s_ota_info.download_url,
         .crt_bundle_attach = esp_crt_bundle_attach,
-        .timeout_ms = 60000,
-        .keep_alive_enable = true,
-        .buffer_size = 1024,
+        .timeout_ms = 30000,          // 30 second timeout for operations
+        .keep_alive_enable = false,   // Disable keep-alive for simpler connection handling
+        .buffer_size = 4096,          // Larger receive buffer for better throughput
         .buffer_size_tx = 1024,
     };
 
@@ -514,8 +533,18 @@ static esp_err_t ota_perform_internal(void)
         progress_cb(100);
     }
 
+    ESP_LOGI(TAG, "Download complete, calling esp_https_ota_finish...");
     ret = esp_https_ota_finish(ota_handle);
+    ESP_LOGI(TAG, "esp_https_ota_finish returned: %s", esp_err_to_name(ret));
+
     if (ret == ESP_OK) {
+        // Log the new boot partition
+        const esp_partition_t *update_partition = esp_ota_get_next_update_partition(NULL);
+        if (update_partition) {
+            ESP_LOGI(TAG, "Next boot partition set to: %s (offset 0x%lx)",
+                     update_partition->label, update_partition->address);
+        }
+
         ESP_LOGI(TAG, "OTA update successful! Rebooting in 2 seconds...");
         s_ota_info.status = OTA_STATUS_COMPLETE;
         vTaskDelay(pdMS_TO_TICKS(2000));

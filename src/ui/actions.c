@@ -380,44 +380,31 @@ void action_action_wifi_connect_manual(lv_event_t *e)
 // OTA Update Actions
 // ============================================================================
 
-// Progress callback to update UI during OTA download (called from OTA task)
-static void ota_progress_callback(int progress_percent)
+// Storage for thread-safe UI updates via lv_async_call
+static volatile int s_ota_progress_percent = -1;
+static volatile ota_status_t s_ota_check_status = OTA_STATUS_IDLE;
+static volatile ota_status_t s_ota_update_status = OTA_STATUS_IDLE;
+static char s_ota_status_message[64] = {0};
+
+// Async UI update for OTA check result (runs in LVGL task context)
+static void ota_check_ui_update_async(void *param)
 {
-	// Update progress bar
-	if (objects.bar_ota_progress) {
-		lv_bar_set_value(objects.bar_ota_progress, progress_percent, LV_ANIM_OFF);
-	}
-
-	// Update status label with progress
-	if (objects.lbl_ota_status) {
-		char buf[32];
-		snprintf(buf, sizeof(buf), "Downloading... %d%%", progress_percent);
-		lv_label_set_text(objects.lbl_ota_status, buf);
-	}
-
-	ESP_LOGI("OTA", "Progress: %d%%", progress_percent);
-}
-
-// Status callback for OTA check (called from OTA task when complete)
-static void ota_check_status_callback(ota_status_t status, const char *message)
-{
-	ESP_LOGI("OTA", "Check complete, status: %d, message: %s", status, message ? message : "none");
+	(void)param;
+	const ota_info_t *info = ota_manager_get_info();
 
 	// Re-enable check button
 	if (objects.btn_check_update) {
 		lv_obj_clear_state(objects.btn_check_update, LV_STATE_DISABLED);
 	}
 
-	const ota_info_t *info = ota_manager_get_info();
-
-	if (status == OTA_STATUS_ERROR) {
+	if (s_ota_check_status == OTA_STATUS_ERROR) {
 		if (objects.lbl_ota_status) {
-			lv_label_set_text(objects.lbl_ota_status, message ? message : "Check failed");
+			lv_label_set_text(objects.lbl_ota_status, s_ota_status_message[0] ? s_ota_status_message : "Check failed");
 		}
 		return;
 	}
 
-	if (status == OTA_STATUS_AVAILABLE) {
+	if (s_ota_check_status == OTA_STATUS_AVAILABLE) {
 		// Update available
 		if (objects.lbl_ota_status) {
 			char buf[64];
@@ -450,14 +437,14 @@ static void ota_check_status_callback(ota_status_t status, const char *message)
 	}
 }
 
-// Status callback for OTA update (called from OTA task on failure)
-static void ota_update_status_callback(ota_status_t status, const char *message)
+// Async UI update for OTA update failure (runs in LVGL task context)
+static void ota_update_ui_update_async(void *param)
 {
-	ESP_LOGI("OTA", "Update status: %d, message: %s", status, message ? message : "none");
+	(void)param;
 
-	// If we get here, update failed (success causes reboot)
+	// Update failed (success causes reboot)
 	if (objects.lbl_ota_status) {
-		lv_label_set_text(objects.lbl_ota_status, message ? message : "Update failed!");
+		lv_label_set_text(objects.lbl_ota_status, s_ota_status_message[0] ? s_ota_status_message : "Update failed!");
 	}
 
 	// Re-enable buttons
@@ -472,6 +459,82 @@ static void ota_update_status_callback(ota_status_t status, const char *message)
 	if (objects.bar_ota_progress) {
 		lv_obj_add_flag(objects.bar_ota_progress, LV_OBJ_FLAG_HIDDEN);
 	}
+
+	// Reset progress
+	s_ota_progress_percent = -1;
+}
+
+// Async UI update for progress bar (runs in LVGL task context)
+static void ota_progress_ui_update_async(void *param)
+{
+	(void)param;
+	int progress = s_ota_progress_percent;
+	if (progress < 0) return;
+
+	// Update progress bar
+	if (objects.bar_ota_progress) {
+		lv_bar_set_value(objects.bar_ota_progress, progress, LV_ANIM_OFF);
+	}
+
+	// Update status label with progress
+	if (objects.lbl_ota_status) {
+		char buf[32];
+		snprintf(buf, sizeof(buf), "Downloading... %d%%", progress);
+		lv_label_set_text(objects.lbl_ota_status, buf);
+	}
+}
+
+// Progress callback (called from OTA task) - schedules UI update via lv_async_call
+static void ota_progress_callback(int progress_percent)
+{
+	static int last_ui_update = -1;
+
+	// Store progress
+	s_ota_progress_percent = progress_percent;
+
+	// Only update UI every 5% to reduce overhead
+	if (progress_percent / 5 != last_ui_update / 5) {
+		last_ui_update = progress_percent;
+		ESP_LOGI("OTA", "Progress: %d%%", progress_percent);
+		// Schedule UI update in LVGL task context (thread-safe)
+		lv_async_call(ota_progress_ui_update_async, NULL);
+	}
+}
+
+// Status callback for OTA check (called from OTA task when complete)
+static void ota_check_status_callback(ota_status_t status, const char *message)
+{
+	ESP_LOGI("OTA", "Check complete, status: %d, message: %s", status, message ? message : "none");
+
+	// Store status for async UI update
+	s_ota_check_status = status;
+	if (message) {
+		strncpy(s_ota_status_message, message, sizeof(s_ota_status_message) - 1);
+	} else {
+		s_ota_status_message[0] = '\0';
+	}
+
+	// Schedule UI update in LVGL task context (thread-safe)
+	lv_async_call(ota_check_ui_update_async, NULL);
+}
+
+// Status callback for OTA update (called from OTA task on failure)
+static void ota_update_status_callback(ota_status_t status, const char *message)
+{
+	ESP_LOGI("OTA", "Update status: %d, message: %s", status, message ? message : "none");
+
+	// If we get here, update failed (success causes reboot)
+	s_ota_update_status = status;
+	if (message) {
+		strncpy(s_ota_status_message, message, sizeof(s_ota_status_message) - 1);
+	} else {
+		s_ota_status_message[0] = '\0';
+	}
+
+	ESP_LOGE("OTA", "Update failed: %s", message ? message : "unknown error");
+
+	// Schedule UI update in LVGL task context (thread-safe)
+	lv_async_call(ota_update_ui_update_async, NULL);
 }
 
 // Check for firmware updates from GitHub
