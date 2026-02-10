@@ -53,9 +53,18 @@ static bool s_ble_was_disabled = false;  // Track if we disabled BLE for OTA
 // Increased to 16KB to prevent Double Exception during esp_https_ota_finish()
 #define OTA_TASK_STACK_SIZE (16 * 1024)
 
+// Size of pre-allocated buffer to reserve contiguous memory for TLS
+// mbedTLS needs ~32KB contiguous internal RAM for SSL context
+// Note: 40KB caused WiFi init to fail due to insufficient memory
+#define OTA_TLS_RESERVE_SIZE (32 * 1024)
+
 // Static task resources (allocated from internal RAM for flash operation safety)
 static StaticTask_t s_ota_task_buffer;
 static StackType_t *s_ota_task_stack = NULL;
+
+// Pre-allocated buffer to reserve contiguous memory before BLE fragments heap
+// This is allocated at boot and freed just before TLS operations
+static void *s_tls_reserve_buffer = NULL;
 
 // Compare two version strings (e.g., "1.0.0" vs "1.1.0")
 // Returns: -1 if v1 < v2, 0 if equal, 1 if v1 > v2
@@ -169,8 +178,25 @@ esp_err_t ota_manager_init(void)
     // Mark current firmware as valid to prevent rollback
     ota_manager_confirm_update();
 
-    // Log initial memory state
-    log_memory_report("OTA Init");
+    // Log initial memory state (before any allocations)
+    log_memory_report("OTA Init - Before Pre-allocation");
+
+    // PRE-ALLOCATE OTA TASK STACK
+    // The task stack must be in internal RAM because during esp_https_ota_finish(),
+    // flash cache is disabled which makes PSRAM inaccessible.
+    //
+    // NOTE: TLS reserve buffer is NO LONGER needed because CONFIG_MBEDTLS_EXTERNAL_MEM_ALLOC
+    // is enabled in sdkconfig, so mbedTLS allocates from PSRAM instead of internal RAM.
+    if (s_ota_task_stack == NULL) {
+        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+        if (s_ota_task_stack != NULL) {
+            ESP_LOGI(TAG, "Pre-allocated OTA task stack: %d bytes from internal RAM", OTA_TASK_STACK_SIZE);
+        } else {
+            ESP_LOGW(TAG, "Failed to pre-allocate OTA task stack");
+        }
+    }
+
+    log_memory_report("OTA Init - After Pre-allocation");
 
     return ESP_OK;
 }
@@ -178,6 +204,17 @@ esp_err_t ota_manager_init(void)
 const char* ota_manager_get_version(void)
 {
     return SW_VER;
+}
+
+// Free TLS reserve buffer to make contiguous memory available for TLS
+static void free_tls_reserve(void)
+{
+    if (s_tls_reserve_buffer != NULL) {
+        ESP_LOGI(TAG, "Freeing TLS reserve buffer to make %d bytes available", OTA_TLS_RESERVE_SIZE);
+        heap_caps_free(s_tls_reserve_buffer);
+        s_tls_reserve_buffer = NULL;
+        log_memory_report("After TLS Reserve Free");
+    }
 }
 
 // Internal blocking check function
@@ -191,6 +228,10 @@ static esp_err_t ota_check_internal(void)
     s_ota_info.error_message[0] = '\0';
 
     ESP_LOGI(TAG, "Checking for updates from: %s", GITHUB_API_URL);
+
+    // Free the pre-allocated TLS reserve buffer to create contiguous space for TLS
+    // This must happen AFTER BLE is disabled but BEFORE HTTP client init
+    free_tls_reserve();
 
     // Allocate response buffer
     s_http_response_buffer = malloc(MAX_HTTP_RESPONSE_SIZE);
@@ -341,11 +382,12 @@ static void ota_check_task(void *pvParameters)
         }
     }
 
-    // Restore BLE if we disabled it and no update is available (or error occurred)
-    // Keep BLE disabled if update is available so user can proceed with install
-    if (s_ota_info.status != OTA_STATUS_AVAILABLE) {
-        ota_restore_ble();
-    }
+    // Always resume LVGL and restore BLE after check completes
+    // User needs to see the UI to decide whether to proceed with update
+    // LVGL and BLE will be disabled again when user starts the actual update
+    ESP_LOGI(TAG, "Resuming LVGL after OTA check");
+    bsp_lvgl_resume();
+    ota_restore_ble();
 
     s_ota_busy = false;
     s_ota_task_handle = NULL;
@@ -359,34 +401,31 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
         return ESP_ERR_INVALID_STATE;
     }
 
+    // Check that pre-allocated resources are available
+    // These should have been allocated at ota_manager_init() before BLE fragmented memory
+    if (s_ota_task_stack == NULL) {
+        ESP_LOGE(TAG, "OTA task stack not pre-allocated - OTA unavailable");
+        strncpy(s_ota_info.error_message, "OTA not initialized", sizeof(s_ota_info.error_message) - 1);
+        s_ota_info.status = OTA_STATUS_ERROR;
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    if (s_tls_reserve_buffer == NULL) {
+        ESP_LOGW(TAG, "TLS reserve buffer not available - may fail if memory fragmented");
+    }
+
     // Log detailed memory before OTA
     log_memory_report("Before OTA Check");
 
+    // Suspend LVGL to free internal RAM (8KB task stack + reduce fragmentation)
+    // LVGL uses PSRAM buffers but its task stack is in internal RAM
+    ESP_LOGI(TAG, "Suspending LVGL for OTA...");
+    bsp_lvgl_suspend();
+    vTaskDelay(pdMS_TO_TICKS(50));
+    log_memory_report("After LVGL Suspend");
+
     // Disable BLE to free internal RAM for HTTPS/TLS operations
     ota_disable_ble();
-
-    size_t internal_largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
-
-    // Need at least 20KB internal RAM: 12KB task stack + 8KB for LWIP/TLS/HTTP
-    if (internal_largest < 20480) {
-        ESP_LOGE(TAG, "Not enough internal RAM (need 20KB, have %u)", (unsigned)internal_largest);
-        strncpy(s_ota_info.error_message, "Low memory", sizeof(s_ota_info.error_message) - 1);
-        s_ota_info.status = OTA_STATUS_ERROR;
-        ota_restore_ble();  // Restore BLE since we're not proceeding
-        return ESP_ERR_NO_MEM;
-    }
-
-    // Allocate stack from internal RAM (not PSRAM) - required for flash operations
-    // During esp_https_ota_finish(), flash cache may be disabled, making PSRAM inaccessible
-    if (s_ota_task_stack == NULL) {
-        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
-        if (s_ota_task_stack == NULL) {
-            ESP_LOGE(TAG, "Failed to allocate task stack from internal RAM");
-            ota_restore_ble();  // Restore BLE since we're not proceeding
-            return ESP_ERR_NO_MEM;
-        }
-        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from internal RAM", OTA_TASK_STACK_SIZE);
-    }
 
     s_status_callback = status_cb;
     s_ota_busy = true;
@@ -405,6 +444,7 @@ esp_err_t ota_manager_check_for_update_async(ota_status_callback_t status_cb)
     if (s_ota_task_handle == NULL) {
         ESP_LOGE(TAG, "Failed to create OTA check task");
         s_ota_busy = false;
+        bsp_lvgl_resume();  // Resume LVGL since we're not proceeding
         ota_restore_ble();  // Restore BLE since we're not proceeding
         return ESP_FAIL;
     }
@@ -448,6 +488,10 @@ static esp_err_t ota_perform_internal(void)
     s_ota_info.error_message[0] = '\0';
 
     ESP_LOGI(TAG, "Starting OTA update from: %s", s_ota_info.download_url);
+
+    // Free the pre-allocated TLS reserve buffer if still allocated
+    // (should already be freed from check, but just in case)
+    free_tls_reserve();
 
     esp_http_client_config_t http_config = {
         .url = s_ota_info.download_url,
@@ -609,22 +653,20 @@ esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, 
         return ESP_FAIL;
     }
 
-    // Ensure BLE is disabled (should already be disabled from check, but just in case)
-    if (!s_ble_was_disabled) {
-        ota_disable_ble();
+    // Check that pre-allocated task stack is available
+    if (s_ota_task_stack == NULL) {
+        ESP_LOGE(TAG, "OTA task stack not pre-allocated - OTA unavailable");
+        return ESP_ERR_INVALID_STATE;
     }
 
-    // Allocate stack from internal RAM (not PSRAM) - required for flash operations
-    // During esp_https_ota_finish(), flash cache may be disabled, making PSRAM inaccessible
-    if (s_ota_task_stack == NULL) {
-        s_ota_task_stack = heap_caps_malloc(OTA_TASK_STACK_SIZE, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
-        if (s_ota_task_stack == NULL) {
-            ESP_LOGE(TAG, "Failed to allocate task stack from internal RAM");
-            ota_restore_ble();
-            return ESP_ERR_NO_MEM;
-        }
-        ESP_LOGI(TAG, "Allocated %d bytes for OTA task stack from internal RAM", OTA_TASK_STACK_SIZE);
-    }
+    // Suspend LVGL for the download/install operation
+    // LVGL uses PSRAM buffers which become inaccessible during esp_https_ota_finish()
+    ESP_LOGI(TAG, "Suspending LVGL for OTA update...");
+    bsp_lvgl_suspend();
+    vTaskDelay(pdMS_TO_TICKS(50));
+
+    // Disable BLE to free memory for TLS operations
+    ota_disable_ble();
 
     s_progress_callback = progress_cb;
     s_status_callback = status_cb;
