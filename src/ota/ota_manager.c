@@ -267,9 +267,45 @@ static esp_err_t ota_check_internal(void)
     esp_http_client_set_header(client, "User-Agent", "HD2-Macropad-OTA/1.0");
     esp_http_client_set_header(client, "Accept", "application/vnd.github.v3+json");
 
-    ret = esp_http_client_perform(client);
+    // Retry logic for transient TLS/network failures
+    #define OTA_CHECK_MAX_RETRIES 3
+    #define OTA_CHECK_RETRY_DELAY_MS 2000
+
+    for (int attempt = 1; attempt <= OTA_CHECK_MAX_RETRIES; attempt++) {
+        ret = esp_http_client_perform(client);
+        if (ret == ESP_OK) {
+            break;  // Success
+        }
+
+        ESP_LOGW(TAG, "HTTP request failed (attempt %d/%d): %s",
+                 attempt, OTA_CHECK_MAX_RETRIES, esp_err_to_name(ret));
+
+        if (attempt < OTA_CHECK_MAX_RETRIES) {
+            ESP_LOGI(TAG, "Retrying in %d ms...", OTA_CHECK_RETRY_DELAY_MS);
+            vTaskDelay(pdMS_TO_TICKS(OTA_CHECK_RETRY_DELAY_MS));
+
+            // Reinitialize client for retry (some TLS errors require this)
+            esp_http_client_cleanup(client);
+            client = esp_http_client_init(&config);
+            if (!client) {
+                ESP_LOGE(TAG, "Failed to reinitialize HTTP client for retry");
+                strncpy(s_ota_info.error_message, "HTTP client init failed", sizeof(s_ota_info.error_message) - 1);
+                s_ota_info.status = OTA_STATUS_ERROR;
+                free(s_http_response_buffer);
+                s_http_response_buffer = NULL;
+                return ESP_FAIL;
+            }
+            esp_http_client_set_header(client, "User-Agent", "HD2-Macropad-OTA/1.0");
+            esp_http_client_set_header(client, "Accept", "application/vnd.github.v3+json");
+
+            // Reset response buffer for retry
+            s_http_response_len = 0;
+            s_http_response_buffer[0] = '\0';
+        }
+    }
+
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "HTTP request failed: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "HTTP request failed after %d attempts: %s", OTA_CHECK_MAX_RETRIES, esp_err_to_name(ret));
         strncpy(s_ota_info.error_message, "Network error", sizeof(s_ota_info.error_message) - 1);
         s_ota_info.status = OTA_STATUS_ERROR;
         goto cleanup;
@@ -372,7 +408,16 @@ static void ota_check_task(void *pvParameters)
 
     esp_err_t ret = ota_check_internal();
 
-    // Notify via callback
+    // IMPORTANT: Resume LVGL and restore BLE BEFORE calling callback
+    // The callback may try to update UI, which requires LVGL to be running
+    ESP_LOGI(TAG, "Resuming LVGL after OTA check");
+    bsp_lvgl_resume();
+    ota_restore_ble();
+
+    // Small delay to let LVGL task resume before callback updates UI
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    // Notify via callback (UI updates now safe since LVGL is resumed)
     if (s_status_callback) {
         if (ret == ESP_OK) {
             s_status_callback(s_ota_info.status,
@@ -381,13 +426,6 @@ static void ota_check_task(void *pvParameters)
             s_status_callback(OTA_STATUS_ERROR, s_ota_info.error_message);
         }
     }
-
-    // Always resume LVGL and restore BLE after check completes
-    // User needs to see the UI to decide whether to proceed with update
-    // LVGL and BLE will be disabled again when user starts the actual update
-    ESP_LOGI(TAG, "Resuming LVGL after OTA check");
-    bsp_lvgl_resume();
-    ota_restore_ble();
 
     s_ota_busy = false;
     s_ota_task_handle = NULL;
