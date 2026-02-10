@@ -5,6 +5,8 @@ This ensures the ESP-IDF app version matches version.h
 """
 
 import re
+from SCons.Script import Import
+
 Import("env")
 
 def get_version_from_header():
