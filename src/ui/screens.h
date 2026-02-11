@@ -207,6 +207,7 @@ typedef struct _objects_t {
     lv_obj_t *obj47;
     lv_obj_t *btn_check_update;
     lv_obj_t *btn_install_update;
+    lv_obj_t *btn_rollback;
     lv_obj_t *obj48;
     lv_obj_t *obj49;
     lv_obj_t *obj50;
@@ -224,6 +225,7 @@ typedef struct _objects_t {
     lv_obj_t *label_amount;
     lv_obj_t *msg_box;
     lv_obj_t *msg_label;
+    lv_obj_t *lbl_current_version_setup;
     lv_obj_t *label_cooldown1;
     lv_obj_t *label_cooldown2;
     lv_obj_t *label_cooldown3;
@@ -248,6 +250,7 @@ typedef struct _objects_t {
     lv_obj_t *lbl_available_version;
     lv_obj_t *bar_ota_progress;
     lv_obj_t *lbl_ota_status;
+    lv_obj_t *lbl_previous_version;
     lv_obj_t *obj58;
     lv_obj_t *lbl_version;
     lv_obj_t *manual_preview_item;

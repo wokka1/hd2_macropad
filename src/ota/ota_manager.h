@@ -103,6 +103,28 @@ esp_err_t ota_manager_confirm_update(void);
  */
 const char* ota_manager_status_str(ota_status_t status);
 
+/**
+ * @brief Check if a previous firmware version is available for rollback
+ * @return true if previous version exists in inactive partition
+ */
+bool ota_manager_has_previous_version(void);
+
+/**
+ * @brief Get the version of the previous firmware (from inactive partition)
+ * @return Version string, or NULL if no previous version available
+ */
+const char* ota_manager_get_previous_version(void);
+
+/**
+ * @brief Rollback to the previous firmware version
+ *
+ * Sets the inactive partition as the boot partition and reboots.
+ * This function does not return on success (device reboots).
+ *
+ * @return ESP_FAIL if rollback failed, does not return on success
+ */
+esp_err_t ota_manager_rollback(void);
+
 #ifdef __cplusplus
 }
 #endif

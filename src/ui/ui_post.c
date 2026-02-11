@@ -4,6 +4,7 @@
 #include "ui_events.h"
 #include "../ota/ota_manager.h"
 #include <stdio.h>
+#include <esp_log.h>
 
 
 extern lv_obj_t *cooldownLabels[MAX_USER_STRATAGEMS];
@@ -89,6 +90,13 @@ void ui_post()
     lv_label_set_text(objects.lbl_version, version_text);
   }
 
+  // Set version label on Setup page
+  if (objects.lbl_current_version_setup) {
+    char version_text[16];
+    snprintf(version_text, sizeof(version_text), "v%s", ota_manager_get_version());
+    lv_label_set_text(objects.lbl_current_version_setup, version_text);
+  }
+
   // Initialize OTA UI state - hide elements that should only show after check
   if (objects.lbl_available_version) {
     lv_obj_add_flag(objects.lbl_available_version, LV_OBJ_FLAG_HIDDEN);
@@ -107,4 +115,31 @@ void ui_post()
 
   // Initialize OTA manager (marks current firmware as valid)
   ota_manager_init();
+
+  // Initialize rollback UI - check if previous version exists
+  if (ota_manager_has_previous_version()) {
+    const char* prev_ver = ota_manager_get_previous_version();
+
+    // Show previous version label
+    if (objects.lbl_previous_version) {
+      char prev_text[32];
+      snprintf(prev_text, sizeof(prev_text), "Previous: v%s", prev_ver ? prev_ver : "?");
+      lv_label_set_text(objects.lbl_previous_version, prev_text);
+      lv_obj_clear_flag(objects.lbl_previous_version, LV_OBJ_FLAG_HIDDEN);
+    }
+
+    // Show rollback button
+    if (objects.btn_rollback) {
+      lv_obj_clear_flag(objects.btn_rollback, LV_OBJ_FLAG_HIDDEN);
+    }
+  } else {
+    // No previous version - hide rollback UI
+    if (objects.lbl_previous_version) {
+      lv_label_set_text(objects.lbl_previous_version, "No previous version");
+    }
+
+    if (objects.btn_rollback) {
+      lv_obj_add_flag(objects.btn_rollback, LV_OBJ_FLAG_HIDDEN);
+    }
+  }
 }

@@ -760,3 +760,87 @@ const char* ota_manager_status_str(ota_status_t status)
         default:                     return "Unknown";
     }
 }
+
+// Static buffer to hold previous version string
+static char s_previous_version[32] = {0};
+
+bool ota_manager_has_previous_version(void)
+{
+    // Get the partition that would be used for the next OTA update
+    // This is the "other" partition - the inactive one
+    const esp_partition_t *inactive = esp_ota_get_next_update_partition(NULL);
+    if (inactive == NULL) {
+        return false;
+    }
+
+    // Try to read the app description from the inactive partition
+    esp_app_desc_t app_desc;
+    esp_err_t ret = esp_ota_get_partition_description(inactive, &app_desc);
+    if (ret != ESP_OK) {
+        ESP_LOGD(TAG, "No valid app in inactive partition: %s", esp_err_to_name(ret));
+        return false;
+    }
+
+    // Check if it looks like a valid version (not empty or all 0xFF)
+    if (app_desc.version[0] == '\0' || app_desc.version[0] == 0xFF) {
+        return false;
+    }
+
+    // Cache the version string
+    strncpy(s_previous_version, app_desc.version, sizeof(s_previous_version) - 1);
+    s_previous_version[sizeof(s_previous_version) - 1] = '\0';
+
+    ESP_LOGI(TAG, "Previous version available: %s (partition: %s at 0x%lx)",
+             s_previous_version, inactive->label, inactive->address);
+    return true;
+}
+
+const char* ota_manager_get_previous_version(void)
+{
+    // Check if we already have the version cached
+    if (s_previous_version[0] != '\0') {
+        return s_previous_version;
+    }
+
+    // Try to get it
+    if (ota_manager_has_previous_version()) {
+        return s_previous_version;
+    }
+
+    return NULL;
+}
+
+esp_err_t ota_manager_rollback(void)
+{
+    // Get the inactive partition
+    const esp_partition_t *inactive = esp_ota_get_next_update_partition(NULL);
+    if (inactive == NULL) {
+        ESP_LOGE(TAG, "No inactive partition found for rollback");
+        return ESP_FAIL;
+    }
+
+    // Verify there's a valid app in the inactive partition
+    esp_app_desc_t app_desc;
+    esp_err_t ret = esp_ota_get_partition_description(inactive, &app_desc);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "No valid app in inactive partition: %s", esp_err_to_name(ret));
+        return ESP_FAIL;
+    }
+
+    ESP_LOGI(TAG, "Rolling back to version %s (partition: %s at 0x%lx)",
+             app_desc.version, inactive->label, inactive->address);
+
+    // Set the inactive partition as the boot partition
+    ret = esp_ota_set_boot_partition(inactive);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to set boot partition: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ESP_LOGI(TAG, "Boot partition set, rebooting in 2 seconds...");
+    vTaskDelay(pdMS_TO_TICKS(2000));
+    esp_restart();
+
+    // Should not reach here
+    return ESP_OK;
+}

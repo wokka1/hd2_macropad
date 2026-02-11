@@ -631,3 +631,45 @@ const char* action_get_current_version(void)
 {
 	return ota_manager_get_version();
 }
+
+// Rollback to previous firmware version
+void action_action_btn_rollback(lv_event_t *e)
+{
+	(void)e;  // Unused parameter
+
+	// Verify there's a previous version to rollback to
+	if (!ota_manager_has_previous_version()) {
+		ESP_LOGW("OTA", "No previous version available for rollback");
+		if (objects.lbl_ota_status) {
+			lv_label_set_text(objects.lbl_ota_status, "No previous version");
+		}
+		return;
+	}
+
+	const char* prev_ver = ota_manager_get_previous_version();
+	ESP_LOGI("OTA", "Rolling back to version: %s", prev_ver ? prev_ver : "unknown");
+
+	// Update status label
+	if (objects.lbl_ota_status) {
+		char status_text[64];
+		snprintf(status_text, sizeof(status_text), "Rolling back to v%s...", prev_ver ? prev_ver : "?");
+		lv_label_set_text(objects.lbl_ota_status, status_text);
+	}
+
+	// Disable rollback button to prevent double-click
+	if (objects.btn_rollback) {
+		lv_obj_add_state(objects.btn_rollback, LV_STATE_DISABLED);
+	}
+
+	// Perform rollback (this will reboot, so it won't return on success)
+	esp_err_t ret = ota_manager_rollback();
+
+	// If we get here, rollback failed
+	ESP_LOGE("OTA", "Rollback failed: %s", esp_err_to_name(ret));
+	if (objects.lbl_ota_status) {
+		lv_label_set_text(objects.lbl_ota_status, "Rollback failed!");
+	}
+	if (objects.btn_rollback) {
+		lv_obj_clear_state(objects.btn_rollback, LV_STATE_DISABLED);
+	}
+}
