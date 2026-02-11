@@ -1,7 +1,10 @@
 # HD2 Macropad Installation Guide
-## CrowPanel 7" Advance (ESP32-S3)
-
+### CrowPanel Advance 7" HMI ESP32 AI Display
 This guide explains how to flash pre-built firmware to your CrowPanel 7" Advance board without compiling from source.
+
+
+- **Product Page:** https://www.elecrow.com/crowpanel-advance-7-hmi-esp32-ai-display-800x480-ai-ips-touch-screen.html
+- **Wiki:** https://www.elecrow.com/pub/wiki/ESP32_Display-7.0_inch%28Advance_Series%29wiki.html
 
 ---
 
@@ -39,10 +42,10 @@ macOS and Linux typically don't need additional drivers.
 
 Go to the [Releases page](https://github.com/wokka1/hd2_macropad/releases) and download:
 
-| File | Use Case |
-|------|----------|
-| `hd2_macropad_install_vX.X.X.zip` | **New boards** - contains everything needed |
-| `firmware.bin` | **Updates only** - if you already have HD2 Macropad installed |
+`hd2_macropad_install_vX.X.X.zip` | **New boards** - contains everything needed
+
+> [!NOTE]
+> Only the zip file is needed for first time install, the firmware.bin file is there for OTA (Over The Air) updates
 
 ---
 
@@ -54,10 +57,11 @@ Connect your CrowPanel 7" Advance board via USB, then find the port:
 Open Device Manager and look under "Ports (COM & LPT)" for something like `COM3` or `COM4`
 
 ### macOS
+Look for something like `/dev/cu.usbserial-0001` or `/dev/cu.wchusb*`
+
 ```bash
 ls /dev/cu.usb*
 ```
-Look for something like `/dev/cu.usbserial-0001` or `/dev/cu.SLAB_USBtoUART`
 
 ### Linux
 ```bash
