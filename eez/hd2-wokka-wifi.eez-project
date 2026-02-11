@@ -17515,7 +17515,14 @@
                           "states": "",
                           "useStyle": "ButtonStd",
                           "localStyles": {
-                            "objID": "20799685-e254-4dfd-8492-cd9fcb609805"
+                            "objID": "20799685-e254-4dfd-8492-cd9fcb609805",
+                            "definition": {
+                              "MAIN": {
+                                "DEFAULT": {
+                                  "translate_x": 18
+                                }
+                              }
+                            }
                           },
                           "group": "",
                           "groupIndex": 0

@@ -6307,6 +6307,7 @@ void create_screen_config() {
                                     lv_obj_set_size(obj, LV_SIZE_CONTENT, 38);
                                     lv_obj_add_event_cb(obj, event_handler_cb_config_btn_rollback, LV_EVENT_ALL, flowState);
                                     add_style_button_std(obj);
+                                    lv_obj_set_style_translate_x(obj, 18, LV_PART_MAIN | LV_STATE_DEFAULT);
                                     {
                                         lv_obj_t *parent_obj = obj;
                                         {
