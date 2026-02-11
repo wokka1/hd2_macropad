@@ -241,9 +241,9 @@ typedef struct _objects_t {
     lv_obj_t *wifi_network_dropdown;
     lv_obj_t *keyboard;
     lv_obj_t *manual_ssid;
-    lv_obj_t *wifi_status_label;
+    lv_obj_t *manual_status_label;
     lv_obj_t *wifi_status;
-    lv_obj_t *wifi_status_label2;
+    lv_obj_t *wifi_status_label;
     lv_obj_t *lbl_current_version;
     lv_obj_t *lbl_available_version;
     lv_obj_t *bar_ota_progress;
