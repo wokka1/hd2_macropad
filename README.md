@@ -4,7 +4,9 @@ This code is forked from https://github.com/unic8s/hd2_macropad and modified to 
 
 ## No need to compile code if you don't want to, upload the binary
 
-# [Install Guide](INSTALL_7IN_ADV.md)  
+| [Install Guide](INSTALL_7IN_ADV.md)              | [Upgrade Guide](UPGRADE_OTA.md)                 |
+| ------------------------------------------------ | ----------------------------------------------- |
+| Fresh Install only                               | used once you have v1.7.3 or higher installed |
 
 <br/>
 
