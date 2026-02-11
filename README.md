@@ -2,6 +2,9 @@
 
 This code is forked from https://github.com/unic8s/hd2_macropad and modified to run on this specific board: [Elecrow 7" Advance](https://www.elecrow.com/crowpanel-advance-7-hmi-esp32-ai-display-800x480-ai-ips-touch-screen.html)
 
+No need to compile code if you don't want to, upload the binary
+[Install Guide](INSTALL_7IN_ADV.md)
+
 > [!NOTE]
 > I didn't realize when I started this, the Elecrow board doesn't seem to follow all of the ESP32 specs, it has no usb_hid capabilities, and I was trying to use that first, but once BT was enabled, things started falling into place.  I've moved to the advanced board from the basic, giving more capabilities, mainly more flash storage, but still no usb_hid support on the 7" panel and  I'd like to enable the sound in the future.
 >
@@ -9,16 +12,19 @@ This code is forked from https://github.com/unic8s/hd2_macropad and modified to 
 
 Technical details of this build can be found at [README_Crowpanel_Advance](https://github.com/wokka1/hd2_macropad/blob/main/README_CROWPANEL_ADVANCE.md)
 
-### Merging Upstream Updates
-
-A Python script is provided to transform the upstream EEZ project (480x320) to the Elecrow 7" resolution (800x480). This allows merging new features from upstream without manually re-applying all layout changes. See [scripts/README.md](scripts/README.md) for details.  There are so many changes in the EEZ configuration between the two builds, it was easier to script changes.  If new icons are added, those will have to be manually updated more than likely.
+> [!TIP]
+> **Merging Upstream Updates**
+> 
+> A Python script is provided to transform the upstream EEZ project (480x320) to the Elecrow 7" resolution (800x480). This allows merging new features from upstream without manually re-applying all layout changes. See [scripts/README.md](scripts/README.md) for > details.  There are so many changes in the EEZ configuration between the two builds, it was easier to script changes.  If new icons are added, those will have to be manually updated more than likely.
 
 ```bash
 python3 scripts/transform_eez_elecrow7.py
 ```
 
-### Removing animations
-The 7" screen doesn't animate well for transitions and seemed jerky and laggy.  Instead of trying to resolve that, I chose to remove them.  The issue is that when you update any changes in EEZ and compile there, it removes the animation changes, so there is a script to run to remove animations, if you choose.  So build in EEZ, then run the following script, and then build in platformIO and upload.
+> [!Note]
+> **Animations**
+> 
+> The 7" screen doesn't animate well for transitions and seemed jerky and laggy.  Instead of trying to resolve that, I chose to remove them.  The issue is that when you update any changes in EEZ and compile there, it removes the animation changes, so there is > a script to run to remove animations, if you choose.  So build in EEZ, then run the following script, and then build in platformIO and upload.
 
 ```bash
 python3 scripts/patch_eez_animations.py
