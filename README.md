@@ -2,10 +2,14 @@
 
 This code is forked from https://github.com/unic8s/hd2_macropad and modified to run on this specific board: [Elecrow 7" Advance](https://www.elecrow.com/crowpanel-advance-7-hmi-esp32-ai-display-800x480-ai-ips-touch-screen.html)
 
-No need to compile code if you don't want to, upload the binary
-[Install Guide](INSTALL_7IN_ADV.md)
+## No need to compile code if you don't want to, upload the binary
+
+# [Install Guide](INSTALL_7IN_ADV.md)  
+
+<br/>
 
 > [!NOTE]
+> 
 > I didn't realize when I started this, the Elecrow board doesn't seem to follow all of the ESP32 specs, it has no usb_hid capabilities, and I was trying to use that first, but once BT was enabled, things started falling into place.  I've moved to the advanced board from the basic, giving more capabilities, mainly more flash storage, but still no usb_hid support on the 7" panel and  I'd like to enable the sound in the future.
 >
 > Flashing this code will be the same process as the original, so follow the instructions down below.  I've tried to keep all of the original functionality.
