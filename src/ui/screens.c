@@ -2520,7 +2520,7 @@ static void event_handler_cb_config_obj44(lv_event_t *e) {
     }
 }
 
-static void event_handler_cb_config_wifi_password_input_1(lv_event_t *e) {
+static void event_handler_cb_config_wifi_password_input(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -2535,7 +2535,7 @@ static void event_handler_cb_config_wifi_password_input_1(lv_event_t *e) {
     }
 }
 
-static void event_handler_cb_config_connect_1(lv_event_t *e) {
+static void event_handler_cb_config_connect(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -2557,7 +2557,7 @@ static void event_handler_cb_config_obj45(lv_event_t *e) {
     }
 }
 
-static void event_handler_cb_config_wifi_ssid_manual_input_1(lv_event_t *e) {
+static void event_handler_cb_config_wifi_ssid_manual_input(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -2572,7 +2572,7 @@ static void event_handler_cb_config_wifi_ssid_manual_input_1(lv_event_t *e) {
     }
 }
 
-static void event_handler_cb_config_wifi_password_manual_input_1(lv_event_t *e) {
+static void event_handler_cb_config_wifi_password_manual_input(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -2587,7 +2587,7 @@ static void event_handler_cb_config_wifi_password_manual_input_1(lv_event_t *e) 
     }
 }
 
-static void event_handler_cb_config_connect__manual__1(lv_event_t *e) {
+static void event_handler_cb_config_connect__manual_(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -2609,7 +2609,7 @@ static void event_handler_cb_config_obj46(lv_event_t *e) {
     }
 }
 
-static void event_handler_cb_config_wifi_switch_1(lv_event_t *e) {
+static void event_handler_cb_config_wifi_switch(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -2631,7 +2631,7 @@ static void event_handler_cb_config_obj47(lv_event_t *e) {
     }
 }
 
-static void event_handler_cb_config_btn_check_update_1(lv_event_t *e) {
+static void event_handler_cb_config_btn_check_update(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -2642,7 +2642,7 @@ static void event_handler_cb_config_btn_check_update_1(lv_event_t *e) {
     }
 }
 
-static void event_handler_cb_config_btn_install_update_1(lv_event_t *e) {
+static void event_handler_cb_config_btn_install_update(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     (void)flowState;
@@ -5915,9 +5915,9 @@ void create_screen_config() {
                     {
                         lv_obj_t *parent_obj = obj;
                         {
-                            // Auto SSID_1
+                            // Auto SSID
                             lv_obj_t *obj = lv_obj_create(parent_obj);
-                            objects.auto_ssid_1 = obj;
+                            objects.auto_ssid = obj;
                             lv_obj_set_pos(obj, 60, 44);
                             lv_obj_set_size(obj, LV_PCT(49), LV_SIZE_CONTENT);
                             lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -5961,42 +5961,42 @@ void create_screen_config() {
                                     }
                                 }
                                 {
-                                    // wifi_network_dropdown_1
+                                    // wifi_network_dropdown
                                     lv_obj_t *obj = lv_dropdown_create(parent_obj);
-                                    objects.wifi_network_dropdown_1 = obj;
+                                    objects.wifi_network_dropdown = obj;
                                     lv_obj_set_pos(obj, 20, 94);
                                     lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT);
                                     lv_dropdown_set_options(obj, "Press Scan SSID to start\n");
                                     lv_dropdown_set_selected(obj, 0);
                                 }
                                 {
-                                    // wifi_password_input_1
+                                    // wifi_password_input
                                     lv_obj_t *obj = lv_textarea_create(parent_obj);
-                                    objects.wifi_password_input_1 = obj;
+                                    objects.wifi_password_input = obj;
                                     lv_obj_set_pos(obj, 21, 416);
                                     lv_obj_set_size(obj, LV_PCT(100), 70);
                                     lv_textarea_set_max_length(obj, 64);
                                     lv_textarea_set_placeholder_text(obj, "Password");
                                     lv_textarea_set_one_line(obj, true);
                                     lv_textarea_set_password_mode(obj, true);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_password_input_1, LV_EVENT_ALL, flowState);
+                                    lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_password_input, LV_EVENT_ALL, flowState);
                                 }
                                 {
-                                    // Keyboard_1
+                                    // Keyboard
                                     lv_obj_t *obj = lv_keyboard_create(parent_obj);
-                                    objects.keyboard_1 = obj;
+                                    objects.keyboard = obj;
                                     lv_obj_set_pos(obj, -20, 228);
                                     lv_obj_set_size(obj, 800, 160);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
                                     lv_obj_set_style_align(obj, LV_ALIGN_DEFAULT, LV_PART_MAIN | LV_STATE_DEFAULT);
                                 }
                                 {
-                                    // Connect_1
+                                    // Connect
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
-                                    objects.connect_1 = obj;
+                                    objects.connect = obj;
                                     lv_obj_set_pos(obj, 290, 196);
                                     lv_obj_set_size(obj, 82, 32);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_connect_1, LV_EVENT_ALL, flowState);
+                                    lv_obj_add_event_cb(obj, event_handler_cb_config_connect, LV_EVENT_ALL, flowState);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_FLOATING);
                                     {
                                         lv_obj_t *parent_obj = obj;
@@ -6014,9 +6014,9 @@ void create_screen_config() {
                             }
                         }
                         {
-                            // Manual_SSID_1
+                            // Manual_SSID
                             lv_obj_t *obj = lv_obj_create(parent_obj);
-                            objects.manual_ssid_1 = obj;
+                            objects.manual_ssid = obj;
                             lv_obj_set_pos(obj, 1972, -669);
                             lv_obj_set_size(obj, LV_PCT(49), LV_SIZE_CONTENT);
                             lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -6033,43 +6033,43 @@ void create_screen_config() {
                             {
                                 lv_obj_t *parent_obj = obj;
                                 {
-                                    // wifi_status_label_2
+                                    // wifi_status_label
                                     lv_obj_t *obj = lv_label_create(parent_obj);
-                                    objects.wifi_status_label_2 = obj;
+                                    objects.wifi_status_label = obj;
                                     lv_obj_set_pos(obj, 411, -8);
                                     lv_obj_set_size(obj, 91, 16);
                                     lv_label_set_text(obj, "Manual SSID");
                                 }
                                 {
-                                    // wifi_ssid_manual_input_1
+                                    // wifi_ssid_manual_input
                                     lv_obj_t *obj = lv_textarea_create(parent_obj);
-                                    objects.wifi_ssid_manual_input_1 = obj;
+                                    objects.wifi_ssid_manual_input = obj;
                                     lv_obj_set_pos(obj, 0, 0);
                                     lv_obj_set_size(obj, LV_PCT(100), 70);
                                     lv_textarea_set_max_length(obj, 128);
                                     lv_textarea_set_one_line(obj, true);
                                     lv_textarea_set_password_mode(obj, false);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_ssid_manual_input_1, LV_EVENT_ALL, flowState);
+                                    lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_ssid_manual_input, LV_EVENT_ALL, flowState);
                                 }
                                 {
-                                    // wifi_password_manual_input_1
+                                    // wifi_password_manual_input
                                     lv_obj_t *obj = lv_textarea_create(parent_obj);
-                                    objects.wifi_password_manual_input_1 = obj;
+                                    objects.wifi_password_manual_input = obj;
                                     lv_obj_set_pos(obj, 21, 416);
                                     lv_obj_set_size(obj, LV_PCT(100), 70);
                                     lv_textarea_set_max_length(obj, 64);
                                     lv_textarea_set_placeholder_text(obj, "Password");
                                     lv_textarea_set_one_line(obj, true);
                                     lv_textarea_set_password_mode(obj, true);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_password_manual_input_1, LV_EVENT_ALL, flowState);
+                                    lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_password_manual_input, LV_EVENT_ALL, flowState);
                                 }
                                 {
-                                    // Connect (Manual)_1
+                                    // Connect (Manual)
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
-                                    objects.connect__manual__1 = obj;
+                                    objects.connect__manual_ = obj;
                                     lv_obj_set_pos(obj, 231, 0);
                                     lv_obj_set_size(obj, 138, 32);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_connect__manual__1, LV_EVENT_ALL, flowState);
+                                    lv_obj_add_event_cb(obj, event_handler_cb_config_connect__manual_, LV_EVENT_ALL, flowState);
                                     {
                                         lv_obj_t *parent_obj = obj;
                                         {
@@ -6086,9 +6086,9 @@ void create_screen_config() {
                             }
                         }
                         {
-                            // Wifi Status_1
+                            // Wifi Status
                             lv_obj_t *obj = lv_obj_create(parent_obj);
-                            objects.wifi_status_1 = obj;
+                            objects.wifi_status = obj;
                             lv_obj_set_pos(obj, 8, 156);
                             lv_obj_set_size(obj, LV_PCT(49), LV_SIZE_CONTENT);
                             lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -6106,9 +6106,9 @@ void create_screen_config() {
                             {
                                 lv_obj_t *parent_obj = obj;
                                 {
-                                    // wifi_status_label_3
+                                    // wifi_status_label2
                                     lv_obj_t *obj = lv_label_create(parent_obj);
-                                    objects.wifi_status_label_3 = obj;
+                                    objects.wifi_status_label2 = obj;
                                     lv_obj_set_pos(obj, 0, -53);
                                     lv_obj_set_size(obj, LV_PCT(49), LV_SIZE_CONTENT);
                                     lv_label_set_text(obj, "Wifi Status");
@@ -6116,12 +6116,12 @@ void create_screen_config() {
                             }
                         }
                         {
-                            // Wifi Switch_1
+                            // Wifi Switch
                             lv_obj_t *obj = lv_switch_create(parent_obj);
-                            objects.wifi_switch_1 = obj;
+                            objects.wifi_switch = obj;
                             lv_obj_set_pos(obj, 167, 5);
                             lv_obj_set_size(obj, 50, 25);
-                            lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_switch_1, LV_EVENT_ALL, flowState);
+                            lv_obj_add_event_cb(obj, event_handler_cb_config_wifi_switch, LV_EVENT_ALL, flowState);
                             lv_obj_add_flag(obj, LV_OBJ_FLAG_FLOATING);
                         }
                         {
@@ -6142,17 +6142,17 @@ void create_screen_config() {
                     {
                         lv_obj_t *parent_obj = obj;
                         {
-                            // lbl_current_version_1
+                            // lbl_current_version
                             lv_obj_t *obj = lv_label_create(parent_obj);
-                            objects.lbl_current_version_1 = obj;
+                            objects.lbl_current_version = obj;
                             lv_obj_set_pos(obj, 0, 0);
                             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                             lv_label_set_text(obj, "Current Version");
                         }
                         {
-                            // lbl_available_version_1
+                            // lbl_available_version
                             lv_obj_t *obj = lv_label_create(parent_obj);
-                            objects.lbl_available_version_1 = obj;
+                            objects.lbl_available_version = obj;
                             lv_obj_set_pos(obj, 0, 0);
                             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                             lv_obj_set_style_translate_x(obj, 300, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -6177,12 +6177,12 @@ void create_screen_config() {
                             {
                                 lv_obj_t *parent_obj = obj;
                                 {
-                                    // btn_check_update_1
+                                    // btn_check_update
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
-                                    objects.btn_check_update_1 = obj;
+                                    objects.btn_check_update = obj;
                                     lv_obj_set_pos(obj, 0, 0);
                                     lv_obj_set_size(obj, LV_SIZE_CONTENT, 38);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_btn_check_update_1, LV_EVENT_ALL, flowState);
+                                    lv_obj_add_event_cb(obj, event_handler_cb_config_btn_check_update, LV_EVENT_ALL, flowState);
                                     add_style_button_std(obj);
                                     {
                                         lv_obj_t *parent_obj = obj;
@@ -6196,12 +6196,12 @@ void create_screen_config() {
                                     }
                                 }
                                 {
-                                    // btn_install_update_1
+                                    // btn_install_update
                                     lv_obj_t *obj = lv_btn_create(parent_obj);
-                                    objects.btn_install_update_1 = obj;
+                                    objects.btn_install_update = obj;
                                     lv_obj_set_pos(obj, 0, 0);
                                     lv_obj_set_size(obj, LV_SIZE_CONTENT, 38);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_btn_install_update_1, LV_EVENT_ALL, flowState);
+                                    lv_obj_add_event_cb(obj, event_handler_cb_config_btn_install_update, LV_EVENT_ALL, flowState);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
                                     add_style_button_std(obj);
                                     lv_obj_set_style_translate_x(obj, 225, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -6236,18 +6236,18 @@ void create_screen_config() {
                             {
                                 lv_obj_t *parent_obj = obj;
                                 {
-                                    // bar_ota_progress_1
+                                    // bar_ota_progress
                                     lv_obj_t *obj = lv_bar_create(parent_obj);
-                                    objects.bar_ota_progress_1 = obj;
+                                    objects.bar_ota_progress = obj;
                                     lv_obj_set_pos(obj, 0, 0);
                                     lv_obj_set_size(obj, 352, 10);
                                     lv_bar_set_value(obj, 25, LV_ANIM_OFF);
                                     lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
                                 }
                                 {
-                                    // lbl_ota_status_1
+                                    // lbl_ota_status
                                     lv_obj_t *obj = lv_label_create(parent_obj);
-                                    objects.lbl_ota_status_1 = obj;
+                                    objects.lbl_ota_status = obj;
                                     lv_obj_set_pos(obj, 0, 0);
                                     lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT);
                                     lv_label_set_text(obj, "Status Message");
@@ -7020,7 +7020,7 @@ extern void add_style(lv_obj_t *obj, int32_t styleIndex);
 extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
 
 static const char *screen_names[] = { "Intro", "Setup", "Preset", "ResetPreset", "Image", "Game", "Mission", "Config", "ResetConfig", "About", "Manual" };
-static const char *object_names[] = { "intro", "setup", "preset", "reset_preset", "image", "game", "mission", "config", "reset_config", "about", "manual", "tab_view_setup", "tab_rifle", "weapons_mg", "weapons_hmg", "weapons_sw", "weapons_ac", "weapons_amr", "weapons_rg", "weapons_lc", "weapons_qc", "weapons_at", "weapons_e", "weapons_sg", "weapons_mxg", "tab_special", "obj0", "weapons_arl", "weapons_c", "weapons_eat", "weapons_en", "weapons_rr", "obj1", "obj2", "weapons_eatl", "weapons_spr", "weapons_wsp", "weapons_gl", "weapons_bfgl", "weapons_de", "weapons_ste", "weapons_ft", "weapons_dt", "tab_backpack", "obj3", "backpack_bsb", "backpack_sgp", "backpack_ds", "backpack_gd", "backpack_gdb", "obj4", "obj5", "backpack_gdr", "backpack_gdk", "backpack_gdhd", "backpack_sup", "backpack_ph", "backpack_c4_p", "backpack_jp", "backpack_hp", "backpack_wp", "tab_supply", "obj6", "supply_frv", "supply_bmk", "supply_pe", "supply_ee", "obj7", "supply_otf", "supply_cqc", "supply_ss", "tab_sentry", "obj8", "sentry_mgs", "sentry_gs", "sentry_acs", "sentry_hmge", "sentry_ate", "sentry_fs", "sentry_ms", "sentry_rs", "sentry_ems", "sentry_ls", "tab_ground", "obj9", "ground_gm", "ground_tt", "ground_sgr", "ground_apm", "obj10", "ground_atm", "ground_im", "ground_gb", "tab_strike", "strike120", "strike380", "strike_ors", "strike_ogb", "strike_oas", "strike_ol", "strike_ops", "strike_owb", "strike_oes", "strike_onb", "strike_ogs", "strike_oss", "tab_eagle", "obj11", "eagle110", "eagle500", "eagle_a", "eagle_cb", "obj12", "eagle_sr", "eagle_na", "eagle_ss", "obj13", "obj14", "obj15", "obj16", "obj17", "btn_preset1", "btn_preset2", "btn_preset3", "btn_preset4", "btn_preset5", "btn_preset6", "obj18", "btn_preset_image", "obj19", "obj20", "obj21", "obj22", "obj23", "obj24", "obj25", "obj26", "obj27", "obj28", "obj29", "obj30", "obj31", "obj32", "obj33", "obj34", "obj35", "obj36", "obj37", "obj38", "btn_reinforce", "btn_resupply", "btn_rearm", "btn_hellbomb_1", "custom_stratagem1", "custom_stratagem2", "custom_stratagem3", "custom_stratagem4", "custom_stratagem5", "custom_stratagem6", "btn_seaf", "obj39", "obj40", "clear_cooldowns", "btn_sssd", "btn_ud", "btn_sef", "btn_hbd", "btn_td", "btn_pd", "btn_sp", "btn_oif", "btn_dfv", "btn_csd", "btn_cc", "empty", "obj41", "tab_view_config", "sld_brightness", "chb_flip", "chb_mute", "chb_cooldowns_1", "chb_debug_1", "sld_delay", "dd_connectivity", "obj42", "dd_keymap", "obj43", "obj44", "wifi_password_input_1", "connect_1", "obj45", "wifi_ssid_manual_input_1", "wifi_password_manual_input_1", "connect__manual__1", "obj46", "wifi_switch_1", "obj47", "btn_check_update_1", "btn_install_update_1", "obj48", "obj49", "obj50", "obj51", "obj52", "obj53", "obj54", "manual_arrow_left", "manual_arrow_up", "manual_arrow_down", "manual_arrow_right", "obj55", "img_splash", "bar_amount", "label_amount", "msg_box", "msg_label", "label_cooldown1", "label_cooldown2", "label_cooldown3", "label_cooldown4", "label_cooldown5", "label_cooldown6", "img_connection2", "label_supplies", "obj56", "lbl_brightness", "lbl_delay", "img_connection1", "obj57", "auto_ssid_1", "wifi_network_dropdown_1", "keyboard_1", "manual_ssid_1", "wifi_status_label_2", "wifi_status_1", "wifi_status_label_3", "lbl_current_version_1", "lbl_available_version_1", "bar_ota_progress_1", "lbl_ota_status_1", "obj58", "lbl_version", "manual_preview_item", "manual_cmd1", "manual_cmd2", "manual_cmd3", "manual_cmd4", "manual_cmd5", "manual_cmd6", "manual_cmd7", "manual_cmd8", "manual_cmd9" };
+static const char *object_names[] = { "intro", "setup", "preset", "reset_preset", "image", "game", "mission", "config", "reset_config", "about", "manual", "tab_view_setup", "tab_rifle", "weapons_mg", "weapons_hmg", "weapons_sw", "weapons_ac", "weapons_amr", "weapons_rg", "weapons_lc", "weapons_qc", "weapons_at", "weapons_e", "weapons_sg", "weapons_mxg", "tab_special", "obj0", "weapons_arl", "weapons_c", "weapons_eat", "weapons_en", "weapons_rr", "obj1", "obj2", "weapons_eatl", "weapons_spr", "weapons_wsp", "weapons_gl", "weapons_bfgl", "weapons_de", "weapons_ste", "weapons_ft", "weapons_dt", "tab_backpack", "obj3", "backpack_bsb", "backpack_sgp", "backpack_ds", "backpack_gd", "backpack_gdb", "obj4", "obj5", "backpack_gdr", "backpack_gdk", "backpack_gdhd", "backpack_sup", "backpack_ph", "backpack_c4_p", "backpack_jp", "backpack_hp", "backpack_wp", "tab_supply", "obj6", "supply_frv", "supply_bmk", "supply_pe", "supply_ee", "obj7", "supply_otf", "supply_cqc", "supply_ss", "tab_sentry", "obj8", "sentry_mgs", "sentry_gs", "sentry_acs", "sentry_hmge", "sentry_ate", "sentry_fs", "sentry_ms", "sentry_rs", "sentry_ems", "sentry_ls", "tab_ground", "obj9", "ground_gm", "ground_tt", "ground_sgr", "ground_apm", "obj10", "ground_atm", "ground_im", "ground_gb", "tab_strike", "strike120", "strike380", "strike_ors", "strike_ogb", "strike_oas", "strike_ol", "strike_ops", "strike_owb", "strike_oes", "strike_onb", "strike_ogs", "strike_oss", "tab_eagle", "obj11", "eagle110", "eagle500", "eagle_a", "eagle_cb", "obj12", "eagle_sr", "eagle_na", "eagle_ss", "obj13", "obj14", "obj15", "obj16", "obj17", "btn_preset1", "btn_preset2", "btn_preset3", "btn_preset4", "btn_preset5", "btn_preset6", "obj18", "btn_preset_image", "obj19", "obj20", "obj21", "obj22", "obj23", "obj24", "obj25", "obj26", "obj27", "obj28", "obj29", "obj30", "obj31", "obj32", "obj33", "obj34", "obj35", "obj36", "obj37", "obj38", "btn_reinforce", "btn_resupply", "btn_rearm", "btn_hellbomb_1", "custom_stratagem1", "custom_stratagem2", "custom_stratagem3", "custom_stratagem4", "custom_stratagem5", "custom_stratagem6", "btn_seaf", "obj39", "obj40", "clear_cooldowns", "btn_sssd", "btn_ud", "btn_sef", "btn_hbd", "btn_td", "btn_pd", "btn_sp", "btn_oif", "btn_dfv", "btn_csd", "btn_cc", "empty", "obj41", "tab_view_config", "sld_brightness", "chb_flip", "chb_mute", "chb_cooldowns_1", "chb_debug_1", "sld_delay", "dd_connectivity", "obj42", "dd_keymap", "obj43", "obj44", "wifi_password_input", "connect", "obj45", "wifi_ssid_manual_input", "wifi_password_manual_input", "connect__manual_", "obj46", "wifi_switch", "obj47", "btn_check_update", "btn_install_update", "obj48", "obj49", "obj50", "obj51", "obj52", "obj53", "obj54", "manual_arrow_left", "manual_arrow_up", "manual_arrow_down", "manual_arrow_right", "obj55", "img_splash", "bar_amount", "label_amount", "msg_box", "msg_label", "label_cooldown1", "label_cooldown2", "label_cooldown3", "label_cooldown4", "label_cooldown5", "label_cooldown6", "img_connection2", "label_supplies", "obj56", "lbl_brightness", "lbl_delay", "img_connection1", "obj57", "auto_ssid", "wifi_network_dropdown", "keyboard", "manual_ssid", "wifi_status_label", "wifi_status", "wifi_status_label2", "lbl_current_version", "lbl_available_version", "bar_ota_progress", "lbl_ota_status", "obj58", "lbl_version", "manual_preview_item", "manual_cmd1", "manual_cmd2", "manual_cmd3", "manual_cmd4", "manual_cmd5", "manual_cmd6", "manual_cmd7", "manual_cmd8", "manual_cmd9" };
 static const char *style_names[] = { "ButtonStd", "TabStratagem", "TabConfig", "SliderConfig", "CheckboxConfig", "LabelCooldown" };
 static const char *theme_names[] = { "Default" };
 
