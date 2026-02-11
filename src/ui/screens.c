@@ -6297,27 +6297,25 @@ void create_screen_config() {
                             lv_obj_set_size(obj, LV_PCT(99), LV_SIZE_CONTENT);
                             lv_obj_set_style_translate_y(obj, 75, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_label_set_text(obj, "Previous Version");
+                        }
+                        {
+                            // btn_rollback
+                            lv_obj_t *obj = lv_btn_create(parent_obj);
+                            objects.btn_rollback = obj;
+                            lv_obj_set_pos(obj, 6, 98);
+                            lv_obj_set_size(obj, LV_SIZE_CONTENT, 38);
+                            lv_obj_add_event_cb(obj, event_handler_cb_config_btn_rollback, LV_EVENT_ALL, flowState);
+                            add_style_button_std(obj);
+                            lv_obj_set_style_translate_x(obj, 18, LV_PART_MAIN | LV_STATE_DEFAULT);
+                            lv_obj_set_style_translate_y(obj, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
                             {
                                 lv_obj_t *parent_obj = obj;
                                 {
-                                    // btn_rollback
-                                    lv_obj_t *obj = lv_btn_create(parent_obj);
-                                    objects.btn_rollback = obj;
-                                    lv_obj_set_pos(obj, 4, 20);
-                                    lv_obj_set_size(obj, LV_SIZE_CONTENT, 38);
-                                    lv_obj_add_event_cb(obj, event_handler_cb_config_btn_rollback, LV_EVENT_ALL, flowState);
-                                    add_style_button_std(obj);
-                                    lv_obj_set_style_translate_x(obj, 18, LV_PART_MAIN | LV_STATE_DEFAULT);
-                                    {
-                                        lv_obj_t *parent_obj = obj;
-                                        {
-                                            lv_obj_t *obj = lv_label_create(parent_obj);
-                                            lv_obj_set_pos(obj, 0, 0);
-                                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-                                            lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-                                            lv_label_set_text(obj, "Rollback to Previous");
-                                        }
-                                    }
+                                    lv_obj_t *obj = lv_label_create(parent_obj);
+                                    lv_obj_set_pos(obj, 0, 0);
+                                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                                    lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                                    lv_label_set_text(obj, "Rollback to Previous");
                                 }
                             }
                         }
