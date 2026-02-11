@@ -697,11 +697,10 @@ esp_err_t ota_manager_perform_update_async(ota_progress_callback_t progress_cb, 
         return ESP_ERR_INVALID_STATE;
     }
 
-    // Suspend LVGL for the download/install operation
-    // LVGL uses PSRAM buffers which become inaccessible during esp_https_ota_finish()
-    ESP_LOGI(TAG, "Suspending LVGL for OTA update...");
-    bsp_lvgl_suspend();
-    vTaskDelay(pdMS_TO_TICKS(50));
+    // NOTE: We do NOT suspend LVGL here - keep it running during download
+    // so progress bar updates work. LVGL is only suspended right before
+    // esp_https_ota_finish() in ota_perform_internal() when flash cache
+    // is disabled and PSRAM becomes inaccessible.
 
     // Disable BLE to free memory for TLS operations
     ota_disable_ble();
