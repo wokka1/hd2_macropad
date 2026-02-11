@@ -1,5 +1,5 @@
-## HD2 Macropad Installation Guide
-# CrowPanel 7" Advance (ESP32-S3)
+# HD2 Macropad Installation Guide
+## CrowPanel 7" Advance (ESP32-S3)
 
 This guide explains how to flash pre-built firmware to your CrowPanel 7" Advance board without compiling from source.
 
