@@ -16,36 +16,44 @@ This guide explains how to update your HD2 Macropad firmware over-the-air (OTA) 
 
 If your device isn't already connected to WiFi:
 
-1. Go to **Setup** page
-2. Tap **WiFi** button
-3. Select your network and enter the password
-4. Wait for connection confirmation
+1. Go to **Config** page
+2. Tap **WiFi** Tab at the top
+3. Flip the slider to Enable Wifi (disabled on boot)
+4. Press Scan SSID button or Enter Manual SSID info
+5. Enter appropriate password if required
+6. Press Connect under Auto or Manual Connect if needed
+7. Wait for connection confirmation
+
+> [!NOTE]
+> Wifi credentials are stored on the NVS flash for storage, enabling Wifi will attempt to reconnect to the last saved SSID.
 
 <!-- Screenshot: WiFi connection screen -->
+<img width="804" height="481" alt="wifi_setup" src="https://github.com/user-attachments/assets/e779285a-72ed-48ff-a4c8-9c7f4c29b862" />
 
 ---
 
 ## Step 2: Navigate to Update Screen
 
-1. Go to **Config** page
-2. Tap the **Update** tab
+Tap the **Update** tab
 
 You'll see:
 - **Current version** - your installed firmware version
-- **Check for Updates** button
+- **Check for Update** button
 - **Previous version** (if available) with rollback option
 
 <!-- Screenshot: Update tab initial state -->
+<img width="805" height="482" alt="update_screen1" src="https://github.com/user-attachments/assets/d209a31c-6fba-47df-a583-cdd21f72d43b" />
 
 ---
 
 ## Step 3: Check for Updates
 
-1. Tap **Check for Updates**
+1. Tap **Check for Update**
 2. Wait while the device contacts GitHub for the latest release
 3. Status will show "Checking..."
 
 <!-- Screenshot: Checking for updates -->
+<img width="997" height="601" alt="update_install" src="https://github.com/user-attachments/assets/4ecd57f7-43ac-4662-9112-c84842c21cb1" />
 
 ---
 
@@ -96,7 +104,7 @@ If you experience issues with a new update, you can rollback to the previous fir
 
 1. Go to **Config** > **Update** tab
 2. Check the **Previous version** label
-3. Tap **Rollback** button
+3. Tap **Rollback to Previous** button
 4. Device reboots into the previous firmware
 
 **Note:** Rollback is only available if a previous firmware exists in the backup partition (after at least one OTA update).
