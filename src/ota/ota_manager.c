@@ -10,7 +10,6 @@
 #include <esp_https_ota.h>
 #include <esp_http_client.h>
 #include <esp_crt_bundle.h>
-#include <cJSON.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <esp_heap_caps.h>
@@ -26,6 +25,8 @@ static const char *TAG = "OTA";
 #define GITHUB_API_URL "https://api.github.com/repos/" GITHUB_REPO "/releases/latest"
 
 // Maximum size for GitHub API response
+// We use string searching instead of full JSON parsing, so truncation is OK
+// as long as tag_name and firmware.bin asset appear in the first 4KB
 #define MAX_HTTP_RESPONSE_SIZE 4096
 
 // OTA information
@@ -65,6 +66,91 @@ static StackType_t *s_ota_task_stack = NULL;
 // Pre-allocated buffer to reserve contiguous memory before BLE fragments heap
 // This is allocated at boot and freed just before TLS operations
 static void *s_tls_reserve_buffer = NULL;
+
+// Extract a JSON string value after a key (e.g., find "tag_name":"1.2.3" and return "1.2.3")
+// Returns pointer to static buffer with extracted value, or NULL if not found
+static const char* extract_json_string(const char *json, const char *key, char *out_buf, size_t buf_size)
+{
+    // Build search pattern like: "tag_name":"
+    char pattern[64];
+    snprintf(pattern, sizeof(pattern), "\"%s\":\"", key);
+
+    const char *start = strstr(json, pattern);
+    if (!start) {
+        return NULL;
+    }
+
+    // Move past the pattern to the value
+    start += strlen(pattern);
+
+    // Find the closing quote
+    const char *end = strchr(start, '"');
+    if (!end) {
+        return NULL;
+    }
+
+    // Copy the value
+    size_t len = end - start;
+    if (len >= buf_size) {
+        len = buf_size - 1;
+    }
+    memcpy(out_buf, start, len);
+    out_buf[len] = '\0';
+
+    return out_buf;
+}
+
+// Find firmware.bin asset and extract its download URL
+// GitHub JSON structure: "assets":[{...,"name":"firmware.bin",...,"browser_download_url":"..."},...]
+static const char* extract_firmware_url(const char *json, char *out_buf, size_t buf_size)
+{
+    // Find the firmware.bin asset entry
+    const char *firmware_pos = strstr(json, "\"name\":\"firmware.bin\"");
+    if (!firmware_pos) {
+        return NULL;
+    }
+
+    // Search backwards for the start of this asset object (the '{' before it)
+    // and forwards for browser_download_url within this asset
+    // Assets are typically ~200-300 chars, so search within a reasonable range
+
+    // Search forward for browser_download_url (it comes after name in the asset object)
+    const char *search_end = firmware_pos + 500;  // Reasonable limit
+    const char *url_key = "\"browser_download_url\":\"";
+    const char *url_start = strstr(firmware_pos, url_key);
+
+    if (!url_start || url_start > search_end) {
+        // Try searching backwards in case URL comes before name in this asset
+        // Limit backwards search to avoid crossing into previous asset
+        const char *search_start = (firmware_pos - 500 > json) ? firmware_pos - 500 : json;
+        for (const char *p = firmware_pos; p >= search_start; p--) {
+            if (strncmp(p, url_key, strlen(url_key)) == 0) {
+                url_start = p;
+                break;
+            }
+        }
+    }
+
+    if (!url_start) {
+        return NULL;
+    }
+
+    // Extract the URL value
+    url_start += strlen(url_key);
+    const char *url_end = strchr(url_start, '"');
+    if (!url_end) {
+        return NULL;
+    }
+
+    size_t len = url_end - url_start;
+    if (len >= buf_size) {
+        len = buf_size - 1;
+    }
+    memcpy(out_buf, url_start, len);
+    out_buf[len] = '\0';
+
+    return out_buf;
+}
 
 // Compare two version strings (e.g., "1.0.0" vs "1.1.0")
 // Returns: -1 if v1 < v2, 0 if equal, 1 if v1 > v2
@@ -330,50 +416,31 @@ static esp_err_t ota_check_internal(void)
         goto cleanup;
     }
 
-    // Parse JSON response
-    cJSON *json = cJSON_Parse(s_http_response_buffer);
-    if (!json) {
-        ESP_LOGE(TAG, "Failed to parse JSON response");
-        strncpy(s_ota_info.error_message, "JSON parse error", sizeof(s_ota_info.error_message) - 1);
-        s_ota_info.status = OTA_STATUS_ERROR;
-        ret = ESP_FAIL;
-        goto cleanup;
-    }
+    // Extract version and firmware URL using string searching
+    // This works even if the JSON is truncated, as long as tag_name and
+    // the firmware.bin asset appear in the first 4KB of the response
+    // (GitHub puts these fields before the release body/notes)
 
-    // Extract tag_name (version)
-    cJSON *tag_name = cJSON_GetObjectItem(json, "tag_name");
-    if (!tag_name || !cJSON_IsString(tag_name)) {
-        ESP_LOGE(TAG, "No tag_name in response");
+    char version_buf[32];
+    if (!extract_json_string(s_http_response_buffer, "tag_name", version_buf, sizeof(version_buf))) {
+        ESP_LOGE(TAG, "No tag_name found in response");
         strncpy(s_ota_info.error_message, "Invalid release format", sizeof(s_ota_info.error_message) - 1);
         s_ota_info.status = OTA_STATUS_ERROR;
-        cJSON_Delete(json);
         ret = ESP_FAIL;
         goto cleanup;
     }
 
-    strncpy(s_ota_info.available_version, tag_name->valuestring, sizeof(s_ota_info.available_version) - 1);
+    strncpy(s_ota_info.available_version, version_buf, sizeof(s_ota_info.available_version) - 1);
     ESP_LOGI(TAG, "Latest release: %s (current: %s)", s_ota_info.available_version, SW_VER);
 
-    // Find firmware.bin asset
-    cJSON *assets = cJSON_GetObjectItem(json, "assets");
-    if (assets && cJSON_IsArray(assets)) {
-        cJSON *asset = NULL;
-        cJSON_ArrayForEach(asset, assets) {
-            cJSON *name = cJSON_GetObjectItem(asset, "name");
-            if (name && cJSON_IsString(name)) {
-                if (strcmp(name->valuestring, "firmware.bin") == 0) {
-                    cJSON *download_url = cJSON_GetObjectItem(asset, "browser_download_url");
-                    if (download_url && cJSON_IsString(download_url)) {
-                        strncpy(s_ota_info.download_url, download_url->valuestring, sizeof(s_ota_info.download_url) - 1);
-                        ESP_LOGI(TAG, "Firmware URL: %s", s_ota_info.download_url);
-                    }
-                    break;
-                }
-            }
-        }
+    // Find firmware.bin download URL
+    char url_buf[256];
+    if (extract_firmware_url(s_http_response_buffer, url_buf, sizeof(url_buf))) {
+        strncpy(s_ota_info.download_url, url_buf, sizeof(s_ota_info.download_url) - 1);
+        ESP_LOGI(TAG, "Firmware URL: %s", s_ota_info.download_url);
+    } else {
+        ESP_LOGW(TAG, "firmware.bin asset not found in response (may be truncated or missing)");
     }
-
-    cJSON_Delete(json);
 
     // Compare versions
     int cmp = version_compare(SW_VER, s_ota_info.available_version);
