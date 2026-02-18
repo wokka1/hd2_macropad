@@ -7,6 +7,26 @@
 #include "main.h"
 #include "configration.h"
 
+// =============================================================================
+// Ship Module Cooldown Modifiers
+// =============================================================================
+// Each stratagem has a shipModules bitmask indicating which modules affect it.
+// Cooldown reducers (multiply with base cooldown):
+//   SHIP_LVC (1)   - Liquid-Ventilcated Cockpit     -50% cooldown - Eagle strats
+//   SHIP_ZBL (2)   - Zero-G Breaching Logistics:    -10% cooldown - Orbital strats
+//   SHIP_HC  (4)   - Hand Carts:                    -10% cooldown - Backpack strats
+//   SHIP_MA  (8)   - Morale Augmentation            -5%  cooldown - All strats
+//   SHIP_SRP (16)  - Streamlined Request Process:   -10% cooldown - Support Weapon strats
+//   SHIP_SS  (32)  - Synthetic Supplementation:     -10% cooldown - Sentry, Emplacement, Resupply strats
+//
+// Call-in time adders (add to final cooldown):
+//   SHIP_TSU (64)  - Targeting Software Upgrade:    +1s call-in - 1-second reduction call in Orbital strats
+//   SHIP_RLS (128) - Rapid Launch System:           +3s call-in - Emplacement stratagems launch immediately, reducing overall deployment time. 
+//   SHIP_DT  (256) - Dynamic Tracking:              +3s call-in - Sentry stratagems launch immediately, reducing overall deployment time. 
+//
+// Formula: finalCooldown = (baseCooldown * reductionFactor) + callInTime
+// =============================================================================
+
 // Identifiers for inputs (UP/DOWN/LEFT/RIGHT)
 // DO NOT EDIT - If you want to change assignments please have a look into "keymaps.c"
 #define INPUT_UP 1
@@ -174,7 +194,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_LEFT, INPUT_DOWN, 0, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_gl2,
@@ -186,7 +206,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_LEFT, INPUT_DOWN, INPUT_UP, INPUT_LEFT, 0, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_lc2,
@@ -198,7 +218,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, INPUT_LEFT, INPUT_LEFT, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_at2,
@@ -210,7 +230,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_DOWN, INPUT_UP, INPUT_LEFT, INPUT_RIGHT, 0, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_qc2,
@@ -222,7 +242,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_UP, INPUT_UP, INPUT_LEFT, INPUT_RIGHT, 0, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_arl2,
@@ -234,7 +254,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_DOWN, INPUT_LEFT, 0, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_ste2,
@@ -1002,7 +1022,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT, INPUT_UP, 0, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_cqc2,
@@ -1014,7 +1034,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_DOWN, 0, 0, 0, 0},
         140,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_eatl2,
@@ -1026,7 +1046,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         {INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_LEFT, INPUT_UP, INPUT_UP, 0, 0, 0},
         480,
         7.75,
-        SHIP_MA,
+        SHIP_MA | SHIP_SRP,
         SND_WEAPON,
         sgBlue,
         &img_bfgl2,

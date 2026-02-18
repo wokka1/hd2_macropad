@@ -33,15 +33,15 @@ int8_t peekConfig(char *key, int8_t defaultValue);
 // Values must match upstream for compatibility with stratagems.h shipModules field
 enum ModuleType
 {
-    SHIP_LVC = 1,    // Localization Confusion: -50% cooldown
-    SHIP_ZBL = 2,    // Zero-G Breaching Logistics: -10% cooldown
-    SHIP_HC = 4,     // Hangar Capacity: -10% cooldown
-    SHIP_MA = 8,     // Morale Amplifier: -5% cooldown
-    SHIP_SRP = 16,   // Superior Replenishment Pack: -10% cooldown
-    SHIP_SS = 32,    // Synthetic Supplementation: -10% cooldown
-    SHIP_TSU = 64,   // Targeting Software Upgrade: +1s call-in
-    SHIP_RLS = 128,  // Rapid Launch System: +3s call-in
-    SHIP_DT = 256    // Dynamic Tracking: +3s call-in
+    SHIP_LVC = 1,    // Liquid-Ventilated Cockpit: -50% cooldown (Eagle strats)
+    SHIP_ZBL = 2,    // Zero-G Breaching Logistics: -10% cooldown (Orbital strats)
+    SHIP_HC = 4,     // Hand Carts: -10% cooldown (Backpack strats)
+    SHIP_MA = 8,     // Morale Augmentation: -5% cooldown (All strats)
+    SHIP_SRP = 16,   // Streamlined Request Process: -10% cooldown (Support Weapon strats)
+    SHIP_SS = 32,    // Synthetic Supplementation: -10% cooldown (Sentry, Emplacement, Resupply)
+    SHIP_TSU = 64,   // Targeting Software Upgrade: +1s call-in (Orbital strats)
+    SHIP_RLS = 128,  // Rapid Launch System: +3s call-in (Emplacement strats)
+    SHIP_DT = 256    // Dynamic Tracking: +3s call-in (Sentry strats)
 };
 
 #define MAX_SHIP_MODULES 9
