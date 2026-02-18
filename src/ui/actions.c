@@ -2,7 +2,7 @@
 #include "ui.h"
 #include "screens.h"
 #include "ui_events.h"
-#include "configration.h"
+#include "configuration.h"
 #include "esp_log.h"
 #include <string.h>
 #include <esp_wifi.h>

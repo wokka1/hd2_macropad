@@ -13,7 +13,7 @@
 #include "i2s_player.h"
 #include "main.h"
 #include "ui_post.h"
-#include "configration.h"
+#include "configuration.h"
 #include "actions.h"
 #include "ui_assignment.h"
 

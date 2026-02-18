@@ -9,7 +9,7 @@
 #include "ui/ui.h"
 #include "ui/screens.h"
 #include "main.h"
-#include "configration.h"
+#include "configuration.h"
 #include <string.h>
 
 const char *TAG_CFG = "Configuration";
