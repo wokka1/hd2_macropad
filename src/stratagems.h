@@ -1065,7 +1065,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // Resupply
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_UP, INPUT_RIGHT, 0, 0, 0, 0, 0},
-        150,  // 2.5 minute cooldown
+        132,  // 2.5 minute cooldown -- temp cooldown
         SND_SUPPLY,
         &img_res2},
 
