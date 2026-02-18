@@ -5,7 +5,7 @@
 #include "ui/ui_assignment.h"
 #include "ui/images.h"
 #include "main.h"
-#include "configration.h"
+#include "configuration.h"
 
 // =============================================================================
 // Ship Module Cooldown Modifiers
