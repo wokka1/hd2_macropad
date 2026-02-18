@@ -44,6 +44,26 @@ void remove_style_checkbox_config(lv_obj_t *obj);
 void add_style_label_cooldown(lv_obj_t *obj);
 void remove_style_label_cooldown(lv_obj_t *obj);
 
+// Style: CheckboxConfig2
+lv_style_t *get_style_checkbox_config2_INDICATOR_DEFAULT();
+lv_style_t *get_style_checkbox_config2_INDICATOR_CHECKED();
+void add_style_checkbox_config2(lv_obj_t *obj);
+void remove_style_checkbox_config2(lv_obj_t *obj);
+
+// Style: SwitchConfig
+lv_style_t *get_style_switch_config_MAIN_DEFAULT();
+lv_style_t *get_style_switch_config_MAIN_CHECKED();
+lv_style_t *get_style_switch_config_KNOB_DEFAULT();
+lv_style_t *get_style_switch_config_KNOB_CHECKED();
+lv_style_t *get_style_switch_config_INDICATOR_CHECKED();
+void add_style_switch_config(lv_obj_t *obj);
+void remove_style_switch_config(lv_obj_t *obj);
+
+// Style: TabConfig2
+lv_style_t *get_style_tab_config2_MAIN_DEFAULT();
+void add_style_tab_config2(lv_obj_t *obj);
+void remove_style_tab_config2(lv_obj_t *obj);
+
 
 
 #ifdef __cplusplus

@@ -9,6 +9,7 @@
 #include "ui/ui.h"
 #include "ui/screens.h"
 #include "main.h"
+#include "configration.h"
 #include <string.h>
 
 const char *TAG_CFG = "Configuration";
@@ -271,11 +272,11 @@ void setShowCooldowns(bool show, bool restore)
         // Invert checkbox state: show=true means unchecked (not disabled)
         if (show)
         {
-            lv_obj_clear_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
+            lv_obj_clear_state(objects.chb_cooldowns, LV_STATE_CHECKED);
         }
         else
         {
-            lv_obj_add_state(objects.chb_cooldowns_1, LV_STATE_CHECKED);
+            lv_obj_add_state(objects.chb_cooldowns, LV_STATE_CHECKED);
         }
     }
     else
@@ -400,6 +401,9 @@ void loadConfig()
     uint8_t keymap_index = getConfig("keymap", 0);
     setKeymap(keymap_index, true);
 
+    // Restore ship module checkbox states
+    setShipModules(true);
+
     closeConfig();
 }
 
@@ -416,6 +420,78 @@ int8_t peekConfig(char *key, int8_t defaultValue)
     closeConfig();
 
     return value;
+}
+
+// Save/restore ship module checkbox states
+// Uses two NVS keys to avoid 16-bit storage:
+//   shipModLo: bits for LVC, ZBL, HC, MA, SRP, SS, TSU, RLS
+//   shipModHi: bit for DT (9th module)
+void setShipModules(bool restore)
+{
+    // Check if ship module checkboxes exist in UI
+    // These will be NULL until EEZ Studio UI is exported with the checkboxes
+    #ifdef HAS_SHIP_MODULE_UI
+    shipModule list[MAX_SHIP_MODULES] = {
+        {SHIP_LVC, objects.chb_ship_mod_lvc, false},
+        {SHIP_ZBL, objects.chb_ship_mod_zbl, false},
+        {SHIP_HC, objects.chb_ship_mod_hc, false},
+        {SHIP_MA, objects.chb_ship_mod_ma, false},
+        {SHIP_SRP, objects.chb_ship_mod_srp, false},
+        {SHIP_SS, objects.chb_ship_mod_ss, false},
+        {SHIP_TSU, objects.chb_ship_mod_tsu, false},
+        {SHIP_RLS, objects.chb_ship_mod_rls, false},
+        {SHIP_DT, objects.chb_ship_mod_dt, true}   // High byte
+    };
+
+    if (restore)
+    {
+        uint8_t shipModLo = getConfig("shipModLo", 0);
+        uint8_t shipModHi = getConfig("shipModHi", 0);
+
+        for (uint8_t c = 0; c < MAX_SHIP_MODULES; c++)
+        {
+            shipModule item = list[c];
+            uint8_t storedValue = item.isHighByte ? shipModHi : shipModLo;
+
+            if (storedValue & item.value)
+            {
+                lv_obj_add_state(item.checkbox, LV_STATE_CHECKED);
+            }
+            else
+            {
+                lv_obj_clear_state(item.checkbox, LV_STATE_CHECKED);
+            }
+        }
+    }
+    else
+    {
+        uint8_t shipModLo = 0;
+        uint8_t shipModHi = 0;
+
+        for (uint8_t c = 0; c < MAX_SHIP_MODULES; c++)
+        {
+            shipModule item = list[c];
+
+            if (lv_obj_has_state(item.checkbox, LV_STATE_CHECKED))
+            {
+                if (item.isHighByte)
+                {
+                    shipModHi |= item.value;
+                }
+                else
+                {
+                    shipModLo |= item.value;
+                }
+            }
+        }
+
+        setConfig("shipModLo", shipModLo);
+        setConfig("shipModHi", shipModHi);
+    }
+    #else
+    // Ship module UI not yet available
+    (void)restore;
+    #endif
 }
 
 // Clear all stored configuration in NVS and write it to default values

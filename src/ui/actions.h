@@ -45,6 +45,8 @@ extern void action_show_keyboard(lv_event_t * e);
 extern void action_action_ota_check(lv_event_t * e);
 extern void action_action_ota_install(lv_event_t * e);
 extern void action_action_btn_rollback(lv_event_t * e);
+extern void action_set_cooldown(lv_event_t * e);
+extern void action_set_ship_modules(lv_event_t * e);
 
 
 #ifdef __cplusplus
