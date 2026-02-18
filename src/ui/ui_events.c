@@ -307,7 +307,44 @@ void _executeUserStratagem(uint8_t index)
 	setStratagemCode(item.sequence, INPUT_CTRL_MASK, false);
 
 	extern bool cooldownBeepTriggered[MAX_USER_STRATAGEMS];
+
+	// Calculate cooldown with ship module reductions
+	#ifdef HAS_SHIP_MODULE_UI
+	shipModuleDetails shipModuleList[MAX_SHIP_MODULES] = {
+		{SHIP_LVC, objects.chb_ship_mod_lvc, 0, 0.5, 0.0},   // -50% cooldown
+		{SHIP_ZBL, objects.chb_ship_mod_zbl, 1, 0.1, 0.0},   // -10% cooldown
+		{SHIP_HC,  objects.chb_ship_mod_hc,  2, 0.1, 0.0},   // -10% cooldown
+		{SHIP_MA,  objects.chb_ship_mod_ma,  3, 0.05, 0.0},  // -5% cooldown
+		{SHIP_SRP, objects.chb_ship_mod_srp, 4, 0.1, 0.0},   // -10% cooldown
+		{SHIP_SS,  objects.chb_ship_mod_ss,  5, 0.1, 0.0},   // -10% cooldown
+		{SHIP_TSU, objects.chb_ship_mod_tsu, 6, 0.0, 1.0},   // +1s call-in
+		{SHIP_RLS, objects.chb_ship_mod_rls, 7, 0.0, 3.0},   // +3s call-in
+		{SHIP_DT,  objects.chb_ship_mod_dt,  8, 0.0, 3.0}    // +3s call-in
+	};
+
+	double cooldown = item.cooldown;
+	double callin = item.callIn;
+	double factor = 1.0;
+
+	for (uint8_t c = 0; c < MAX_SHIP_MODULES; c++)
+	{
+		shipModuleDetails mod = shipModuleList[c];
+
+		// Check if module is enabled AND applies to this stratagem
+		if (lv_obj_has_state(mod.checkbox, LV_STATE_CHECKED) &&
+		    (item.shipModules & (1 << mod.shift)))
+		{
+			factor -= mod.cooldown;
+			callin += mod.callin;
+		}
+	}
+
+	cooldown *= factor;
+	cooldownValues[index] = getNow() + (uint64_t)(cooldown + callin);
+	#else
 	cooldownValues[index] = getNow() + item.cooldown;
+	#endif
+
 	cooldownBeepTriggered[index] = false;  // Reset beep flag for new cooldown
 
 	char *path = item.soundPath;

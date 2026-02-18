@@ -262,21 +262,20 @@ void setDebugLogging(bool debug, bool restore)
 }
 
 // Write the cooldown display state to configuration
-// NOTE: Switch is labeled "Disable", so checkbox logic is inverted
 void setShowCooldowns(bool show, bool restore)
 {
     showCooldowns = show;
 
     if (restore)
     {
-        // Invert checkbox state: show=true means unchecked (not disabled)
+        // Checked = show cooldowns enabled
         if (show)
         {
-            lv_obj_clear_state(objects.chb_cooldowns, LV_STATE_CHECKED);
+            lv_obj_add_state(objects.chb_cooldowns, LV_STATE_CHECKED);
         }
         else
         {
-            lv_obj_add_state(objects.chb_cooldowns, LV_STATE_CHECKED);
+            lv_obj_clear_state(objects.chb_cooldowns, LV_STATE_CHECKED);
         }
     }
     else
@@ -424,23 +423,29 @@ int8_t peekConfig(char *key, int8_t defaultValue)
 
 // Save/restore ship module checkbox states
 // Uses two NVS keys to avoid 16-bit storage:
-//   shipModLo: bits for LVC, ZBL, HC, MA, SRP, SS, TSU, RLS
-//   shipModHi: bit for DT (9th module)
+//   shipModLo: bits 0-7 for LVC, ZBL, HC, MA, SRP, SS, TSU, RLS
+//   shipModHi: bit 0 for DT (9th module, value 256 stored as bit 0)
 void setShipModules(bool restore)
 {
     // Check if ship module checkboxes exist in UI
-    // These will be NULL until EEZ Studio UI is exported with the checkboxes
     #ifdef HAS_SHIP_MODULE_UI
-    shipModule list[MAX_SHIP_MODULES] = {
-        {SHIP_LVC, objects.chb_ship_mod_lvc, false},
-        {SHIP_ZBL, objects.chb_ship_mod_zbl, false},
-        {SHIP_HC, objects.chb_ship_mod_hc, false},
-        {SHIP_MA, objects.chb_ship_mod_ma, false},
-        {SHIP_SRP, objects.chb_ship_mod_srp, false},
-        {SHIP_SS, objects.chb_ship_mod_ss, false},
-        {SHIP_TSU, objects.chb_ship_mod_tsu, false},
-        {SHIP_RLS, objects.chb_ship_mod_rls, false},
-        {SHIP_DT, objects.chb_ship_mod_dt, true}   // High byte
+    // Ship modules with their enum values and storage info
+    // isHighByte=true means stored in shipModHi, storageBit is the bit position within that byte
+    struct {
+        uint16_t value;
+        lv_obj_t *checkbox;
+        bool isHighByte;
+        uint8_t storageBit;  // Bit position within the storage byte
+    } list[MAX_SHIP_MODULES] = {
+        {SHIP_LVC, objects.chb_ship_mod_lvc, false, 0},   // bit 0 of shipModLo
+        {SHIP_ZBL, objects.chb_ship_mod_zbl, false, 1},   // bit 1 of shipModLo
+        {SHIP_HC,  objects.chb_ship_mod_hc,  false, 2},   // bit 2 of shipModLo
+        {SHIP_MA,  objects.chb_ship_mod_ma,  false, 3},   // bit 3 of shipModLo
+        {SHIP_SRP, objects.chb_ship_mod_srp, false, 4},   // bit 4 of shipModLo
+        {SHIP_SS,  objects.chb_ship_mod_ss,  false, 5},   // bit 5 of shipModLo
+        {SHIP_TSU, objects.chb_ship_mod_tsu, false, 6},   // bit 6 of shipModLo
+        {SHIP_RLS, objects.chb_ship_mod_rls, false, 7},   // bit 7 of shipModLo
+        {SHIP_DT,  objects.chb_ship_mod_dt,  true,  0}    // bit 0 of shipModHi
     };
 
     if (restore)
@@ -450,16 +455,16 @@ void setShipModules(bool restore)
 
         for (uint8_t c = 0; c < MAX_SHIP_MODULES; c++)
         {
-            shipModule item = list[c];
-            uint8_t storedValue = item.isHighByte ? shipModHi : shipModLo;
+            uint8_t storedValue = list[c].isHighByte ? shipModHi : shipModLo;
+            uint8_t bitMask = 1 << list[c].storageBit;
 
-            if (storedValue & item.value)
+            if (storedValue & bitMask)
             {
-                lv_obj_add_state(item.checkbox, LV_STATE_CHECKED);
+                lv_obj_add_state(list[c].checkbox, LV_STATE_CHECKED);
             }
             else
             {
-                lv_obj_clear_state(item.checkbox, LV_STATE_CHECKED);
+                lv_obj_clear_state(list[c].checkbox, LV_STATE_CHECKED);
             }
         }
     }
@@ -470,17 +475,16 @@ void setShipModules(bool restore)
 
         for (uint8_t c = 0; c < MAX_SHIP_MODULES; c++)
         {
-            shipModule item = list[c];
-
-            if (lv_obj_has_state(item.checkbox, LV_STATE_CHECKED))
+            if (lv_obj_has_state(list[c].checkbox, LV_STATE_CHECKED))
             {
-                if (item.isHighByte)
+                uint8_t bitMask = 1 << list[c].storageBit;
+                if (list[c].isHighByte)
                 {
-                    shipModHi |= item.value;
+                    shipModHi |= bitMask;
                 }
                 else
                 {
-                    shipModLo |= item.value;
+                    shipModLo |= bitMask;
                 }
             }
         }

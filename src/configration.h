@@ -30,8 +30,8 @@ void resetConfig();
 int8_t peekConfig(char *key, int8_t defaultValue);
 
 // Ship module bitmask values for cooldown reduction calculation
-// First 8 modules fit in one byte (shipModLo)
-enum ShipModuleType
+// Values must match upstream for compatibility with stratagems.h shipModules field
+enum ModuleType
 {
     SHIP_LVC = 1,    // Localization Confusion: -50% cooldown
     SHIP_ZBL = 2,    // Zero-G Breaching Logistics: -10% cooldown
@@ -41,19 +41,29 @@ enum ShipModuleType
     SHIP_SS = 32,    // Synthetic Supplementation: -10% cooldown
     SHIP_TSU = 64,   // Targeting Software Upgrade: +1s call-in
     SHIP_RLS = 128,  // Rapid Launch System: +3s call-in
-    // 9th module stored separately in shipModHi
-    SHIP_DT = 1      // Dynamic Tracking: +3s call-in (stored in high byte)
+    SHIP_DT = 256    // Dynamic Tracking: +3s call-in
 };
 
 #define MAX_SHIP_MODULES 9
 
-// Ship module checkbox mapping
+// Ship module checkbox mapping for NVS save/restore
+// Uses two 8-bit keys (shipModLo/shipModHi) to avoid 16-bit NVS issues
 typedef struct
 {
-    uint8_t value;
+    uint16_t value;
     lv_obj_t *checkbox;
     bool isHighByte;  // true if stored in shipModHi key
 } shipModule;
+
+// Ship module details for cooldown/call-in calculations
+typedef struct
+{
+    uint16_t value;
+    lv_obj_t *checkbox;
+    uint8_t shift;       // Bit position for checking stratagem compatibility
+    double cooldown;     // Cooldown reduction factor (e.g., 0.5 = 50% reduction)
+    double callin;       // Additional call-in time in seconds
+} shipModuleDetails;
 
 #ifdef __cplusplus
 } /*extern "C"*/

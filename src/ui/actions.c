@@ -689,7 +689,7 @@ void action_set_ship_modules(lv_event_t *e)
 // Handle cooldown checkbox toggle (action from EEZ UI)
 void action_set_cooldown(lv_event_t *e)
 {
-	bool disable = lv_obj_get_state(e->current_target) & LV_STATE_CHECKED ? true : false;
-	setShowCooldowns(!disable, false);  // Invert: checked = disable = hide cooldowns
-	ESP_LOGI("Config", "Cooldown display %s", disable ? "DISABLED" : "ENABLED");
+	bool enabled = lv_obj_get_state(e->current_target) & LV_STATE_CHECKED ? true : false;
+	setShowCooldowns(enabled, false);  // Checked = show cooldowns
+	ESP_LOGI("Config", "Cooldown display %s", enabled ? "ENABLED" : "DISABLED");
 }
