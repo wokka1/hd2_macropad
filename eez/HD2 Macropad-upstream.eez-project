@@ -343,6 +343,60 @@
       "userProperties": [],
       "name": "finalizeManualExecution",
       "implementationType": "native"
+    },
+    {
+      "objID": "2f206f29-065e-4fed-885b-abc61e5250d1",
+      "components": [],
+      "connectionLines": [],
+      "localVariables": [],
+      "userProperties": [],
+      "name": "action_enable_wifi",
+      "implementationType": "native"
+    },
+    {
+      "objID": "0a512026-e746-497e-8d67-da176fc20e5c",
+      "components": [],
+      "connectionLines": [],
+      "localVariables": [],
+      "userProperties": [],
+      "name": "action_wifi_connect_manual",
+      "implementationType": "native"
+    },
+    {
+      "objID": "41f7f524-4ed1-4a61-9986-36cf520e33c9",
+      "components": [],
+      "connectionLines": [],
+      "localVariables": [],
+      "userProperties": [],
+      "name": "action_wifi_connect_selected",
+      "implementationType": "native"
+    },
+    {
+      "objID": "88d2e2f8-62d2-4604-a0a4-cade929dbcf0",
+      "components": [],
+      "connectionLines": [],
+      "localVariables": [],
+      "userProperties": [],
+      "name": "action_wifi_scan",
+      "implementationType": "native"
+    },
+    {
+      "objID": "adff1fad-6cf7-4f74-cf62-297b9bf1f637",
+      "components": [],
+      "connectionLines": [],
+      "localVariables": [],
+      "userProperties": [],
+      "name": "hide_keyboard",
+      "implementationType": "native"
+    },
+    {
+      "objID": "8cd56989-46eb-487a-aa81-163de642c62b",
+      "components": [],
+      "connectionLines": [],
+      "localVariables": [],
+      "userProperties": [],
+      "name": "show_keyboard",
+      "implementationType": "native"
     }
   ],
   "userPages": [
@@ -14848,6 +14902,416 @@
                   "groupIndex": 0,
                   "tabName": "Input",
                   "tabNameType": "literal"
+                },
+                {
+                  "objID": "46bf1859-514c-43c1-8643-347ae8ad721c",
+                  "type": "LVGLTabWidget",
+                  "left": 0,
+                  "top": 0,
+                  "width": 480,
+                  "height": 242,
+                  "customInputs": [],
+                  "customOutputs": [],
+                  "style": {
+                    "objID": "a620ddab-3d6c-4de1-d43f-69481ab4f6de",
+                    "useStyle": "default",
+                    "conditionalStyles": [],
+                    "childStyles": []
+                  },
+                  "timeline": [],
+                  "eventHandlers": [],
+                  "leftUnit": "px",
+                  "topUnit": "px",
+                  "widthUnit": "px",
+                  "heightUnit": "px",
+                  "children": [
+                    {
+                      "objID": "4daa35dd-a776-497c-83a0-1e041dfc998c",
+                      "type": "LVGLKeyboardWidget",
+                      "left": 159,
+                      "top": -8,
+                      "width": 319,
+                      "height": 229,
+                      "customInputs": [],
+                      "customOutputs": [],
+                      "style": {
+                        "objID": "08cbd7b4-074d-43c0-d1db-fb08fce9dac0",
+                        "useStyle": "default",
+                        "conditionalStyles": [],
+                        "childStyles": []
+                      },
+                      "timeline": [],
+                      "eventHandlers": [],
+                      "identifier": "Keyboard",
+                      "leftUnit": "px",
+                      "topUnit": "px",
+                      "widthUnit": "px",
+                      "heightUnit": "px",
+                      "children": [],
+                      "widgetFlags": "GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|FLOATING",
+                      "hiddenFlag": false,
+                      "hiddenFlagType": "literal",
+                      "clickableFlag": true,
+                      "clickableFlagType": "literal",
+                      "flagScrollbarMode": "",
+                      "flagScrollDirection": "",
+                      "scrollSnapX": "",
+                      "scrollSnapY": "",
+                      "checkedStateType": "literal",
+                      "disabledStateType": "literal",
+                      "states": "",
+                      "localStyles": {
+                        "objID": "55c49fa0-1b9f-43e7-ed6b-10509852a075",
+                        "definition": {
+                          "MAIN": {
+                            "DEFAULT": {
+                              "align": "DEFAULT"
+                            }
+                          }
+                        }
+                      },
+                      "group": "",
+                      "groupIndex": 0,
+                      "mode": "TEXT_LOWER"
+                    },
+                    {
+                      "objID": "d6bc11f2-f2f9-429e-a43a-a41101d7626e",
+                      "type": "LVGLSwitchWidget",
+                      "left": 7,
+                      "top": 0,
+                      "width": 50,
+                      "height": 25,
+                      "customInputs": [],
+                      "customOutputs": [],
+                      "style": {
+                        "objID": "06dd2cbc-21f2-4e79-91a6-fd4422f95e1a",
+                        "useStyle": "default",
+                        "conditionalStyles": [],
+                        "childStyles": []
+                      },
+                      "timeline": [],
+                      "eventHandlers": [
+                        {
+                          "objID": "0e0978c4-4886-4d9d-c8ac-f16db5cd087b",
+                          "eventName": "PRESSED",
+                          "handlerType": "action",
+                          "action": "action_enable_wifi",
+                          "userData": 0
+                        }
+                      ],
+                      "identifier": "Wifi Switch",
+                      "leftUnit": "px",
+                      "topUnit": "px",
+                      "widthUnit": "px",
+                      "heightUnit": "px",
+                      "children": [],
+                      "widgetFlags": "CHECKABLE|CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_ON_FOCUS|SCROLL_WITH_ARROW|SNAPPABLE|FLOATING",
+                      "hiddenFlagType": "literal",
+                      "clickableFlag": true,
+                      "clickableFlagType": "literal",
+                      "flagScrollbarMode": "",
+                      "flagScrollDirection": "",
+                      "scrollSnapX": "",
+                      "scrollSnapY": "",
+                      "checkedStateType": "literal",
+                      "disabledStateType": "literal",
+                      "states": "",
+                      "localStyles": {
+                        "objID": "7f80a38a-0b1c-4fd4-a089-9a702e258f4d"
+                      },
+                      "group": "",
+                      "groupIndex": 0
+                    },
+                    {
+                      "objID": "63d6d040-2978-4850-86e7-608dc64d363a",
+                      "type": "LVGLLabelWidget",
+                      "left": -135,
+                      "top": -105,
+                      "width": 84,
+                      "height": 16,
+                      "customInputs": [],
+                      "customOutputs": [],
+                      "style": {
+                        "objID": "42513145-5335-4349-fa2a-b7138c716577",
+                        "useStyle": "default",
+                        "conditionalStyles": [],
+                        "childStyles": []
+                      },
+                      "timeline": [],
+                      "eventHandlers": [
+                        {
+                          "objID": "c8ee4639-2b76-4165-8e26-6b91b505ca59",
+                          "eventName": "PRESSED",
+                          "handlerType": "action",
+                          "action": "action_wifi_connect_selected",
+                          "userData": 0
+                        }
+                      ],
+                      "leftUnit": "px",
+                      "topUnit": "px",
+                      "widthUnit": "content",
+                      "heightUnit": "content",
+                      "children": [],
+                      "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|FLOATING",
+                      "hiddenFlagType": "literal",
+                      "clickableFlagType": "literal",
+                      "flagScrollbarMode": "",
+                      "flagScrollDirection": "",
+                      "scrollSnapX": "",
+                      "scrollSnapY": "",
+                      "checkedStateType": "literal",
+                      "disabledStateType": "literal",
+                      "states": "",
+                      "localStyles": {
+                        "objID": "f134c50c-ff45-4ec1-c7f9-c05701a5fe48",
+                        "definition": {
+                          "MAIN": {
+                            "DEFAULT": {
+                              "align": "CENTER"
+                            }
+                          }
+                        }
+                      },
+                      "group": "",
+                      "groupIndex": 0,
+                      "text": "Enable Wifi",
+                      "textType": "literal",
+                      "longMode": "WRAP",
+                      "recolor": false
+                    },
+                    {
+                      "objID": "527c2072-bb26-46b1-c349-9a181d8ec015",
+                      "type": "LVGLTextareaWidget",
+                      "left": 6,
+                      "top": 177,
+                      "width": 140,
+                      "height": 40,
+                      "customInputs": [],
+                      "customOutputs": [],
+                      "style": {
+                        "objID": "425a67d5-867a-410a-fbf1-598498f137a4",
+                        "useStyle": "default",
+                        "conditionalStyles": [],
+                        "childStyles": []
+                      },
+                      "timeline": [],
+                      "eventHandlers": [
+                        {
+                          "objID": "b964ae4f-eb35-4222-efe2-317c283d1d86",
+                          "eventName": "DEFOCUSED",
+                          "handlerType": "action",
+                          "action": "hide_keyboard",
+                          "userData": 0
+                        },
+                        {
+                          "objID": "6d83264e-112e-45f0-dba5-08ea71a69d39",
+                          "eventName": "FOCUSED",
+                          "handlerType": "action",
+                          "action": "show_keyboard",
+                          "userData": 0
+                        }
+                      ],
+                      "identifier": "wifi_password_input",
+                      "leftUnit": "px",
+                      "topUnit": "px",
+                      "widthUnit": "px",
+                      "heightUnit": "px",
+                      "children": [],
+                      "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_ON_FOCUS|SCROLL_WITH_ARROW|SNAPPABLE|FLOATING",
+                      "hiddenFlagType": "literal",
+                      "clickableFlag": true,
+                      "clickableFlagType": "literal",
+                      "flagScrollbarMode": "",
+                      "flagScrollDirection": "",
+                      "scrollSnapX": "",
+                      "scrollSnapY": "",
+                      "checkedStateType": "literal",
+                      "disabledStateType": "literal",
+                      "states": "",
+                      "localStyles": {
+                        "objID": "0c934731-d37b-4db8-aa44-051825854a6e"
+                      },
+                      "group": "",
+                      "groupIndex": 0,
+                      "text": "",
+                      "textType": "literal",
+                      "placeholder": "Password",
+                      "oneLineMode": true,
+                      "passwordMode": true,
+                      "acceptedCharacters": "",
+                      "maxTextLength": 64
+                    },
+                    {
+                      "objID": "201921bd-5f1b-4783-fa24-5eb3093a9d49",
+                      "type": "LVGLDropdownWidget",
+                      "left": 3,
+                      "top": 72,
+                      "width": 150,
+                      "height": 40,
+                      "customInputs": [],
+                      "customOutputs": [],
+                      "style": {
+                        "objID": "39023ac9-e482-4248-cc5a-384ad9f13835",
+                        "useStyle": "default",
+                        "conditionalStyles": [],
+                        "childStyles": []
+                      },
+                      "timeline": [],
+                      "eventHandlers": [],
+                      "identifier": "wifi_network_dropdown",
+                      "leftUnit": "px",
+                      "topUnit": "px",
+                      "widthUnit": "px",
+                      "heightUnit": "content",
+                      "children": [],
+                      "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_ON_FOCUS|SCROLL_WITH_ARROW|SNAPPABLE|FLOATING",
+                      "hiddenFlag": false,
+                      "hiddenFlagType": "literal",
+                      "clickableFlag": true,
+                      "clickableFlagType": "literal",
+                      "flagScrollbarMode": "",
+                      "flagScrollDirection": "",
+                      "scrollSnapX": "",
+                      "scrollSnapY": "",
+                      "checkedStateType": "literal",
+                      "disabledStateType": "literal",
+                      "states": "",
+                      "localStyles": {
+                        "objID": "29ed91af-8897-47b8-c70f-622b2b9e1181"
+                      },
+                      "group": "",
+                      "groupIndex": 0,
+                      "options": "Press Scan SSID to start\n",
+                      "optionsType": "literal",
+                      "selected": 0,
+                      "selectedType": "literal",
+                      "direction": "bottom"
+                    },
+                    {
+                      "objID": "c9a8e967-223e-424a-c49b-cbcb4714f3f2",
+                      "type": "LVGLButtonWidget",
+                      "left": 7,
+                      "top": 32,
+                      "width": 82,
+                      "height": 32,
+                      "customInputs": [],
+                      "customOutputs": [],
+                      "style": {
+                        "objID": "9e6e031f-c3c6-414a-ffec-9ed67c73a3a1",
+                        "useStyle": "default",
+                        "conditionalStyles": [],
+                        "childStyles": []
+                      },
+                      "timeline": [],
+                      "eventHandlers": [
+                        {
+                          "objID": "42648753-dc96-46f5-acd8-5913c39cf31a",
+                          "eventName": "PRESSED",
+                          "handlerType": "action",
+                          "action": "action_wifi_scan",
+                          "userData": 0
+                        }
+                      ],
+                      "leftUnit": "px",
+                      "topUnit": "px",
+                      "widthUnit": "px",
+                      "heightUnit": "px",
+                      "children": [
+                        {
+                          "objID": "a4b06295-38f8-4e8d-c6eb-cb2f1a12c604",
+                          "type": "LVGLLabelWidget",
+                          "left": 0,
+                          "top": 0,
+                          "width": 73,
+                          "height": 16,
+                          "customInputs": [],
+                          "customOutputs": [],
+                          "style": {
+                            "objID": "611d87dc-c01e-47be-e340-9a20a37c6de9",
+                            "useStyle": "default",
+                            "conditionalStyles": [],
+                            "childStyles": []
+                          },
+                          "timeline": [],
+                          "eventHandlers": [
+                            {
+                              "objID": "3b353415-f340-435e-aac6-8236d74efabf",
+                              "eventName": "PRESSED",
+                              "handlerType": "action",
+                              "action": "action_wifi_scan",
+                              "userData": 0
+                            }
+                          ],
+                          "leftUnit": "px",
+                          "topUnit": "px",
+                          "widthUnit": "content",
+                          "heightUnit": "content",
+                          "children": [],
+                          "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+                          "hiddenFlagType": "literal",
+                          "clickableFlagType": "literal",
+                          "flagScrollbarMode": "",
+                          "flagScrollDirection": "",
+                          "scrollSnapX": "",
+                          "scrollSnapY": "",
+                          "checkedStateType": "literal",
+                          "disabledStateType": "literal",
+                          "states": "",
+                          "localStyles": {
+                            "objID": "df4eb811-a4d2-4478-ccd7-3c4aa01153ab",
+                            "definition": {
+                              "MAIN": {
+                                "DEFAULT": {
+                                  "align": "CENTER"
+                                }
+                              }
+                            }
+                          },
+                          "group": "",
+                          "groupIndex": 0,
+                          "text": "Scan SSID",
+                          "textType": "literal",
+                          "longMode": "WRAP",
+                          "recolor": false
+                        }
+                      ],
+                      "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_ON_FOCUS|SCROLL_WITH_ARROW|SNAPPABLE|FLOATING",
+                      "hiddenFlagType": "literal",
+                      "clickableFlag": true,
+                      "clickableFlagType": "literal",
+                      "flagScrollbarMode": "",
+                      "flagScrollDirection": "",
+                      "scrollSnapX": "",
+                      "scrollSnapY": "",
+                      "checkedStateType": "literal",
+                      "disabledStateType": "literal",
+                      "states": "",
+                      "localStyles": {
+                        "objID": "688072a5-73e7-470e-cafb-3c9bead40d02"
+                      },
+                      "group": "",
+                      "groupIndex": 0
+                    }
+                  ],
+                  "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+                  "hiddenFlagType": "literal",
+                  "clickableFlag": true,
+                  "clickableFlagType": "literal",
+                  "flagScrollbarMode": "",
+                  "flagScrollDirection": "",
+                  "scrollSnapX": "",
+                  "scrollSnapY": "",
+                  "checkedStateType": "literal",
+                  "disabledStateType": "literal",
+                  "states": "",
+                  "useStyle": "TabConfig",
+                  "localStyles": {
+                    "objID": "b1480f46-54fb-4208-85ae-d657f667c4eb"
+                  },
+                  "group": "",
+                  "groupIndex": 0,
+                  "tabName": "Wifi",
+                  "tabNameType": "literal"
                 }
               ],
               "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|SCROLLABLE",
@@ -17354,6 +17818,30 @@
             "INDICATOR": {
               "CHECKED": {
                 "bg_opa": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "objID": "96475e37-1d54-486d-e74d-c435e85eed90",
+        "name": "WIfi2",
+        "forWidgetType": "LVGLTabWidget",
+        "childStyles": [],
+        "definition": {
+          "objID": "65af05f6-f251-403a-af2d-11cf19cd99c6",
+          "definition": {
+            "MAIN": {
+              "DEFAULT": {
+                "pad_top": 8,
+                "pad_bottom": 8,
+                "pad_left": 0,
+                "pad_right": 0,
+                "pad_row": 8,
+                "pad_column": 8,
+                "layout": "FLEX",
+                "flex_flow": "ROW_WRAP",
+                "flex_main_place": "START"
               }
             }
           }

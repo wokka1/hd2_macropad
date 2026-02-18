@@ -14207,7 +14207,7 @@
               "left": 0,
               "top": 0,
               "width": 100,
-              "height": 343,
+              "height": 440,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -14216,6 +14216,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "locked": false,
               "timeline": [],
               "eventHandlers": [
                 {
@@ -14238,7 +14239,7 @@
                   "left": 0,
                   "top": 0,
                   "width": 800,
-                  "height": 305,
+                  "height": 402,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -14247,6 +14248,7 @@
                     "conditionalStyles": [],
                     "childStyles": []
                   },
+                  "locked": false,
                   "timeline": [],
                   "eventHandlers": [],
                   "leftUnit": "px",
@@ -15090,6 +15092,7 @@
                     "conditionalStyles": [],
                     "childStyles": []
                   },
+                  "locked": false,
                   "timeline": [],
                   "eventHandlers": [],
                   "leftUnit": "px",
@@ -15780,9 +15783,9 @@
                   "objID": "f04fb8df-5b72-4745-92ee-2ec31e140f50",
                   "type": "LVGLTabWidget",
                   "left": 0,
-                  "top": 0,
+                  "top": 30,
                   "width": 800,
-                  "height": 305,
+                  "height": 402,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -15791,6 +15794,7 @@
                     "conditionalStyles": [],
                     "childStyles": []
                   },
+                  "locked": false,
                   "timeline": [],
                   "eventHandlers": [],
                   "leftUnit": "px",
@@ -15813,6 +15817,7 @@
                         "conditionalStyles": [],
                         "childStyles": []
                       },
+                      "locked": false,
                       "timeline": [],
                       "eventHandlers": [],
                       "identifier": "Auto SSID",
@@ -15836,6 +15841,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [],
                           "identifier": "",
@@ -15879,6 +15885,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [
                             {
@@ -15984,6 +15991,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [],
                           "identifier": "wifi_network_dropdown",
@@ -16030,6 +16038,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [
                             {
@@ -16078,55 +16087,6 @@
                           "maxTextLength": 64
                         },
                         {
-                          "objID": "03febcfa-1505-4fef-e47b-6140ba0fd445",
-                          "type": "LVGLKeyboardWidget",
-                          "left": -20,
-                          "top": 228,
-                          "width": 800,
-                          "height": 160,
-                          "customInputs": [],
-                          "customOutputs": [],
-                          "style": {
-                            "objID": "7be746b4-2012-4dd2-f02a-1f9819659547",
-                            "useStyle": "default",
-                            "conditionalStyles": [],
-                            "childStyles": []
-                          },
-                          "timeline": [],
-                          "eventHandlers": [],
-                          "identifier": "Keyboard",
-                          "leftUnit": "px",
-                          "topUnit": "px",
-                          "widthUnit": "px",
-                          "heightUnit": "px",
-                          "children": [],
-                          "widgetFlags": "GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-                          "hiddenFlag": true,
-                          "hiddenFlagType": "literal",
-                          "clickableFlag": true,
-                          "clickableFlagType": "literal",
-                          "flagScrollbarMode": "",
-                          "flagScrollDirection": "",
-                          "scrollSnapX": "",
-                          "scrollSnapY": "",
-                          "checkedStateType": "literal",
-                          "disabledStateType": "literal",
-                          "states": "",
-                          "localStyles": {
-                            "objID": "1333a116-85d0-4627-ee61-3a423f63ec1a",
-                            "definition": {
-                              "MAIN": {
-                                "DEFAULT": {
-                                  "align": "DEFAULT"
-                                }
-                              }
-                            }
-                          },
-                          "group": "",
-                          "groupIndex": 0,
-                          "mode": "TEXT_LOWER"
-                        },
-                        {
                           "objID": "6437fce4-c144-4e4f-84b2-7b8cc1c79a96",
                           "type": "LVGLButtonWidget",
                           "left": 290,
@@ -16141,6 +16101,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [
                             {
@@ -16279,6 +16240,7 @@
                         "conditionalStyles": [],
                         "childStyles": []
                       },
+                      "locked": false,
                       "timeline": [],
                       "eventHandlers": [],
                       "identifier": "Manual_SSID",
@@ -16302,6 +16264,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [],
                           "identifier": "Manual_status_label",
@@ -16345,6 +16308,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [
                             {
@@ -16407,6 +16371,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [
                             {
@@ -16469,6 +16434,7 @@
                             "conditionalStyles": [],
                             "childStyles": []
                           },
+                          "locked": false,
                           "timeline": [],
                           "eventHandlers": [
                             {
@@ -16607,6 +16573,7 @@
                         "conditionalStyles": [],
                         "childStyles": []
                       },
+                      "locked": false,
                       "timeline": [],
                       "eventHandlers": [],
                       "identifier": "Wifi Status",
@@ -16691,6 +16658,56 @@
                       "groupIndex": 0
                     },
                     {
+                      "objID": "03febcfa-1505-4fef-e47b-6140ba0fd445",
+                      "type": "LVGLKeyboardWidget",
+                      "left": -2,
+                      "top": 234,
+                      "width": 800,
+                      "height": 160,
+                      "customInputs": [],
+                      "customOutputs": [],
+                      "style": {
+                        "objID": "7be746b4-2012-4dd2-f02a-1f9819659547",
+                        "useStyle": "default",
+                        "conditionalStyles": [],
+                        "childStyles": []
+                      },
+                      "locked": false,
+                      "timeline": [],
+                      "eventHandlers": [],
+                      "identifier": "Keyboard",
+                      "leftUnit": "px",
+                      "topUnit": "px",
+                      "widthUnit": "px",
+                      "heightUnit": "px",
+                      "children": [],
+                      "widgetFlags": "GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|FLOATING",
+                      "hiddenFlag": true,
+                      "hiddenFlagType": "literal",
+                      "clickableFlag": true,
+                      "clickableFlagType": "literal",
+                      "flagScrollbarMode": "",
+                      "flagScrollDirection": "",
+                      "scrollSnapX": "",
+                      "scrollSnapY": "",
+                      "checkedStateType": "literal",
+                      "disabledStateType": "literal",
+                      "states": "",
+                      "localStyles": {
+                        "objID": "1333a116-85d0-4627-ee61-3a423f63ec1a",
+                        "definition": {
+                          "MAIN": {
+                            "DEFAULT": {
+                              "align": "DEFAULT"
+                            }
+                          }
+                        }
+                      },
+                      "group": "",
+                      "groupIndex": 0,
+                      "mode": "TEXT_LOWER"
+                    },
+                    {
                       "objID": "ec28333f-7ea5-4783-bb3c-bfac5fe92f3b",
                       "type": "LVGLSwitchWidget",
                       "left": 167,
@@ -16705,6 +16722,7 @@
                         "conditionalStyles": [],
                         "childStyles": []
                       },
+                      "locked": false,
                       "timeline": [],
                       "eventHandlers": [
                         {
@@ -16753,6 +16771,7 @@
                         "conditionalStyles": [],
                         "childStyles": []
                       },
+                      "locked": false,
                       "timeline": [],
                       "eventHandlers": [
                         {
@@ -16797,6 +16816,7 @@
                     }
                   ],
                   "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|SCROLLABLE",
+                  "hiddenFlag": false,
                   "hiddenFlagType": "literal",
                   "clickableFlag": true,
                   "clickableFlagType": "literal",
@@ -16839,6 +16859,7 @@
                     "conditionalStyles": [],
                     "childStyles": []
                   },
+                  "locked": false,
                   "timeline": [],
                   "eventHandlers": [],
                   "leftUnit": "px",
@@ -17618,6 +17639,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "locked": false,
               "timeline": [],
               "eventHandlers": [],
               "leftUnit": "px",
@@ -17777,6 +17799,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "locked": false,
               "timeline": [],
               "eventHandlers": [],
               "leftUnit": "px",

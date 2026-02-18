@@ -1,6 +1,6 @@
 {
   "navigation": {
-    "selectedUserPageObject": "[HD2 Macropad-upstream.eez-project]:/userPages/1",
+    "selectedUserPageObject": "[HD2 Macropad-upstream.eez-project]:/userPages/7",
     "subnavigationSelectedItems": {}
   },
   "layoutModel": {
@@ -201,10 +201,10 @@
                 {
                   "type": "tab",
                   "id": "#9441ff7e-dd56-4761-aa39-87a88eebb6de",
-                  "name": "Setup",
+                  "name": "Config",
                   "component": "editor",
                   "config": {
-                    "objectPath": "[HD2 Macropad-upstream.eez-project]:/userPages/1",
+                    "objectPath": "[HD2 Macropad-upstream.eez-project]:/userPages/7",
                     "permanent": false
                   },
                   "icon": "svg:page"
@@ -1006,7 +1006,33 @@
       "transform": {
         "translate": {
           "x": -240,
-          "y": -160
+          "y": -40
+        },
+        "scale": 1
+      },
+      "timeline": {
+        "isEditorActive": false,
+        "position": 0,
+        "secondToPx": 200,
+        "scrollLeft": 0
+      }
+    },
+    "[HD2 Macropad-upstream.eez-project]:/userPages/7[flow-state]": {
+      "selection": {
+        "0": {
+          "0": {
+            "2": {
+              "0": {},
+              "1": {},
+              "5": {}
+            }
+          }
+        }
+      },
+      "transform": {
+        "translate": {
+          "x": -240,
+          "y": -40
         },
         "scale": 1
       },
