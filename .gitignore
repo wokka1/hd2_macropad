@@ -11,3 +11,4 @@ debug.txt
 .DS_Store
 releases/*
 scripts/release.sh
+scripts/*.csv

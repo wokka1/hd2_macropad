@@ -50,7 +50,9 @@ typedef struct
 typedef struct
 {
     uint8_t sequence[9];
-    uint16_t cooldown;  // Cooldown time in seconds (for resupply tracking)
+    uint16_t cooldown;     // Cooldown time in seconds
+    double callIn;         // Call-in time modifier from ship modules
+    uint16_t shipModules;  // Bitmask of applicable ship modules
     char *soundPath;
     const lv_img_dsc_t *imgHiRes;
 } stratagemBase;
@@ -588,7 +590,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // Orbital Railcannon Strike
     {
         {INPUT_RIGHT, INPUT_UP, INPUT_DOWN, INPUT_DOWN, INPUT_RIGHT, 0, 0, 0, 0},
-        210,
+        180,
         4.75,
         SHIP_MA | SHIP_TSU,
         SND_ORBITAL,
@@ -636,7 +638,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
     // Orbital Smoke Strike
     {
         {INPUT_RIGHT, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, 0, 0, 0, 0, 0},
-        100,
+        75,
         4.75,
         SHIP_MA | SHIP_TSU,
         SND_ORBITAL,
@@ -741,7 +743,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_500},
 
     // 57
-    // Directional Shield
+    // SH-51 Directional Shield
     {
         {INPUT_DOWN, INPUT_UP, INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_UP, 0, 0, 0},
         300,
@@ -753,7 +755,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_DS},
 
     // 58
-    // Anti-Tank Emplacement
+    // E/AT-12 Anti-Tank Emplacement
     {
         {INPUT_DOWN, INPUT_UP, INPUT_LEFT, INPUT_RIGHT, INPUT_RIGHT, INPUT_RIGHT, 0, 0, 0},
         180,
@@ -765,7 +767,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_ATE},
 
     // 59
-    // Flame Sentry
+    // A/FLAM-40 Flame Sentry
     {
         {INPUT_DOWN, INPUT_UP, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, INPUT_UP, 0, 0, 0},
         100,
@@ -789,7 +791,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_FRV},
 
     // 61
-    // Portable Hellbomb
+    // B-100 Portable Hellbomb
     {
         {INPUT_DOWN, INPUT_RIGHT, INPUT_UP, INPUT_UP, INPUT_UP, 0, 0, 0, 0},
         300,
@@ -801,7 +803,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_PH},
 
     // 62
-    // Gas Mines
+    // MD-8 Gas Mines
     {
         {INPUT_DOWN, INPUT_LEFT, INPUT_LEFT, INPUT_RIGHT, 0, 0, 0, 0, 0},
         120,
@@ -861,7 +863,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_OTF},
 
     // 67
-    // De-escalator
+    // GL-52 De-Escalator
     {
         {INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_LEFT, INPUT_RIGHT, 0, 0, 0, 0},
         480,
@@ -921,7 +923,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_WP},
 
     // 72
-    // Exandable Napalm
+    // EAT-700 Expendable Napalm
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_LEFT, 0, 0, 0, 0},
         140,
@@ -933,7 +935,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_EN},
 
     // 73
-    // Solo Silo
+    // MS-11 Solo Silo
     {
         {INPUT_DOWN, INPUT_UP, INPUT_RIGHT, INPUT_DOWN, INPUT_DOWN, 0, 0, 0, 0},
         180,
@@ -945,7 +947,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_SS},
 
     // 74
-    // Speargun
+    // S-11 Speargun
     {
         {INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, INPUT_LEFT, INPUT_UP, INPUT_RIGHT, 0, 0},
         480,
@@ -1005,7 +1007,7 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_C4P},
 
     // 79
-    // TD-220 Bastion MK XVI
+    // TD-220 Bastion
     {
         {INPUT_LEFT, INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, INPUT_LEFT, INPUT_DOWN, INPUT_UP, INPUT_DOWN, INPUT_UP},
         780,
@@ -1053,139 +1055,122 @@ const stratagemItem strategemItemList[SG_ITEM_AMOUNT] = {
         SG_BFGL}};
 
 const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
-    // 0
-    // Reinforce
+    // 0 - Reinforce
     {
         {INPUT_UP, INPUT_DOWN, INPUT_RIGHT, INPUT_LEFT, INPUT_UP, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,  // No cooldown tracking
         SND_REINFORCE,
         &img_rf2},
 
-    // 1
-    // Resupply
+    // 1 - Resupply (SHIP_MA + SHIP_SS apply)
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_UP, INPUT_RIGHT, 0, 0, 0, 0, 0},
-        132,  // 2.5 minute cooldown -- temp cooldown
+        150, 0.0, SHIP_MA | SHIP_SS,  // 2.5 minute cooldown
         SND_SUPPLY,
         &img_res2},
 
-    // 2
-    // SOS
+    // 2 - SOS
     {
         {INPUT_UP, INPUT_DOWN, INPUT_RIGHT, INPUT_UP, 0, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         SND_SOS,
         &img_sos2},
 
-    // 3
-    // Eagle rearm
+    // 3 - Eagle rearm
     {
         {INPUT_UP, INPUT_UP, INPUT_LEFT, INPUT_UP, INPUT_RIGHT, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         SND_EAGLE_RELOAD,
         &img_er2},
 
-    // 4
-    // Hellbomb
+    // 4 - Hellbomb
     {
         {INPUT_DOWN, INPUT_UP, INPUT_LEFT, INPUT_DOWN, INPUT_UP, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         SND_BACKPACK,
         &img_hb2},
 
-    // 5
-    // S.E.A.F.
+    // 5 - S.E.A.F.
     {
         {INPUT_RIGHT, INPUT_UP, INPUT_UP, INPUT_DOWN, 0, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         &img_seaf2},
 
-    // 6
-    // SSSD Delivery
+    // 6 - SSSD Delivery
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_DOWN, INPUT_UP, INPUT_UP, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 7
-    // Upload data
+    // 7 - Upload data
     {
         {INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_UP, INPUT_UP, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 8
-    // Super Earth Flag
+    // 8 - Super Earth Flag
     {
         {INPUT_DOWN, INPUT_UP, INPUT_DOWN, INPUT_UP, 0, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 9
-    // Hive breaker drill
+    // 9 - Hive breaker drill
     {
         {INPUT_LEFT, INPUT_UP, INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, INPUT_DOWN, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 10
-    // Tectonic drill
+    // 10 - Tectonic drill
     {
         {INPUT_UP, INPUT_DOWN, INPUT_UP, INPUT_DOWN, INPUT_UP, INPUT_DOWN, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 11
-    // Prospection drill
+    // 11 - Prospecting Drill
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_DOWN, INPUT_DOWN, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 12
-    // Seismic probe
+    // 12 - Seismic probe
     {
         {INPUT_UP, INPUT_UP, INPUT_LEFT, INPUT_RIGHT, INPUT_DOWN, INPUT_DOWN, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 13
-    // Orbital illumination flare
+    // 13 - Orbital illumination flare
     {
         {INPUT_RIGHT, INPUT_RIGHT, INPUT_LEFT, INPUT_LEFT, 0, 0, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 14
-    // Dark fluid vessel
+    // 14 - Dark fluid vessel
     {
         {INPUT_UP, INPUT_LEFT, INPUT_RIGHT, INPUT_DOWN, INPUT_UP, INPUT_UP, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 15
-    // Cargo container
+    // 15 - Cargo container
     {
         {INPUT_UP, INPUT_UP, INPUT_DOWN, INPUT_DOWN, INPUT_RIGHT, INPUT_DOWN, 0, 0, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL},
 
-    // 16
-    // Call in Super Destroyer
+    // 16 - Call in Super Destroyer
     {
         {INPUT_UP, INPUT_UP, INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT, INPUT_RIGHT, 0},
-        0,  // No cooldown tracking
+        0, 0.0, 0,
         NULL,
         NULL}};
 

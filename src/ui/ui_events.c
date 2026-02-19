@@ -356,24 +356,60 @@ void _executeUserStratagem(uint8_t index)
 void action_trigger_stratagem_base(lv_event_t *e)
 {
 	int index = (int)e->user_data;
-	uint8_t *sequence = (uint8_t *)strategemBaseList[index].sequence;
-	char *path = strategemBaseList[index].soundPath;
-	uint16_t cooldown = strategemBaseList[index].cooldown;
+	stratagemBase item = strategemBaseList[index];
+	uint8_t *sequence = (uint8_t *)item.sequence;
+	char *path = item.soundPath;
+	uint16_t cooldown = item.cooldown;
 
 	ESP_LOGI(TAG_EVT, "Base stratagem: idx=%d", index);
 	_executeStdStratagem(sequence, path);
 
-	// Track cooldown for Resupply (index 1)
-	if (index == 1 && cooldown > 0)
+	// Track cooldown for stratagems with cooldown > 0 (e.g., Resupply)
+	if (cooldown > 0)
 	{
 		extern uint64_t resupplyCooldownValue;
 		extern bool resupplyBeepTriggered;
 		uint64_t now = getNow();
+
+		// Calculate cooldown with ship module reductions
+		#ifdef HAS_SHIP_MODULE_UI
+		shipModuleDetails shipModuleList[MAX_SHIP_MODULES] = {
+			{SHIP_LVC, objects.chb_ship_mod_lvc, 0, 0.5, 0.0},   // -50% cooldown
+			{SHIP_ZBL, objects.chb_ship_mod_zbl, 1, 0.1, 0.0},   // -10% cooldown
+			{SHIP_HC,  objects.chb_ship_mod_hc,  2, 0.1, 0.0},   // -10% cooldown
+			{SHIP_MA,  objects.chb_ship_mod_ma,  3, 0.05, 0.0},  // -5% cooldown
+			{SHIP_SRP, objects.chb_ship_mod_srp, 4, 0.1, 0.0},   // -10% cooldown
+			{SHIP_SS,  objects.chb_ship_mod_ss,  5, 0.1, 0.0},   // -10% cooldown
+			{SHIP_TSU, objects.chb_ship_mod_tsu, 6, 0.0, 1.0},   // +1s call-in
+			{SHIP_RLS, objects.chb_ship_mod_rls, 7, 0.0, 3.0},   // +3s call-in
+			{SHIP_DT,  objects.chb_ship_mod_dt,  8, 0.0, 3.0}    // +3s call-in
+		};
+
+		double callin = item.callIn;
+		double factor = 1.0;
+
+		for (uint8_t c = 0; c < MAX_SHIP_MODULES; c++)
+		{
+			shipModuleDetails mod = shipModuleList[c];
+			// Check if module checkbox is enabled AND stratagem supports this module
+			if (lv_obj_has_state(mod.checkbox, LV_STATE_CHECKED) &&
+			    (item.shipModules & (1 << mod.shift)))
+			{
+				factor -= mod.cooldown;
+				callin += mod.callin;
+			}
+		}
+
+		uint64_t finalCooldown = (uint64_t)(cooldown * factor + callin);
+		resupplyCooldownValue = now + finalCooldown;
+		#else
 		resupplyCooldownValue = now + cooldown;
+		#endif
+
 		resupplyBeepTriggered = false;  // Reset beep flag for new cooldown
 		if (debugLogging) {
-			ESP_LOGI(TAG_EVT, "*** RESUPPLY COOLDOWN STARTED *** (now=%llu, expires=%llu, duration=%d sec)",
-			         now, resupplyCooldownValue, cooldown);
+			ESP_LOGI(TAG_EVT, "*** BASE COOLDOWN STARTED *** idx=%d (now=%llu, expires=%llu, duration=%llu sec)",
+			         index, now, resupplyCooldownValue, resupplyCooldownValue - now);
 		}
 	}
 
