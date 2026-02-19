@@ -340,9 +340,9 @@ void _executeUserStratagem(uint8_t index)
 	}
 
 	cooldown *= factor;
-	cooldownValues[index] = getNow() + (uint64_t)(cooldown + callin);
+	cooldownValues[index] = getNow() + (uint64_t)(cooldown + callin + STRAT_INPUT_THROW_TIME);
 	#else
-	cooldownValues[index] = getNow() + item.cooldown;
+	cooldownValues[index] = getNow() + item.cooldown + (uint64_t)STRAT_INPUT_THROW_TIME;
 	#endif
 
 	cooldownBeepTriggered[index] = false;  // Reset beep flag for new cooldown
@@ -400,10 +400,10 @@ void action_trigger_stratagem_base(lv_event_t *e)
 			}
 		}
 
-		uint64_t finalCooldown = (uint64_t)(cooldown * factor + callin);
+		uint64_t finalCooldown = (uint64_t)(cooldown * factor + callin + STRAT_INPUT_THROW_TIME);
 		resupplyCooldownValue = now + finalCooldown;
 		#else
-		resupplyCooldownValue = now + cooldown;
+		resupplyCooldownValue = now + cooldown + (uint64_t)STRAT_INPUT_THROW_TIME;
 		#endif
 
 		resupplyBeepTriggered = false;  // Reset beep flag for new cooldown

@@ -24,8 +24,11 @@
 //   SHIP_RLS (128) - Rapid Launch System:           +3s call-in - Emplacement stratagems launch immediately, reducing overall deployment time. 
 //   SHIP_DT  (256) - Dynamic Tracking:              +3s call-in - Sentry stratagems launch immediately, reducing overall deployment time. 
 //
-// Formula: finalCooldown = (baseCooldown * reductionFactor) + callInTime
+// Formula: finalCooldown = (baseCooldown * reductionFactor) + callInTime + STRAT_INPUT_THROW_TIME
 // =============================================================================
+
+// Time in seconds for player input lag and stratagem throw animation
+#define STRAT_INPUT_THROW_TIME 2.0
 
 // Identifiers for inputs (UP/DOWN/LEFT/RIGHT)
 // DO NOT EDIT - If you want to change assignments please have a look into "keymaps.c"
@@ -1065,7 +1068,7 @@ const stratagemBase strategemBaseList[SG_BASE_AMOUNT] = {
     // 1 - Resupply (SHIP_MA + SHIP_SS apply)
     {
         {INPUT_DOWN, INPUT_DOWN, INPUT_UP, INPUT_RIGHT, 0, 0, 0, 0, 0},
-        150, 0.0, SHIP_MA | SHIP_SS,  // 2.5 minute cooldown
+        180, 0.0, SHIP_MA | SHIP_SS,  // 2.5 minute cooldown
         SND_SUPPLY,
         &img_res2},
 

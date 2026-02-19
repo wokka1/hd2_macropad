@@ -49,6 +49,9 @@ SHIP_MODULES = {
     'SHIP_DT':  {'value': 256, 'cooldown_reduction': 0.0, 'callin': 3.0, 'name': 'Dynamic Tracking'},
 }
 
+# Time for player input and throw animation (from stratagems.h)
+STRAT_INPUT_THROW_TIME = 2.0
+
 
 @dataclass
 class WikiStratagem:
@@ -365,7 +368,7 @@ def calculate_modified_cooldown(cooldown: int, callin: float, ship_modules: int)
             factor -= mod_info['cooldown_reduction']
             total_callin += mod_info['callin']
 
-    final_cooldown = cooldown * factor + total_callin
+    final_cooldown = cooldown * factor + total_callin + STRAT_INPUT_THROW_TIME
     return final_cooldown, total_callin
 
 
